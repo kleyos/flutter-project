@@ -103,7 +103,7 @@ packages:
     source: hosted
     version: "0.13.3+2"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -388,5 +388,5 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.0.0-dev.62.0 <=2.0.0-dev.69.3.flutter-937ee2e8ca"
+  dart: ">=2.0.0-dev.62.0 <=2.0.0-dev.69.4.flutter-08f59e5de3"
   flutter: ">=0.1.4 <2.0.0"

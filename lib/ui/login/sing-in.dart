@@ -1,3 +1,4 @@
+import 'package:add_just/ui/login/anon-drawer.dart';
 import 'package:flutter/material.dart';
 
 typedef void OnLoginCallback(String username, String pwd);
@@ -67,51 +68,6 @@ class SignIn extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
-    return new Drawer(
-      child: new Container(
-        padding: EdgeInsets.all(54.0),
-        color: Colors.black38,
-        child: new ListView(
-          children: <Widget>[
-            ListTile(
-              title: Text('About'),
-              onTap: () {
-                _notImplemented(context);
-              },
-            ),
-            ListTile(
-              title: Text('Help'),
-              onTap: () {
-                _notImplemented(context);
-              },
-            ),
-            new Divider(),
-            ListTile(
-              title: Text('Contact Us'),
-              onTap: () {
-                _notImplemented(context);
-              },
-            ),
-            ListTile(
-              title: Text('Terms Of Service'),
-              onTap: () {
-                _notImplemented(context);
-              },
-            ),
-            new Divider(),
-            ListTile(
-              title: Text('Log in'),
-              onTap: () {
-                _notImplemented(context);
-              },
-            ),
-          ],
-        )
-      )
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -121,7 +77,7 @@ class SignIn extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Colors.grey,
         ),
-        drawer: _buildDrawer(context),
+        drawer: new AnonDrawer(),
         body: new Container(
           decoration: new BoxDecoration(
             color: Colors.white
