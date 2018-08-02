@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
-
-typedef void OnCodeSubmitCallback(String code);
+import 'package:add_just/ui/common.dart';
+import 'package:add_just/models/user.dart';
+import 'package:add_just/services/api/base.dart';
+import 'package:add_just/services/api/login.dart';
+import 'package:add_just/ui/login/callbacks.dart';
 
 class CodeSubmit extends StatelessWidget {
   CodeSubmit({
     Key key,
-    this.onCodeSubmit
+    this.email,
+    this.onUserLoggedIn
   }) : super(key: key);
 
-  final OnCodeSubmitCallback onCodeSubmit;
+  final String email;
+  final OnUserLoggedIn onUserLoggedIn;
   final TextEditingController _codeController = new TextEditingController();
 
-  void _handleSubmit() {
-    if (onCodeSubmit != null) {
-      onCodeSubmit(_codeController.text);
+  void _handleSubmit(BuildContext context) async {
+    Login loginService = new Login(baseURL: 'https://api.staging.termpay.io/api');
+    ApiResponse resp = await loginService.requestToken(email, _codeController.text);
+    if (loginService.lastError.isEmpty) {
+      if (onUserLoggedIn != null) {
+        onUserLoggedIn(User.fromApiResponse(resp));
+      }
+    } else {
+      showAlert(context, loginService.lastError);
     }
     _codeController.clear();
   }
 
-  Widget _buildForm() {
+  Widget _buildForm(BuildContext context) {
     return new Form(
       child: new Column(
         children: <Widget>[
@@ -41,8 +52,11 @@ class CodeSubmit extends StatelessWidget {
             width: double.infinity,
             height: 50.0,
             child: new FlatButton(
-              onPressed: _handleSubmit,
-              child: new Text("LET'S GET STARTED", style: TextStyle(color: Colors.white, fontSize: 16.0)),
+              onPressed: () {
+                _handleSubmit(context);
+              },
+              child: new Text("LET'S GET STARTED",
+                style: TextStyle(color: Colors.white, fontSize: 16.0)),
               color: Colors.teal
             )
           )
@@ -69,7 +83,7 @@ class CodeSubmit extends StatelessWidget {
             new Expanded(
               child: new Column(
                 children: <Widget>[
-                  _buildForm()
+                  _buildForm(context)
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max

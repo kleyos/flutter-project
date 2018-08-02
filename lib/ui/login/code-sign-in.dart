@@ -1,25 +1,46 @@
-import 'package:add_just/ui/login/anon-drawer.dart';
+import 'package:add_just/models/user.dart';
+import 'package:add_just/ui/common.dart';
 import 'package:flutter/material.dart';
-
-typedef void OnCodeRequestCallback(String email);
+import 'package:add_just/ui/login/callbacks.dart';
+import 'package:add_just/ui/login/code-submit.dart';
+import 'package:add_just/services/api/login.dart';
+import 'package:add_just/ui/login/anon-drawer.dart';
 
 class CodeSignIn extends StatelessWidget {
   CodeSignIn({
     Key key,
-    this.onCodeRequest
+    this.onUserLoggedIn
   }) : super(key: key);
 
-  final OnCodeRequestCallback onCodeRequest;
+  final OnUserLoggedIn onUserLoggedIn;
   final TextEditingController _emailController = new TextEditingController();
+  String _email;
 
-  void _handleSignIn() {
-    if (onCodeRequest != null) {
-      onCodeRequest(_emailController.text);
+  void _handleUserLoggerIn(User user) {
+    if (onUserLoggedIn != null) {
+      onUserLoggedIn(user);
+    }
+  }
+
+  void _handleSignIn(BuildContext context) async {
+    _email = _emailController.text;
+    Login loginService = new Login(baseURL: 'https://api.staging.termpay.io/api');
+    await loginService.requestCode(_emailController.text);
+    if (loginService.lastError.isEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CodeSubmit(
+          email: _email,
+          onUserLoggedIn: _handleUserLoggerIn)
+        ),
+      );
+    } else {
+      showAlert(context, loginService.lastError);
     }
     _emailController.clear();
   }
 
-  Widget _buildForm() {
+  Widget _buildForm(BuildContext context) {
     return new Form(
       child: new Column(
         children: <Widget>[
@@ -40,7 +61,9 @@ class CodeSignIn extends StatelessWidget {
             width: double.infinity,
             height: 50.0,
             child: new FlatButton(
-              onPressed: _handleSignIn,
+              onPressed: () {
+                _handleSignIn(context);
+              },
               child: new Text("Request a code", style: TextStyle(color: Colors.white, fontSize: 16.0)),
               color: Colors.teal
             )
@@ -69,7 +92,7 @@ class CodeSignIn extends StatelessWidget {
             new Expanded(
               child: new Column(
                 children: <Widget>[
-                  _buildForm()
+                  _buildForm(context)
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max

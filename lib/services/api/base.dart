@@ -11,7 +11,7 @@ class ApiResponse {
 
   Map<String, dynamic> data;
 
-  bool get isError => data.containsKey('type') && data['type'] == 'api_error';
+  bool get isError => data.containsKey('type') && data.containsKey('message');
 
   String get error {
     if (isError) {
@@ -37,16 +37,21 @@ class Base {
   Future<dynamic> post(String path, {Map<String, dynamic> headers, body}) async {
     final response = await http.post(Path.join(baseURL, path), headers: headers, body: body);
 
-    if (response.statusCode == 200) {
-      ApiResponse resp = ApiResponse.fromResponse(response.body);
-      if (resp.error.isNotEmpty) {
+    switch(response.statusCode) {
+      case 200:
+        ApiResponse resp = ApiResponse.fromResponse(response.body);
+        return resp;
+        break;
+      case 400:
+      case 401:
+        ApiResponse resp = ApiResponse.fromResponse(response.body);
         _lastError = resp.error;
-        return null;
-      }
-      return resp;
-    } else {
-      _lastError = 'Failed to perform a request';
-      return null;
+        break;
+      default:
+        _lastError = 'Failed to perform a request';
+        break;
     }
+
+    return null;
   }
 }
