@@ -6,38 +6,43 @@ import 'package:add_just/ui/login/code-submit.dart';
 import 'package:add_just/services/api/login.dart';
 import 'package:add_just/ui/login/anon-drawer.dart';
 
-class CodeSignIn extends StatelessWidget {
-  CodeSignIn({
-    Key key,
-    this.onUserLoggedIn
-  }) : super(key: key);
-
-  final OnUserLoggedIn onUserLoggedIn;
+class _CodeSignInState extends State<CodeSignIn> {
   final TextEditingController _emailController = new TextEditingController();
   String _email;
-
-  void _handleUserLoggerIn(User user) {
-    if (onUserLoggedIn != null) {
-      onUserLoggedIn(user);
-    }
-  }
+  bool _isDataSending = false;
 
   void _handleSignIn(BuildContext context) async {
     _email = _emailController.text;
     Login loginService = new Login(baseURL: 'https://api.staging.termpay.io/api');
+    setState(() {
+      _isDataSending = true;
+    });
     await loginService.requestCode(_emailController.text);
     if (loginService.lastError.isEmpty) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => CodeSubmit(
           email: _email,
-          onUserLoggedIn: _handleUserLoggerIn)
+          onUserLoggedIn: widget._handleUserLoggerIn)
         ),
       );
     } else {
       showAlert(context, loginService.lastError);
     }
+    setState(() {
+      _isDataSending = false;
+    });
     _emailController.clear();
+  }
+
+  Function _submitPress() {
+    if (_isDataSending) {
+      return null;
+    } else {
+      return () {
+        _handleSignIn(context);
+      };
+    }
   }
 
   Widget _buildForm(BuildContext context) {
@@ -61,9 +66,7 @@ class CodeSignIn extends StatelessWidget {
             width: double.infinity,
             height: 50.0,
             child: new FlatButton(
-              onPressed: () {
-                _handleSignIn(context);
-              },
+              onPressed: _submitPress(),
               child: new Text("Request a code", style: TextStyle(color: Colors.white, fontSize: 16.0)),
               color: Colors.teal
             )
@@ -102,5 +105,23 @@ class CodeSignIn extends StatelessWidget {
         )
       )
     );
+  }
+}
+
+class CodeSignIn extends StatefulWidget {
+  CodeSignIn({
+    Key key,
+    this.onUserLoggedIn
+  }) : super(key: key);
+
+  final OnUserLoggedIn onUserLoggedIn;
+
+  @override
+  State<StatefulWidget> createState() => new _CodeSignInState();
+
+  void _handleUserLoggerIn(User user) {
+    if (onUserLoggedIn != null) {
+      onUserLoggedIn(user);
+    }
   }
 }
