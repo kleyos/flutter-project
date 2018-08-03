@@ -70,32 +70,30 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('+AddJust'),
-          centerTitle: true,
-          backgroundColor: Colors.grey,
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('+AddJust'),
+        centerTitle: true,
+        backgroundColor: Colors.grey,
+      ),
+      drawer: new AnonDrawer(),
+      body: new Container(
+        decoration: new BoxDecoration(
+          color: Colors.white
         ),
-        drawer: new AnonDrawer(),
-        body: new Container(
-          decoration: new BoxDecoration(
-            color: Colors.white
-          ),
-          padding: const EdgeInsets.all(32.0),
-          child: new Row(
-            children: <Widget>[
-              new Expanded(
-                child: new Column(
-                  children: <Widget>[
-                    _buildForm()
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max
-                )
+        padding: const EdgeInsets.all(32.0),
+        child: new Row(
+          children: <Widget>[
+            new Expanded(
+              child: new Column(
+                children: <Widget>[
+                  _buildForm()
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max
               )
-            ]
-          )
+            )
+          ]
         )
       )
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/services/prefs.dart';
 import 'package:add_just/ui/login/code-sign-in.dart';
+import 'package:add_just/ui/projects/index.dart';
 
 void main() {
   runApp(new AddJustApp());
@@ -10,6 +11,8 @@ void main() {
 class _AddJustAppState extends State<AddJustApp> {
   PrefsService prefs = new PrefsService();
   User _user;
+
+  bool get userLoggedIn => _user != null && _user.isAuthenticated;
 
   void _handleUserLoggedIn(User user) {
     setState(() {
@@ -24,7 +27,8 @@ class _AddJustAppState extends State<AddJustApp> {
       theme: new ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: CodeSignIn(onUserLoggedIn: _handleUserLoggedIn)
+      home: userLoggedIn ? new ProjectsIndex(user: _user) :
+        new CodeSignIn(onUserLoggedIn: _handleUserLoggedIn)
     );
   }
 }

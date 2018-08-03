@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:meta/meta.dart';
+import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as Path;
 
 class ApiResponse {
@@ -35,23 +36,30 @@ class Base {
   String get lastError => _lastError == null ? '' : _lastError;
 
   Future<dynamic> post(String path, {Map<String, dynamic> headers, body}) async {
-    final response = await http.post(Path.join(baseURL, path), headers: headers, body: body);
+    return _extractResponse(await http.post(Path.join(baseURL, path),
+      headers: headers, body: body));
+  }
 
-    switch(response.statusCode) {
+  Future<dynamic> get(String path, {Map<String, dynamic> headers}) async {
+    return _extractResponse(await http.get(Path.join(baseURL, path),
+      headers: headers));
+  }
+
+  ApiResponse _extractResponse(Response r) {
+    switch(r.statusCode) {
       case 200:
-        ApiResponse resp = ApiResponse.fromResponse(response.body);
+        ApiResponse resp = ApiResponse.fromResponse(r.body);
         return resp;
         break;
       case 400:
       case 401:
-        ApiResponse resp = ApiResponse.fromResponse(response.body);
+        ApiResponse resp = ApiResponse.fromResponse(r.body);
         _lastError = resp.error;
         break;
       default:
         _lastError = 'Failed to perform a request';
         break;
     }
-
     return null;
   }
 }

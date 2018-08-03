@@ -13,10 +13,11 @@ class User {
   });
 
   final num id, orgId;
-  final String email, accessToken, firstName, lastName, role, status;
+  final String email, accessToken;
+  String firstName, lastName, role, status;
 
 
-  bool isAuthenticated() => accessToken.isNotEmpty;
+  bool get isAuthenticated => accessToken != null && accessToken.isNotEmpty;
 
 //  {
 //  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJ2aWFjaGVzbGF2LnBldHJlbmtvQGxpdHNsaW5rLmNvbSIsInJvbGUiOiJhbW8iLCJoYXNoIjoiZGFjNTgzNjAtYTIwMi00NTA0LWE3NDctMDczNWQxMGZkODlhIiwib3JnX2lkIjoxLCJhdWQiOiJwb3N0Z3JhcGhpbGUiLCJpYXQiOjE1MzMyMjA2MTUsImV4cCI6MTU5NjMzNTgxNX0.UB5ptUrC5cFCCbJWAoQJkzhGuxZFhzjEwc2iSTNo1vU",
@@ -31,7 +32,7 @@ class User {
 //    }
 //  }
 
-  User.fromApiResponse(ApiResponse resp) :
+    User.fromApiResponse(ApiResponse resp) :
     id = resp['user']['id'],
     orgId = resp['user']['org_id'],
     email = resp['user']['email'],
