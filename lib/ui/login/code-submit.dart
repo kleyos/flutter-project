@@ -1,31 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/ui/common.dart';
 import 'package:add_just/models/user.dart';
-import 'package:add_just/services/api/base.dart';
-import 'package:add_just/services/api/login.dart';
-import 'package:add_just/ui/login/callbacks.dart';
+import 'package:add_just/ui/projects/index.dart';
+import 'package:add_just/ui/login/login-screen-presenter.dart';
+import 'package:add_just/ui/common.dart';
 
-class CodeSubmit extends StatelessWidget {
-  CodeSubmit({
-    Key key,
-    this.email,
-    this.onUserLoggedIn
-  }) : super(key: key);
-
-  final String email;
-  final OnUserLoggedIn onUserLoggedIn;
+class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
   final TextEditingController _codeController = new TextEditingController();
+  bool _isDataSending = false;
+  LoginScreenPresenter _presenter;
+  BuildContext _ctx;
 
-  void _handleSubmit(BuildContext context) async {
-    Login loginService = new Login(baseURL: 'https://api.staging.termpay.io/api');
-    ApiResponse resp = await loginService.requestToken(email, _codeController.text);
-    if (loginService.lastError.isEmpty) {
-      if (onUserLoggedIn != null) {
-        onUserLoggedIn(User.fromApiResponse(resp));
-      }
+  _CodeSubmitState() {
+    _presenter = new LoginScreenPresenter(this);
+  }
+
+  @override
+  void onLoginCodeRequested(String email) {
+  }
+
+  @override
+  void onLoginError(String errorTxt) {
+    showAlert(context, errorTxt);
+    setState(() { _isDataSending = false; });
+  }
+
+  @override
+  void onLoginSuccess(User user) {
+    setState(() { _isDataSending = false; });
+    Navigator.pushReplacement(
+      _ctx,
+      MaterialPageRoute(builder: (context) => ProjectsIndex(
+        user: user
+      ))
+    );
+  }
+
+  Function _submitPress() {
+    if (_isDataSending) {
+      return null;
     } else {
-      showAlert(context, loginService.lastError);
+      return () {
+        _handleSubmit();
+      };
     }
+  }
+
+  void _handleSubmit() {
+    setState(() {
+      _isDataSending = true;
+    });
+    _presenter.doLogin(widget.email, _codeController.text);
     _codeController.clear();
   }
 
@@ -52,9 +76,7 @@ class CodeSubmit extends StatelessWidget {
             width: double.infinity,
             height: 50.0,
             child: new FlatButton(
-              onPressed: () {
-                _handleSubmit(context);
-              },
+              onPressed: _submitPress(),
               child: new Text("LET'S GET STARTED",
                 style: TextStyle(color: Colors.white, fontSize: 16.0)),
               color: Colors.teal
@@ -67,6 +89,7 @@ class CodeSubmit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _ctx = context;
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('+AddJust'),
@@ -94,4 +117,15 @@ class CodeSubmit extends StatelessWidget {
       )
     );
   }
+}
+
+class CodeSubmit extends StatefulWidget {
+  CodeSubmit({
+    Key key,
+    this.email
+  }) : super(key: key);
+
+  final String email;
+  @override
+  State<CodeSubmit> createState() => new _CodeSubmitState();
 }

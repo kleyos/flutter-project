@@ -23,10 +23,37 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _loadProjects();
+//  @override
+//  void initState() {
+//    super.initState();
+//    _loadProjects();
+//  }
+
+  Widget _listProjects() {
+    return new ListView.builder(
+      padding: new EdgeInsets.all(8.0),
+      reverse: false,
+      itemBuilder: (_, int idx) => _projects[idx],
+      itemCount: _projects.length
+    );
+  }
+
+  Widget _addNewProject() {
+    return new Center(
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text('Welcome to'),
+          new Text('+AddJust'),
+          new RaisedButton(
+            child: new Text("+ADD YOUR FIRST PROJET",
+              style: TextStyle(color: Colors.white, fontSize: 16.0)
+            ),
+            onPressed: null
+          )
+        ],
+      )
+    );
   }
 
   @override
@@ -37,12 +64,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
         centerTitle: true,
         backgroundColor: Colors.teal,
       ),
-      body: new ListView.builder(
-        padding: new EdgeInsets.all(8.0),
-        reverse: false,
-        itemBuilder: (_, int idx) => _projects[idx],
-        itemCount: _projects.length
-      )
+      body: _projects.isNotEmpty ? _listProjects() : _addNewProject()
     );
   }
 }

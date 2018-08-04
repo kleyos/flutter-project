@@ -1,38 +1,51 @@
+import 'package:flutter/material.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/ui/common.dart';
-import 'package:flutter/material.dart';
-import 'package:add_just/ui/login/callbacks.dart';
+import 'package:add_just/ui/login/login-screen-presenter.dart';
 import 'package:add_just/ui/login/code-submit.dart';
-import 'package:add_just/services/api/login.dart';
 import 'package:add_just/ui/login/anon-drawer.dart';
 
-class _CodeSignInState extends State<CodeSignIn> {
+class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
   final TextEditingController _emailController = new TextEditingController();
   String _email;
   bool _isDataSending = false;
+  LoginScreenPresenter _presenter;
+  BuildContext _ctx;
 
-  void _handleSignIn(BuildContext context) async {
+  _CodeSignInState() {
+    _presenter = new LoginScreenPresenter(this);
+  }
+
+  void _handleSubmit() {
     _email = _emailController.text;
-    Login loginService = new Login(baseURL: 'https://api.staging.termpay.io/api');
     setState(() {
       _isDataSending = true;
     });
-    await loginService.requestCode(_emailController.text);
-    if (loginService.lastError.isEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CodeSubmit(
-          email: _email,
-          onUserLoggedIn: widget._handleUserLoggerIn)
-        ),
-      );
-    } else {
-      showAlert(context, loginService.lastError);
-    }
+    _presenter.requestCode(_email);
+    _emailController.clear();
+  }
+
+  @override
+  void onLoginError(String errorTxt) {
+    showAlert(context, errorTxt);
     setState(() {
       _isDataSending = false;
     });
-    _emailController.clear();
+  }
+
+  @override
+  void onLoginSuccess(User user) {
+  }
+
+  @override
+  void onLoginCodeRequested(String email) {
+    setState(() { _isDataSending = false; });
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CodeSubmit(
+        email: email
+      ))
+    );
   }
 
   Function _submitPress() {
@@ -40,7 +53,7 @@ class _CodeSignInState extends State<CodeSignIn> {
       return null;
     } else {
       return () {
-        _handleSignIn(context);
+        _handleSubmit();
       };
     }
   }
@@ -65,7 +78,7 @@ class _CodeSignInState extends State<CodeSignIn> {
           new SizedBox(
             width: double.infinity,
             height: 50.0,
-            child: new FlatButton(
+            child: new RaisedButton(
               onPressed: _submitPress(),
               child: new Text("Request a code", style: TextStyle(color: Colors.white, fontSize: 16.0)),
               color: Colors.teal
@@ -78,6 +91,7 @@ class _CodeSignInState extends State<CodeSignIn> {
 
   @override
   Widget build(BuildContext context) {
+    _ctx = context;
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('+AddJust'),
@@ -109,19 +123,6 @@ class _CodeSignInState extends State<CodeSignIn> {
 }
 
 class CodeSignIn extends StatefulWidget {
-  CodeSignIn({
-    Key key,
-    this.onUserLoggedIn
-  }) : super(key: key);
-
-  final OnUserLoggedIn onUserLoggedIn;
-
   @override
   State<StatefulWidget> createState() => new _CodeSignInState();
-
-  void _handleUserLoggerIn(User user) {
-    if (onUserLoggedIn != null) {
-      onUserLoggedIn(user);
-    }
-  }
 }

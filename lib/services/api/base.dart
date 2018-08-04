@@ -30,10 +30,6 @@ class Base {
   });
 
   final String baseURL;
-  String _lastError;
-
-  bool get hasError => lastError != null && lastError.isNotEmpty;
-  String get lastError => _lastError == null ? '' : _lastError;
 
   Future<dynamic> post(String path, {Map<String, dynamic> headers, body}) async {
     return _extractResponse(await http.post(Path.join(baseURL, path),
@@ -54,12 +50,11 @@ class Base {
       case 400:
       case 401:
         ApiResponse resp = ApiResponse.fromResponse(r.body);
-        _lastError = resp.error;
+        throw new Exception(resp.error);
         break;
       default:
-        _lastError = 'Failed to perform a request';
+        throw new Exception('Failed to perform a request');
         break;
     }
-    return null;
   }
 }
