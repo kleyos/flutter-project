@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:add_just/models/user.dart';
 
 class PrefsService {
   static final PrefsService _instance = new PrefsService._internal();
@@ -12,5 +13,9 @@ class PrefsService {
   dynamic getValue(key) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     return _prefs.get(key);
+  }
+
+  void storeUser(User user) {
+
   }
 }

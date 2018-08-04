@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:add_just/services/api/base.dart';
 
 class Login extends Base {

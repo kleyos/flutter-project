@@ -31,18 +31,16 @@ class Base {
 
   final String baseURL;
 
-  Future<dynamic> post(String path, {Map<String, dynamic> headers, body}) async {
-    return _extractResponse(await http.post(Path.join(baseURL, path),
-      headers: headers, body: body));
+  Future<ApiResponse> post(String path, {Map<String, dynamic> headers, body}) async {
+    return _extractResponse(await http.post(Path.join(baseURL, path), headers: headers, body: body));
   }
 
-  Future<dynamic> get(String path, {Map<String, dynamic> headers}) async {
-    return _extractResponse(await http.get(Path.join(baseURL, path),
-      headers: headers));
+  Future<ApiResponse> get(String path, {Map<String, dynamic> headers}) async {
+    return _extractResponse(await http.get(Path.join(baseURL, path), headers: headers));
   }
 
   ApiResponse _extractResponse(Response r) {
-    switch(r.statusCode) {
+    switch (r.statusCode) {
       case 200:
         ApiResponse resp = ApiResponse.fromResponse(r.body);
         return resp;

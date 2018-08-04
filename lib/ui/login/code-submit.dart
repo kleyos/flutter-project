@@ -8,7 +8,6 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
   final TextEditingController _codeController = new TextEditingController();
   bool _isDataSending = false;
   LoginScreenPresenter _presenter;
-  BuildContext _ctx;
 
   _CodeSubmitState() {
     _presenter = new LoginScreenPresenter(this);
@@ -27,8 +26,7 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
   @override
   void onLoginSuccess(User user) {
     setState(() { _isDataSending = false; });
-    Navigator.pushReplacement(
-      _ctx,
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => ProjectsIndex(
         user: user
       ))
@@ -36,13 +34,7 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
   }
 
   Function _submitPress() {
-    if (_isDataSending) {
-      return null;
-    } else {
-      return () {
-        _handleSubmit();
-      };
-    }
+    return _isDataSending ? null : () { _handleSubmit(); };
   }
 
   void _handleSubmit() {
@@ -89,7 +81,6 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
 
   @override
   Widget build(BuildContext context) {
-    _ctx = context;
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('+AddJust'),

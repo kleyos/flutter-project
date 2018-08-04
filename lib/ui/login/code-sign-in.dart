@@ -7,21 +7,18 @@ import 'package:add_just/ui/login/anon-drawer.dart';
 
 class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
   final TextEditingController _emailController = new TextEditingController();
-  String _email;
   bool _isDataSending = false;
   LoginScreenPresenter _presenter;
-  BuildContext _ctx;
 
   _CodeSignInState() {
     _presenter = new LoginScreenPresenter(this);
   }
 
   void _handleSubmit() {
-    _email = _emailController.text;
     setState(() {
       _isDataSending = true;
     });
-    _presenter.requestCode(_email);
+    _presenter.requestCode(_emailController.text);
     _emailController.clear();
   }
 
@@ -40,8 +37,7 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
   @override
   void onLoginCodeRequested(String email) {
     setState(() { _isDataSending = false; });
-    Navigator.push(
-      context,
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => CodeSubmit(
         email: email
       ))
@@ -49,13 +45,7 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
   }
 
   Function _submitPress() {
-    if (_isDataSending) {
-      return null;
-    } else {
-      return () {
-        _handleSubmit();
-      };
-    }
+    return _isDataSending ? null : () { _handleSubmit(); };
   }
 
   Widget _buildForm(BuildContext context) {
@@ -91,7 +81,6 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
 
   @override
   Widget build(BuildContext context) {
-    _ctx = context;
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('+AddJust'),
