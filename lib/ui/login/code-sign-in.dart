@@ -1,3 +1,4 @@
+import 'package:add_just/ui/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/ui/common.dart';
@@ -48,19 +49,23 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
     return _isDataSending ? null : () { _handleSubmit(); };
   }
 
-  Widget _buildForm(BuildContext context) {
+  Widget _buildForm() {
     return new Form(
       child: new Column(
         children: <Widget>[
-          new Text(
-            'Welcome',
+          new Text('Welcome',
+            style: Themes.pageHeader,
+          ),
+          new Text('Please specify your email to get your verification code.',
+            style: Themes.pageHeaderHint
           ),
           const SizedBox(height: 24.0),
           new TextFormField(
             decoration: const InputDecoration(
               border: InputBorder.none,
               filled: true,
-              labelText: 'Email'
+              labelText: 'Email',
+              fillColor: Colors.white
             ),
             controller: _emailController,
           ),
@@ -70,7 +75,8 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
             height: 50.0,
             child: new RaisedButton(
               onPressed: _submitPress(),
-              child: new Text("Request a code", style: TextStyle(color: Colors.white, fontSize: 16.0)),
+              child: new Text('REQUEST A CODE',
+                style: Themes.buttonCaption),
               color: Colors.teal
             )
           )
@@ -84,21 +90,16 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('+AddJust'),
-        centerTitle: true,
-        backgroundColor: Colors.grey,
+        centerTitle: true
       ),
-      drawer: new AnonDrawer(),
       body: new Container(
-        decoration: new BoxDecoration(
-          color: Colors.white
-        ),
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.only(left: 52.0, right: 52.0),
         child: new Row(
           children: <Widget>[
             new Expanded(
               child: new Column(
                 children: <Widget>[
-                  _buildForm(context)
+                  _buildForm()
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max

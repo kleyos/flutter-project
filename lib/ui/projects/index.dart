@@ -10,26 +10,21 @@ import 'package:add_just/ui/shared/add-just-title.dart';
 class _ProjectsIndexState extends State<ProjectsIndex> {
   final List<ProjectItem> _projects = <ProjectItem>[];
 
-  void _loadProjects() {
+  void _loadProjects() async {
     Projects projectService = new Projects(baseURL: 'https://api.staging.termpay.io/api');
-    projectService.index(widget.user).then((ApiResponse resp) {
-//      if (resp.isError) {
-//        // show error
-//      } else {
-//        List.from(resp.data['projects']).forEach((p) {
-//          setState(() {
-//            _projects.add(ProjectItem(project: Project.fromApiResponse(p)));
-//          });
-//        });
-//      }
+    ApiResponse resp = await projectService.index(widget.user);
+    List.from(resp.data['projects']).forEach((p) {
+      setState(() {
+        _projects.add(ProjectItem(project: Project.fromApiResponse(p)));
+      });
     });
   }
 
-//  @override
-//  void initState() {
-//    super.initState();
-//    _loadProjects();
-//  }
+  @override
+  void initState() {
+    super.initState();
+    _loadProjects();
+  }
 
   Widget _listProjects() {
     return new ListView.builder(

@@ -11,7 +11,9 @@ class AddJustApp extends StatelessWidget {
     return new MaterialApp(
       title: '+AddJust',
       theme: new ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.teal,
+        backgroundColor: Colors.blueGrey,
+        scaffoldBackgroundColor: Color.fromRGBO(242, 242, 242, 1.0)
       ),
       routes: {
         '/': (BuildContext context) => CodeSignIn()
