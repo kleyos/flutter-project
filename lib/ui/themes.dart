@@ -19,6 +19,12 @@ class Themes {
     fontWeight: FontWeight.w300
   );
 
+  static TextStyle pageHeader2 = new TextStyle(
+    fontSize: 25.0,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w300
+  );
+
   static TextStyle pageHeaderHint = new TextStyle(
     fontSize: 12.0,
     fontFamily: 'Roboto',
@@ -29,5 +35,9 @@ class Themes {
     color: Colors.white,
     fontSize: 16.0,
     letterSpacing: 1.2
+  );
+
+  static TextStyle tocText = new TextStyle(
+    fontSize: 12.0
   );
 }

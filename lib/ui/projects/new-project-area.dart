@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NewProject extends StatelessWidget {
+class NewProjectArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
