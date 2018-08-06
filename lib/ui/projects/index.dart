@@ -4,6 +4,8 @@ import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/projects/project-item.dart';
+import 'package:add_just/ui/projects/projects-drawer.dart';
+import 'package:add_just/ui/shared/add-just-title.dart';
 
 class _ProjectsIndexState extends State<ProjectsIndex> {
   final List<ProjectItem> _projects = <ProjectItem>[];
@@ -43,14 +45,16 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text('Welcome to'),
-          new Text('+AddJust'),
+          new Text('Welcome to', style: TextStyle(fontSize: 30.0)),
+          new Center(child: AddJustTitle()),
+          const SizedBox(height: 58.0),
           new RaisedButton(
             child: new Text("+ADD YOUR FIRST PROJET",
               style: TextStyle(color: Colors.white, fontSize: 16.0)
             ),
             onPressed: null
-          )
+          ),
+          const SizedBox(height: 58.0 + 60.0),
         ],
       )
     );
@@ -60,10 +64,11 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('+AddJust'),
+        title: AddJustTitle(fontSize: 25.0),
         centerTitle: true,
         backgroundColor: Colors.teal,
       ),
+      drawer: ProjectsDrawer(),
       body: _projects.isNotEmpty ? _listProjects() : _addNewProject()
     );
   }
