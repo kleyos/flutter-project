@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:add_just/ui/themes.dart';
 
 class AddJustTitle extends StatelessWidget {
   AddJustTitle({
@@ -14,8 +15,8 @@ class AddJustTitle extends StatelessWidget {
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        new Text('+Add', style: TextStyle(fontSize: fontSize ?? 30.0)),
-        new Text('Just', style: TextStyle(fontSize: fontSize ?? 30.0, fontWeight: FontWeight.bold))
+        new Text('+Add', style: Themes.mainTitleLight),
+        new Text('Just', style: Themes.mainTitleBold)
       ],
     );
   }

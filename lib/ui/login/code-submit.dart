@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/user.dart';
+import 'package:add_just/ui/shared/single-action-button.dart';
+import 'package:add_just/ui/themes.dart';
+import 'package:add_just/ui/shared/add-just-title.dart';
+import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/projects/index.dart';
 import 'package:add_just/ui/login/login-screen-presenter.dart';
 import 'package:add_just/ui/common.dart';
@@ -26,6 +30,7 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
   @override
   void onLoginSuccess(User user) {
     setState(() { _isDataSending = false; });
+    _codeController.clear();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => ProjectsIndex(
         user: user
@@ -42,38 +47,32 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
       _isDataSending = true;
     });
     _presenter.doLogin(widget.email, _codeController.text);
-    _codeController.clear();
   }
 
-  Widget _buildForm(BuildContext context) {
+  Widget _buildForm() {
     return new Form(
       child: new Column(
         children: <Widget>[
           new Text(
             'Welcome',
+            style: Themes.pageHeader
           ),
           new Text(
-            'Please check your email and enter your verification code.'
+            'Please check your email and enter your verification code.',
+            style: Themes.pageHeaderHint
           ),
-          const SizedBox(height: 24.0),
+          const SizedBox(height: 82.0),
           new TextFormField(
             decoration: const InputDecoration(
               border: InputBorder.none,
               filled: true,
+              fillColor: Colors.white
             ),
+            textAlign: TextAlign.center,
             controller: _codeController,
           ),
           const SizedBox(height: 30.0),
-          new SizedBox(
-            width: double.infinity,
-            height: 50.0,
-            child: new FlatButton(
-              onPressed: _submitPress(),
-              child: new Text("LET'S GET STARTED",
-                style: TextStyle(color: Colors.white, fontSize: 16.0)),
-              color: Colors.teal
-            )
-          )
+          SingleActionButton(caption: "LET'S GET STARTED", onPressed: _submitPress())
         ]
       )
     );
@@ -83,28 +82,29 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('+AddJust'),
-        centerTitle: true,
-        backgroundColor: Colors.grey,
+        title: AddJustTitle(),
+        centerTitle: true
       ),
-      body: new Container(
-        decoration: new BoxDecoration(
-          color: Colors.white
-        ),
-        padding: const EdgeInsets.all(32.0),
-        child: new Row(
-          children: <Widget>[
-            new Expanded(
-              child: new Column(
-                children: <Widget>[
-                  _buildForm(context)
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max
-              )
+      body: new Stack(
+        children: <Widget>[
+          new BackgroundImage(),
+          new Container(
+            padding: const EdgeInsets.only(left: 52.0, right: 52.0),
+            child: new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new Column(
+                    children: <Widget>[
+                      _buildForm()
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max
+                  )
+                )
+              ]
             )
-          ]
-        )
+          )
+        ]
       )
     );
   }

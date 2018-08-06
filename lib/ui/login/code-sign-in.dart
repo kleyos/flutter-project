@@ -1,10 +1,12 @@
-import 'package:add_just/ui/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/user.dart';
+import 'package:add_just/ui/themes.dart';
+import 'package:add_just/ui/shared/add-just-title.dart';
+import 'package:add_just/ui/shared/single-action-button.dart';
+import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/login/login-screen-presenter.dart';
 import 'package:add_just/ui/login/code-submit.dart';
-import 'package:add_just/ui/login/anon-drawer.dart';
 
 class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
   final TextEditingController _emailController = new TextEditingController();
@@ -20,7 +22,6 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
       _isDataSending = true;
     });
     _presenter.requestCode(_emailController.text);
-    _emailController.clear();
   }
 
   @override
@@ -33,6 +34,7 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
 
   @override
   void onLoginSuccess(User user) {
+    _emailController.clear();
   }
 
   @override
@@ -59,27 +61,17 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
           new Text('Please specify your email to get your verification code.',
             style: Themes.pageHeaderHint
           ),
-          const SizedBox(height: 24.0),
+          const SizedBox(height: 82.0),
           new TextFormField(
             decoration: const InputDecoration(
               border: InputBorder.none,
               filled: true,
-              labelText: 'Email',
               fillColor: Colors.white
             ),
             controller: _emailController,
           ),
           const SizedBox(height: 30.0),
-          new SizedBox(
-            width: double.infinity,
-            height: 50.0,
-            child: new RaisedButton(
-              onPressed: _submitPress(),
-              child: new Text('REQUEST A CODE',
-                style: Themes.buttonCaption),
-              color: Colors.teal
-            )
-          )
+          SingleActionButton(caption: 'REQUEST A CODE', onPressed: _submitPress())
         ]
       )
     );
@@ -89,24 +81,29 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('+AddJust'),
+        title: AddJustTitle(),
         centerTitle: true
       ),
-      body: new Container(
-        padding: const EdgeInsets.only(left: 52.0, right: 52.0),
-        child: new Row(
-          children: <Widget>[
-            new Expanded(
-              child: new Column(
-                children: <Widget>[
-                  _buildForm()
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max
-              )
+      body: new Stack(
+        children: <Widget>[
+          new BackgroundImage(),
+          new Container(
+            padding: const EdgeInsets.only(left: 52.0, right: 52.0),
+            child: new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new Column(
+                    children: <Widget>[
+                      _buildForm()
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max
+                  )
+                )
+              ]
             )
-          ]
-        )
+          )
+        ]
       )
     );
   }

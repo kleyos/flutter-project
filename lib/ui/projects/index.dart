@@ -3,6 +3,8 @@ import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/models/project.dart';
+import 'package:add_just/ui/shared/single-action-button.dart';
+import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/projects/project-item.dart';
 import 'package:add_just/ui/projects/projects-drawer.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
@@ -35,6 +37,10 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
     );
   }
 
+  void _handleAddNewProject() {
+
+  }
+
   Widget _addNewProject() {
     return new Center(
       child: new Column(
@@ -43,12 +49,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
           new Text('Welcome to', style: TextStyle(fontSize: 30.0)),
           new Center(child: AddJustTitle()),
           const SizedBox(height: 58.0),
-          new RaisedButton(
-            child: new Text("+ADD YOUR FIRST PROJET",
-              style: TextStyle(color: Colors.white, fontSize: 16.0)
-            ),
-            onPressed: null
-          ),
+          SingleActionButton(caption: '+ADD NEW PROJECT', onPressed: _handleAddNewProject),
           const SizedBox(height: 58.0 + 60.0),
         ],
       )
@@ -64,7 +65,15 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
         backgroundColor: Colors.teal,
       ),
       drawer: ProjectsDrawer(),
-      body: _projects.isNotEmpty ? _listProjects() : _addNewProject()
+      body: new Stack(
+        children: <Widget>[
+          new BackgroundImage(),
+          new Container(
+            padding: const EdgeInsets.only(left: 52.0, right: 52.0),
+            child: _projects.isNotEmpty ? _listProjects() : _addNewProject()
+          )
+        ]
+      )
     );
   }
 }
