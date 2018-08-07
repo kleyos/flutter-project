@@ -12,6 +12,6 @@ class SingleActionButton extends SizedBox {
     color: Colors.teal
   ));
 
-  final Function onPressed;
+  final VoidCallback onPressed;
   final String caption;
 }
