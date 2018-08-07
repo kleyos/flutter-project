@@ -7,6 +7,7 @@ import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/projects/project-item.dart';
 import 'package:add_just/ui/projects/projects-drawer.dart';
+import 'package:add_just/ui/projects/new-project-start.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 
 class _ProjectsIndexState extends State<ProjectsIndex> {
@@ -38,7 +39,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
   }
 
   void _handleAddNewProject() {
-
+    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c) => new NewProjectStart()));
   }
 
   Widget _addNewProject() {
