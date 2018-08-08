@@ -15,17 +15,18 @@ class NewProjectStart extends StatelessWidget {
         children: <Widget>[
           new Expanded(
             flex: 1,
-            child: new Container(
-              padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-              child: new Column(
-                children: <Widget>[
-                  new Text('New project',
-                  style: Themes.pageHeader2,
+            child: new ListView(
+              children:  <Widget>[
+                new Column(
+                  children: <Widget>[
+                    new Text('New project', style: Themes.pageHeader2),
+                    new Text('Please enter project details to get started.',
+                      style: Themes.pageHeaderHint
+                    ),
+                  ]
                 ),
-                  new Text('Please enter project details to get started.',
-                  style: Themes.pageHeaderHint
-                ),
-                  new TextFormField(
+                const SizedBox(height: 16.0),
+                new TextFormField(
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     labelText: 'Project name',
@@ -34,30 +35,20 @@ class NewProjectStart extends StatelessWidget {
                   ),
                   controller: _nameController,
                 ),
-                  const SizedBox(height: 15.0),
-                  new TextFormField(
+                const SizedBox(height: 16.0),
+                new TextFormField(
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     labelText: 'Address',
                     filled: true,
                     fillColor: Colors.white
                   ),
-                  controller: _addressController,
+                controller: _addressController,
                 ),
-                ]
-              )
+              ]
             ),
           ),
-          new Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              new RaisedButton(
-                onPressed: null,
-                child: new Text('NEXT', style: Themes.buttonCaption),
-                color: Colors.teal
-              )
-            ]
-          )
+          new SingleActionButton(caption: 'NEXT', onPressed: null)
         ]
       )
     );
@@ -65,7 +56,6 @@ class NewProjectStart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Scaffold(
       appBar: new AppBar(
         title: AddJustTitle(),
@@ -75,7 +65,7 @@ class NewProjectStart extends StatelessWidget {
         children: <Widget>[
           new BackgroundImage(),
           new Container(
-            padding: const EdgeInsets.only(top: 42.0, left: 24.0, right: 24.0),
+            padding: const EdgeInsets.all(42.0),
             child: _buildForm()
           )
         ]

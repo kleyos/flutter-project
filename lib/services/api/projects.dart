@@ -12,4 +12,9 @@ class Projects extends Base {
     return get("/api/orgs/${user.orgId}/projects",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${user.accessToken}"});
   }
+
+  Future<ApiResponse> regions(User user) {
+    return get("/api/orgs/${user.orgId}/regions",
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${user.accessToken}"});
+  }
 }
