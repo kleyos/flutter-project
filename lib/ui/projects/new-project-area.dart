@@ -10,37 +10,22 @@ import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _NewProjectAreaState extends State<NewProjectArea> {
-  String _currentAreaId;
-  List<DropdownMenuItem<String>> _dropDownMenuItems;
-  bool _isDataLoaded = false;
+  int _currentAreaId;
   User _user = new User(accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJ2aWFjaGVzbGF2LnBldHJlbmtvQGxpdHNsaW5rLmNvbSIsInJvbGUiOiJhbW8iLCJoYXNoIjoiNWFlMDVjYmQtMGJkNS00ODg1LTliMWYtZDhmOWU3NzdhZWI2Iiwib3JnX2lkIjoxLCJhdWQiOiJwb3N0Z3JhcGhpbGUiLCJpYXQiOjE1MzMyOTg2NDgsImV4cCI6MTU5NjQxMzg0OH0.bewHazaLjuepKOabh79xYOwrVZh2YZXQVhhqQqFhkWI', orgId: 1);
 
-  Future<List<Map<String, String>>> _loadRegions() async {
-    Projects projectService = new Projects(baseURL: 'https://api.staging.termpay.io/api');
+  Future<List<Map<String, dynamic>>> _loadRegions() async {
+    Projects projectService = new Projects(baseURL: 'api.staging.termpay.io');
     try {
-      ApiResponse resp = await projectService.index(_user);
-      return resp.data['regions'];
+      ApiResponse resp = await projectService.regions(_user);
+      return resp != null ? resp.data['regions'] : [];
     } catch (e) {
       print(e);
     }
+    return [];
   }
 
-  @override
-  void initState() {
-    _loadRegions().then((val) {
-      _dropDownMenuItems = val.map((e) =>
-        new DropdownMenuItem<String>(value: e['id'], child: new Text(e['name']))
-      );
-      _currentAreaId = _dropDownMenuItems[0].value;
-      _isDataLoaded = true;
-     });
-    super.initState();
-  }
-
-  void changedDropDownItem(String selectedId) {
-    setState(() {
-      _currentAreaId = selectedId;
-    });
+  void changedDropDownItem(int selectedId) {
+    _currentAreaId = selectedId;
   }
 
   Widget _buildForm() {
@@ -56,13 +41,22 @@ class _NewProjectAreaState extends State<NewProjectArea> {
                 new Text('Please enter project details to get started.',
                   style: Themes.pageHeaderHint
                 ),
-                const SizedBox(height: 16.0),
-                _isDataLoaded ?
-                new DropdownButton(
-                  value: _currentAreaId,
-                  items: _dropDownMenuItems,
-                  onChanged: changedDropDownItem,
-                ) : SizedBox()
+                new FutureBuilder(
+                  future: _loadRegions(),
+                  builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return new Text('Loading...');
+                    } else {
+                      return new DropdownButton<int>(
+                        items: snapshot.data.map((Map<String, dynamic> row) => new DropdownMenuItem<int>(
+                          value: row['id'],
+                          child: new Text(row['name'])
+                        )).toList(),
+                        onChanged: changedDropDownItem
+                      );
+                    }
+                  }
+                )
               ]
             )
           ),

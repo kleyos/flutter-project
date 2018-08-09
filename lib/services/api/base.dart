@@ -35,8 +35,9 @@ class Base {
     return _extractResponse(await http.post(Path.join(baseURL, path), headers: headers, body: body));
   }
 
-  Future<ApiResponse> get(String path, {Map<String, dynamic> headers}) async {
-    return _extractResponse(await http.get(Path.join(baseURL, path), headers: headers));
+  Future<ApiResponse> get(String path, {Map<String, String> headers}) async {
+    Response r = await http.get(Uri.https(baseURL, path), headers: headers);
+    return _extractResponse(r);
   }
 
   ApiResponse _extractResponse(Response r) {
