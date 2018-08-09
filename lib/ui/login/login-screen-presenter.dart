@@ -11,7 +11,7 @@ abstract class LoginContract {
 
 class LoginScreenPresenter {
   LoginContract _view;
-  Login _loginService = new Login(baseURL: 'https://api.staging.termpay.io/api');
+  Login _loginService = new Login();
   LoginScreenPresenter(this._view);
 
   void requestCode(String email) async {

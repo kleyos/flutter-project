@@ -3,8 +3,8 @@ import 'package:add_just/services/api/base.dart';
 
 class Login extends Base {
   Login({
-    String baseURL
-  }) : super(baseURL: baseURL);
+    String host
+  }) : super(host: host);
 
   Future<ApiResponse> requestCode(String email) async {
     return await post('login/request-code', body: {"email": email});

@@ -2,15 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
-import 'package:path/path.dart' as Path;
 
 class ApiResponse {
   ApiResponse.fromResponse(String payload) {
     data = json.decode(payload);
   }
 
-  Map<String, dynamic> data;
+  Map<String, Object> data;
 
   bool get isError => data.containsKey('type') && data.containsKey('message');
 
@@ -26,18 +24,19 @@ class ApiResponse {
 
 class Base {
   Base({
-    @required this.baseURL
+    this.host
   });
 
-  final String baseURL;
+  String host;
+
+  String get _host => host ?? 'api.staging.termpay.io';
 
   Future<ApiResponse> post(String path, {Map<String, dynamic> headers, body}) async {
-    return _extractResponse(await http.post(Path.join(baseURL, path), headers: headers, body: body));
+    return _extractResponse(await http.post(Uri.https(_host, path), headers: headers, body: body));
   }
 
   Future<ApiResponse> get(String path, {Map<String, String> headers}) async {
-    Response r = await http.get(Uri.https(baseURL, path), headers: headers);
-    return _extractResponse(r);
+    return _extractResponse(await http.get(Uri.https(_host, path), headers: headers));
   }
 
   ApiResponse _extractResponse(Response r) {

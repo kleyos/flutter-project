@@ -1,5 +1,3 @@
-import 'package:add_just/services/api/base.dart';
-
 class Project {
   Project({
     this.id,
@@ -12,9 +10,9 @@ class Project {
   String name;
   List<String> location;
 
-  Project.fromApiResponse(ApiResponse resp) :
-    id = resp['id'],
-    orgId = resp['org_id'],
-    name = resp['name'],
-    location = resp['location'];
+  Project.fromApiResponse(Map<String, dynamic> p) :
+    id = p['id'],
+    orgId = p['org_id'],
+    name = p['name'],
+    location = p['location'];
 }

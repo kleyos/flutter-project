@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:add_just/models/user.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
+import 'package:add_just/ui/projects/new-project-area.dart';
 
-class NewProjectStart extends StatelessWidget {
+class _NewProjectStartState extends State<NewProjectStart> {
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _addressController = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  bool get canDoNext => _formKey.currentState != null && _formKey.currentState.validate();
+
+  void _handleNext() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (BuildContext c) => new NewProjectArea(user: widget.user))
+    );
+  }
+
+  Function _nextPress() {
+    return canDoNext ? () { _handleNext(); } : null;
+  }
 
   Widget _buildForm() {
     return new Form(
+      key: _formKey,
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -34,6 +50,13 @@ class NewProjectStart extends StatelessWidget {
                     fillColor: Colors.white
                   ),
                   controller: _nameController,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    } else {
+                      return;
+                    }
+                  },
                 ),
                 const SizedBox(height: 16.0),
                 new TextFormField(
@@ -43,12 +66,17 @@ class NewProjectStart extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.white
                   ),
-                controller: _addressController,
+                  controller: _addressController,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                  },
                 ),
               ]
             ),
           ),
-          new SingleActionButton(caption: 'NEXT', onPressed: null)
+          new SingleActionButton(caption: 'NEXT', onPressed: _nextPress())
         ]
       )
     );
@@ -72,4 +100,12 @@ class NewProjectStart extends StatelessWidget {
       )
     );
   }
+}
+
+class NewProjectStart extends StatefulWidget {
+  NewProjectStart({Key key, this.user}) : super(key: key);
+  final User user;
+
+  @override
+  State<StatefulWidget> createState() => new _NewProjectStartState();
 }
