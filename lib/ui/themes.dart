@@ -40,4 +40,13 @@ class Themes {
   static TextStyle tocText = new TextStyle(
     fontSize: 12.0
   );
+
+  static TextStyle summaryCaption = new TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.bold
+  );
+
+  static TextStyle summaryData = new TextStyle(
+    fontSize: 16.0
+  );
 }

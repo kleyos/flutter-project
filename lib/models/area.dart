@@ -1,5 +1,3 @@
-import 'package:add_just/services/api/base.dart';
-
 class Area {
   Area({
     this.id,

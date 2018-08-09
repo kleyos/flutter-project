@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/models/user.dart';
+import 'package:add_just/models/account.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
@@ -28,12 +28,12 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
   }
 
   @override
-  void onLoginSuccess(User user) {
+  void onLoginSuccess(Account user) {
     setState(() { _isDataSending = false; });
     _codeController.clear();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => ProjectsIndex(
-        user: user
+        account: user
       ))
     );
   }

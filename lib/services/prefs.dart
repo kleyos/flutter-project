@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:add_just/models/user.dart';
+import 'package:add_just/models/account.dart';
 
 class PrefsService {
   static final PrefsService _instance = new PrefsService._internal();
@@ -15,7 +15,7 @@ class PrefsService {
     return _prefs.get(key);
   }
 
-  void storeUser(User user) {
+  void storeUser(Account user) {
 
   }
 }

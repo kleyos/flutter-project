@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
-import 'package:add_just/models/user.dart';
+import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -16,7 +16,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
   Future<List<dynamic>> _loadProjects() async {
     try {
       Projects projectService = new Projects();
-      ApiResponse resp = await projectService.index(widget.user);
+      ApiResponse resp = await projectService.index(widget.account);
       return List.from(resp.data['projects']).map((p) =>
         ProjectItem(project: Project.fromApiResponse(p))).toList();
     } catch (e) {
@@ -27,7 +27,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
 
   void _handleAddNewProject() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext c) => new NewProjectStart(user: widget.user))
+      MaterialPageRoute(builder: (BuildContext c) => new NewProjectStart(account: widget.account))
     );
   }
 
@@ -89,9 +89,9 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
 }
 
 class ProjectsIndex extends StatefulWidget {
-  ProjectsIndex({Key key, this.user}) : super(key: key);
+  ProjectsIndex({Key key, this.account}) : super(key: key);
 
-  final User user;
+  final Account account;
 
   @override
   State<StatefulWidget> createState() => new _ProjectsIndexState();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/models/user.dart';
+import 'package:add_just/models/account.dart';
+import 'package:add_just/models/new-project.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -10,17 +11,20 @@ class _NewProjectStartState extends State<NewProjectStart> {
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _addressController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  bool get canDoNext => _formKey.currentState != null && _formKey.currentState.validate();
+  NewProject newProject = new NewProject();
 
   void _handleNext() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext c) => new NewProjectArea(user: widget.user))
-    );
-  }
-
-  Function _nextPress() {
-    return canDoNext ? () { _handleNext(); } : null;
+    if (_formKey.currentState.validate()) {
+      newProject.name = _nameController.text;
+      newProject.address = _addressController.text;
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext c) => new NewProjectArea(
+            account: widget.account,
+            project: newProject
+          ))
+      );
+    }
   }
 
   Widget _buildForm() {
@@ -52,9 +56,7 @@ class _NewProjectStartState extends State<NewProjectStart> {
                   controller: _nameController,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Please enter some text';
-                    } else {
-                      return;
+                      return 'Please enter new project name';
                     }
                   },
                 ),
@@ -69,14 +71,14 @@ class _NewProjectStartState extends State<NewProjectStart> {
                   controller: _addressController,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Please enter some text';
+                      return 'Please enter new project address';
                     }
                   },
                 ),
               ]
             ),
           ),
-          new SingleActionButton(caption: 'NEXT', onPressed: _nextPress())
+          new SingleActionButton(caption: 'NEXT', onPressed: _handleNext)
         ]
       )
     );
@@ -103,8 +105,9 @@ class _NewProjectStartState extends State<NewProjectStart> {
 }
 
 class NewProjectStart extends StatefulWidget {
-  NewProjectStart({Key key, this.user}) : super(key: key);
-  final User user;
+  NewProjectStart({Key key, this.account}) : super(key: key);
+
+  final Account account;
 
   @override
   State<StatefulWidget> createState() => new _NewProjectStartState();

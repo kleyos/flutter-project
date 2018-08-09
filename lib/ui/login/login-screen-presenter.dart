@@ -1,11 +1,11 @@
-import 'package:add_just/models/user.dart';
+import 'package:add_just/models/account.dart';
 import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/login.dart';
 import 'package:add_just/services/prefs.dart';
 
 abstract class LoginContract {
   void onLoginCodeRequested(String email);
-  void onLoginSuccess(User user);
+  void onLoginSuccess(Account user);
   void onLoginError(String errorTxt);
 }
 
@@ -26,7 +26,7 @@ class LoginScreenPresenter {
   void doLogin(String email, code) async {
     try {
       ApiResponse resp = await _loginService.requestToken(email, code);
-      User user = User.fromApiResponse(resp);
+      Account user = Account.fromApiResponse(resp);
       PrefsService prefs = new PrefsService();
       prefs.storeUser(user);
       _view.onLoginSuccess(user);

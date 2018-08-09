@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:add_just/models/new-project.dart';
+import 'package:add_just/ui/projects/new-project-person.dart';
 import 'package:add_just/models/area.dart';
-import 'package:add_just/models/user.dart';
+import 'package:add_just/models/account.dart';
 import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
-import 'package:flutter/material.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
@@ -17,8 +19,9 @@ class _NewProjectAreaState extends State<NewProjectArea> {
     if (_areas.isEmpty) {
       Projects projectService = new Projects();
       try {
-        ApiResponse resp = await projectService.regions(widget.user);
+        ApiResponse resp = await projectService.regions(widget.account);
         _areas = List.from(resp.data['regions']).map((e) => Area.fromApiResponse(e)).toList();
+        _currentAreaId = _areas[0]?.id;
       } catch (e) {
         print(e);
       }
@@ -30,6 +33,18 @@ class _NewProjectAreaState extends State<NewProjectArea> {
     setState(() {
       _currentAreaId = selectedId;
     });
+  }
+  void _handleNext() {
+    if (_currentAreaId != null) {
+      widget.project.region = _areas.firstWhere((area) => area.id == _currentAreaId);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext c) => new NewProjectPerson(
+            account: widget.account,
+            project: widget.project
+          ))
+      );
+    }
   }
 
   Widget _buildDropDown() {
@@ -53,26 +68,24 @@ class _NewProjectAreaState extends State<NewProjectArea> {
   }
 
   Widget _buildForm() {
-    return new Form(
-      child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Expanded(
-            flex: 1,
-            child: new Column(
-              children: <Widget>[
-                new Text('Area', style: Themes.pageHeader2),
-                new Text('Please enter project details to get started.',
-                  style: Themes.pageHeaderHint
-                ),
-                const SizedBox(height: 16.0),
-                _buildDropDown()
-              ]
-            )
-          ),
-          new SingleActionButton(caption: 'NEXT', onPressed: null)
-        ]
-      )
+    return new Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        new Expanded(
+          flex: 1,
+          child: new Column(
+            children: <Widget>[
+              new Text('Area', style: Themes.pageHeader2),
+              new Text('Please enter project details to get started.',
+                style: Themes.pageHeaderHint
+              ),
+              const SizedBox(height: 16.0),
+              _buildDropDown()
+            ]
+          )
+        ),
+        new SingleActionButton(caption: 'NEXT', onPressed: _handleNext)
+      ]
     );
   }
 
@@ -97,9 +110,10 @@ class _NewProjectAreaState extends State<NewProjectArea> {
 }
 
 class NewProjectArea extends StatefulWidget {
-  NewProjectArea({Key key, this.user}) : super(key: key);
+  NewProjectArea({Key key, this.account, this.project}) : super(key: key);
 
-  final User user;
+  final Account account;
+  final NewProject project;
 
   @override
   State<StatefulWidget> createState() => new _NewProjectAreaState();
