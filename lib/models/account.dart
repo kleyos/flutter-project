@@ -41,4 +41,6 @@ class Account {
       role = resp['user']['role'],
       status = resp['user']['status'],
       accessToken = resp['token'];
+
+    String get displayName => [firstName, lastName].join(' ');
 }

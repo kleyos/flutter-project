@@ -11,11 +11,12 @@ class ApiResponse {
 
   Map<String, Object> data;
 
-  bool get isError => data.containsKey('type') && data.containsKey('message');
+  bool get isError => (data.containsKey('type') && data.containsKey('message')) ||
+    data.containsKey('error');
 
   String get error {
     if (isError) {
-      return data['message'];
+      return data['message'] ?? data['error'];
     }
     return '';
   }
@@ -32,41 +33,54 @@ class Base {
 
   String get _host => host ?? 'api.staging.termpay.io';
 
-  Future<ApiResponse> post(String path, {Map<String, Object> headers, body}) async {
-    return _extractResponse(await http.post(Uri.https(_host, path),
-      headers: headers, body: body));
-  }
-
   Future<ApiResponse> get(String path, {Map<String, String> headers}) async {
-    return _extractResponse(await http.get(Uri.https(_host, path), headers: headers));
+    HttpClient httpClient = new HttpClient();
+    HttpClientRequest request = await httpClient.getUrl(Uri.https(_host, path));
+    request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
+    if (headers != null) {
+      headers.forEach((k, v) { request.headers.add(k, v); });
+    }
+    HttpClientResponse response = await request.close();
+    ApiResponse resp = await _extractResponse(response);
+    httpClient.close();
+    return resp;
   }
 
-  Future<String> postJson(String path, {Map<String, String> headers, Map<String, dynamic> body}) async {
+  Future<ApiResponse> post(String path, {Map<String, String> headers, Map<String, dynamic> body}) async {
     HttpClient httpClient = new HttpClient();
-    HttpClientRequest request = await httpClient.postUrl(Uri.https(_host, path));
-    request.headers.set('content-type', 'application/json');
-    headers.forEach((k, v) => request.headers.set(k, v));
+    Uri uri = Uri.https(_host, path);
+    print(uri);
+    HttpClientRequest request = await httpClient.postUrl(uri);
+    request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
+    if (headers != null) {
+      headers.forEach((k, v) { request.headers.add(k, v); });
+    }
     request.add(utf8.encode(json.encode(body)));
     HttpClientResponse response = await request.close();
-    // todo - you should check the response.statusCode
-    String reply = await response.transform(utf8.decoder).join();
+    ApiResponse resp = await _extractResponse(response);
     httpClient.close();
-    return reply;
+    return resp;
   }
 
-  ApiResponse _extractResponse(Response r) {
+  Future<ApiResponse> _extractResponse(HttpClientResponse r) async {
+    String body;
+    ApiResponse resp;
+    print(r);
+
     switch (r.statusCode) {
       case 200:
-        ApiResponse resp = ApiResponse.fromResponse(r.body);
+        body = await r.transform(utf8.decoder).join();
+        resp = ApiResponse.fromResponse(body);
         return resp;
         break;
       case 400:
       case 401:
-        ApiResponse resp = ApiResponse.fromResponse(r.body);
+        body = await r.transform(utf8.decoder).join();
+        resp = ApiResponse.fromResponse(body);
         throw new Exception(resp.error);
         break;
       default:
-        throw new Exception('Failed to perform a request');
+        throw new Exception('Failed to perform a request, status: ${r.statusCode}');
         break;
     }
   }

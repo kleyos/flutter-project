@@ -49,4 +49,9 @@ class Themes {
   static TextStyle summaryData = new TextStyle(
     fontSize: 16.0
   );
+
+  static TextStyle projectListTitle = new TextStyle(
+    fontSize: 25.0,
+    color: Color.fromRGBO(0, 150, 130, 1.0)
+  );
 }

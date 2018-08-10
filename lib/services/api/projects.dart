@@ -24,8 +24,8 @@ class Projects extends Base {
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
   }
 
-  Future<String> saveNewProject(Account acc, NewProject project) {
-    return postJson("/api/orgs/${acc.orgId}/projects",
+  Future<ApiResponse> saveNewProject(Account acc, NewProject project) {
+    return post("/api/orgs/${acc.orgId}/projects",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"},
       body: project.toJson());
   }

@@ -5,7 +5,7 @@ class BackgroundImage extends Container {
     Key key
   }) : super(key: key, decoration: new BoxDecoration(
       image: new DecorationImage(
-        image: new AssetImage("assets/images/background.png"),
+        image: new AssetImage('assets/images/background.png'),
         fit: BoxFit.cover
       ),
     )

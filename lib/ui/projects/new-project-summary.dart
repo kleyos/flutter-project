@@ -1,5 +1,6 @@
 import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/ui/projects/new-project-finish.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/new-project.dart';
@@ -24,12 +25,17 @@ class NewProjectSummary extends StatelessWidget {
     );
   }
 
-  void _handleCompletePress() async {
+  void _handleCompletePress(BuildContext context) async {
     print(project.toJson());
     try {
       Projects projectService = new Projects();
-      String resp = await projectService.saveNewProject(account, project);
+      ApiResponse resp = await projectService.saveNewProject(account, project);
       print(resp);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => NewProjectFinish(
+          project: project
+        ))
+      );
     } catch (e) {
       print(e);
     }
@@ -64,7 +70,7 @@ class NewProjectSummary extends StatelessWidget {
                     ],
                   )
                 ),
-                new SingleActionButton(caption: 'COMPLETE PROJECT SETUP', onPressed: _handleCompletePress)
+                new SingleActionButton(caption: 'COMPLETE PROJECT SETUP', onPressed: () { _handleCompletePress(context); })
               ],
             )
           )

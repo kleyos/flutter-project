@@ -61,7 +61,7 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
           new Text('Please specify your email to get your verification code.',
             style: Themes.pageHeaderHint
           ),
-          const SizedBox(height: 82.0),
+          const SizedBox(height: 32.0),
           new TextFormField(
             decoration: const InputDecoration(
               border: InputBorder.none,

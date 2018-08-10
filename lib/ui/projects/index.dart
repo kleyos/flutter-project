@@ -18,7 +18,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
       Projects projectService = new Projects();
       ApiResponse resp = await projectService.index(widget.account);
       return List.from(resp.data['projects']).map((p) =>
-        ProjectItem(project: Project.fromApiResponse(p))).toList();
+        ProjectItem(account: widget.account, project: Project.fromApiResponse(p))).toList();
     } catch (e) {
       print(e);
     }
