@@ -54,4 +54,9 @@ class Themes {
     fontSize: 25.0,
     color: Color.fromRGBO(0, 150, 130, 1.0)
   );
+
+  static TextStyle projectListSubtitle = new TextStyle(
+    fontSize: 13.0,
+    color: Colors.black54
+  );
 }

@@ -55,6 +55,27 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
     );
   }
 
+  Widget _buildMainContent() {
+    return new FutureBuilder(
+      future: _loadProjects(),
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return new Center(child: new CircularProgressIndicator());
+        } else {
+          return snapshot.data.isNotEmpty
+            ? new Container(
+                padding: const EdgeInsets.all(16.0),
+                child: _listProjects(snapshot.data)
+              )
+            : new Container(
+                padding: const EdgeInsets.all(42.0),
+                child: _addNewProject()
+              );
+        }
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -67,22 +88,13 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
       body: new Stack(
         children: <Widget>[
           new BackgroundImage(),
-          new Container(
-            padding: const EdgeInsets.only(left: 52.0, right: 52.0),
-            child: new FutureBuilder(
-              future: _loadProjects(),
-              builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return new Center(child: new CircularProgressIndicator());
-                } else {
-                  return snapshot.data.isNotEmpty
-                    ? _listProjects(snapshot.data)
-                    : _addNewProject();
-                }
-              }
-            )
-          )
+          _buildMainContent()
         ]
+      ),
+      floatingActionButton: new FloatingActionButton(
+        onPressed: _handleAddNewProject,
+        tooltip: 'Add new project',
+        child: new Icon(Icons.add),
       )
     );
   }
