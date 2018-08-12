@@ -9,23 +9,23 @@ class Projects extends Base {
     String host
   }) : super(host: host);
 
-  Future<ApiResponse> index(Account acc) {
-    return get("/api/orgs/${acc.orgId}/projects",
+  Future<ApiResponse> index(Account acc) async {
+    return await get("/api/orgs/${acc.orgId}/projects",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
   }
 
-  Future<ApiResponse> regions(Account acc) {
-    return get("/api/orgs/${acc.orgId}/regions",
+  Future<ApiResponse> regions(Account acc) async {
+    return await get("/api/orgs/${acc.orgId}/regions",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
   }
 
-  Future<ApiResponse> users(Account acc) {
-    return get("/api/orgs/${acc.orgId}/users",
+  Future<ApiResponse> users(Account acc) async {
+    return await get("/api/orgs/${acc.orgId}/users",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
   }
 
-  Future<ApiResponse> saveNewProject(Account acc, NewProject project) {
-    return post("/api/orgs/${acc.orgId}/projects",
+  Future<ApiResponse> saveNewProject(Account acc, NewProject project) async {
+    return await post("/api/orgs/${acc.orgId}/projects",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"},
       body: project.toJson());
   }

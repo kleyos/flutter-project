@@ -38,7 +38,9 @@ class ProjectItem extends StatelessWidget {
           children: <Widget>[
             new Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[_buildLid()],
+              children: <Widget>[
+                _buildLid()
+              ],
             ),
             new Text(project.name, style: Themes.projectListTitle),
             new Text(subtitle, style: Themes.projectListSubtitle)

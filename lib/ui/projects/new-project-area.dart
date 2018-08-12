@@ -10,23 +10,37 @@ import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
+import 'package:add_just/ui/common.dart';
 
 class _NewProjectAreaState extends State<NewProjectArea> {
   int _currentAreaId;
+  bool _isDataLoading = false;
   List<Area> _areas = [];
 
   Future<List<Area>> _loadRegions() async {
     if (_areas.isEmpty) {
+      setState(() {
+        _isDataLoading = true;
+      });
       Projects projectService = new Projects();
       try {
         ApiResponse resp = await projectService.regions(widget.account);
         _areas = List.from(resp.data['regions']).map((e) => Area.fromApiResponse(e)).toList();
         _currentAreaId = _areas[0]?.id;
       } catch (e) {
-        print(e);
+        showAlert(context, e.toString());
+      }
+      finally {
+        setState(() {
+          _isDataLoading = false;
+        });
       }
     }
     return _areas;
+  }
+
+  Function _submitPress() {
+    return _isDataLoading ? null : () { _handleNext(); };
   }
 
   void changedDropDownItem(int selectedId) {
@@ -34,6 +48,7 @@ class _NewProjectAreaState extends State<NewProjectArea> {
       _currentAreaId = selectedId;
     });
   }
+
   void _handleNext() {
     if (_currentAreaId != null) {
       widget.project.region = _areas.firstWhere((area) => area.id == _currentAreaId);
@@ -84,7 +99,7 @@ class _NewProjectAreaState extends State<NewProjectArea> {
             ]
           )
         ),
-        new SingleActionButton(caption: 'NEXT', onPressed: _handleNext)
+        new SingleActionButton(caption: 'NEXT', onPressed: _submitPress())
       ]
     );
   }

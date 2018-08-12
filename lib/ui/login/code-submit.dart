@@ -71,7 +71,7 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
             textAlign: TextAlign.center,
             controller: _codeController,
           ),
-          const SizedBox(height: 30.0),
+          const SizedBox(height: 32.0),
           SingleActionButton(caption: "LET'S GET STARTED", onPressed: _submitPress())
         ]
       )

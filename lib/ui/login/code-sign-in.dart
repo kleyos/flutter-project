@@ -70,7 +70,7 @@ class _CodeSignInState extends State<CodeSignIn> implements LoginContract {
             ),
             controller: _emailController,
           ),
-          const SizedBox(height: 30.0),
+          const SizedBox(height: 32.0),
           SingleActionButton(caption: 'REQUEST A CODE', onPressed: _submitPress())
         ]
       )

@@ -1,20 +1,22 @@
+import 'package:flutter/material.dart';
 import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
-import 'package:add_just/ui/projects/new-project-finish.dart';
-import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/new-project.dart';
+import 'package:add_just/ui/projects/new-project-finish.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
+import 'package:add_just/ui/common.dart';
 
-class NewProjectSummary extends StatelessWidget {
-  NewProjectSummary({Key key, this.account, this.project}) : super(key: key);
+class _NewProjectSummaryState extends State<NewProjectSummary> {
+  bool _isDataSending = false;
 
-  final Account account;
-  final NewProject project;
-  
+  Function _submitPress() {
+    return _isDataSending ? null : () { _handleCompletePress(); };
+  }
+
   Widget _buildSummaryRow(String caption, text) {
     return new Row(
       children: <Widget>[
@@ -25,19 +27,27 @@ class NewProjectSummary extends StatelessWidget {
     );
   }
 
-  void _handleCompletePress(BuildContext context) async {
-    print(project.toJson());
+  void _handleCompletePress() async {
+    print(widget.project.toJson());
     try {
+      setState(() {
+        _isDataSending = true;
+      });
       Projects projectService = new Projects();
-      ApiResponse resp = await projectService.saveNewProject(account, project);
-      print(resp);
-      Navigator.of(context).push(
+      await projectService.saveNewProject(widget.account, widget.project);
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => NewProjectFinish(
-          project: project
+          account: widget.account,
+          project: widget.project
         ))
       );
     } catch (e) {
       print(e);
+      showAlert(context, e.toString());
+    } finally {
+      setState(() {
+        _isDataSending = false;
+      });
     }
   }
   
@@ -63,14 +73,14 @@ class NewProjectSummary extends StatelessWidget {
                   flex: 1,
                   child: new Column(
                     children: <Widget>[
-                      _buildSummaryRow('Project:', project.name),
-                      _buildSummaryRow('Address:', project.address),
-                      _buildSummaryRow('Area:', project.region.name),
-                      _buildSummaryRow('Senior QS / Engineer:', project.user.displayName)
+                      _buildSummaryRow('Project:', widget.project.name),
+                      _buildSummaryRow('Address:', widget.project.address),
+                      _buildSummaryRow('Area:', widget.project.region.name),
+                      _buildSummaryRow('Senior QS / Engineer:', widget.project.user.displayName)
                     ],
                   )
                 ),
-                new SingleActionButton(caption: 'COMPLETE PROJECT SETUP', onPressed: () { _handleCompletePress(context); })
+                new SingleActionButton(caption: 'COMPLETE PROJECT SETUP', onPressed: _submitPress())
               ],
             )
           )
@@ -78,4 +88,14 @@ class NewProjectSummary extends StatelessWidget {
       )
     );
   }
+}
+
+class NewProjectSummary extends StatefulWidget {
+  NewProjectSummary({Key key, this.account, this.project}) : super(key: key);
+
+  final Account account;
+  final NewProject project;
+
+  @override
+  State<StatefulWidget> createState() => new _NewProjectSummaryState();
 }

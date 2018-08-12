@@ -10,23 +10,36 @@ import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
+import 'package:add_just/ui/common.dart';
 
 class _NewProjectPersonState extends State<NewProjectPerson> {
   int _currentUserId;
+  bool _isDataLoading = false;
   List<User> _users = [];
 
   Future<List<User>> _loadRegions() async {
     if (_users.isEmpty) {
+      setState(() {
+        _isDataLoading = true;
+      });
       Projects projectService = new Projects();
       try {
         ApiResponse resp = await projectService.users(widget.account);
         _users = List.from(resp.data['users']).map((e) => User.fromApiResponse(e)).toList();
         _currentUserId = _users[0]?.id;
       } catch (e) {
-        print(e);
+        showAlert(context, e.toString());
+      } finally {
+        setState(() {
+          _isDataLoading = false;
+        });
       }
     }
     return _users;
+  }
+
+  Function _submitPress() {
+    return _isDataLoading ? null : () { _handleNext(); };
   }
 
   void changedDropDownItem(int selectedId) {
@@ -34,6 +47,7 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
       _currentUserId = selectedId;
     });
   }
+
   void _handleNext() {
     if (_currentUserId != null) {
       widget.project.user = _users.firstWhere((user) => user.id == _currentUserId);
@@ -84,7 +98,7 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
             ]
           )
         ),
-        new SingleActionButton(caption: 'NEXT', onPressed: _handleNext)
+        new SingleActionButton(caption: 'NEXT', onPressed: _submitPress())
       ]
     );
   }

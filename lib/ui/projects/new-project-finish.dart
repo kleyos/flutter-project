@@ -1,13 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:add_just/models/account.dart';
+import 'package:add_just/models/new-project.dart';
+import 'package:add_just/ui/projects/index.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
+import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
-import 'package:flutter/material.dart';
-import 'package:add_just/models/new-project.dart';
 
 class NewProjectFinish extends StatelessWidget {
-  NewProjectFinish({Key key, this.project}) : super(key: key);
+  NewProjectFinish({Key key, this.account, this.project}) : super(key: key);
 
+  final Account account;
   final NewProject project;
+
+  void _handleNext(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => ProjectsIndex(
+        account: account
+      ))
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +45,10 @@ class NewProjectFinish extends StatelessWidget {
                 ),
                 new SizedBox(height: 32.0),
                 new Text("${project.name} has been added to project list",
-                  style: Themes.pageHeader2, textAlign: TextAlign.center)
+                  style: Themes.pageHeader2, textAlign: TextAlign.center),
+                new SizedBox(height: 32.0),
+                new SingleActionButton(caption: 'GO TO PROJECTS LIST',
+                  onPressed: () { _handleNext(context); })
               ],
             )
           )
