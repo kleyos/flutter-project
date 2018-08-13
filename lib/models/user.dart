@@ -18,4 +18,5 @@ class User {
     status = a['status'];
 
   String get displayName => [firstName, lastName].join(' ');
+  bool get isQS => role == 'qs';
 }

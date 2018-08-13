@@ -16,7 +16,8 @@ class AddJustTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         new Text('+Add', style: Themes.mainTitleLight),
-        new Text('Just', style: Themes.mainTitleBold)
+        new Text('Just', style: Themes.mainTitleBold),
+        new SizedBox(width: 48.0)
       ],
     );
   }

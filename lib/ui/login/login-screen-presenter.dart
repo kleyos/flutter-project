@@ -28,7 +28,7 @@ class LoginScreenPresenter {
       ApiResponse resp = await _loginService.requestToken(email, code);
       Account user = Account.fromApiResponse(resp);
       PrefsService prefs = new PrefsService();
-      prefs.storeUser(user);
+      prefs.storeSession(user);
       _view.onLoginSuccess(user);
     } catch (e) {
       _handleError(e);

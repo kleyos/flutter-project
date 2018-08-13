@@ -81,10 +81,9 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
     return new Scaffold(
       appBar: new AppBar(
         title: AddJustTitle(fontSize: 25.0),
-        centerTitle: true,
-        backgroundColor: Colors.teal,
+        centerTitle: true
       ),
-      drawer: ProjectsDrawer(),
+      drawer: new ProjectsDrawer(account: widget.account),
       body: new Stack(
         children: <Widget>[
           new BackgroundImage(),

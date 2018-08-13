@@ -32,15 +32,36 @@ class Account {
 //    }
 //  }
 
-    Account.fromApiResponse(ApiResponse resp) :
-      id = resp['user']['id'],
-      orgId = resp['user']['org_id'],
-      email = resp['user']['email'],
-      firstName = resp['user']['first_name'],
-      lastName = resp['user']['last_name'],
-      role = resp['user']['role'],
-      status = resp['user']['status'],
-      accessToken = resp['token'];
+  Account.fromApiResponse(ApiResponse resp) :
+    id = resp['user']['id'],
+    orgId = resp['user']['org_id'],
+    email = resp['user']['email'],
+    firstName = resp['user']['first_name'],
+    lastName = resp['user']['last_name'],
+    role = resp['user']['role'],
+    status = resp['user']['status'],
+    accessToken = resp['token'];
 
-    String get displayName => [firstName, lastName].join(' ');
+  Account.fromJson(Map<String, dynamic> json) :
+    id = json['id'],
+    orgId = json['orgId'],
+    email = json['email'],
+    firstName = json['firstName'],
+    lastName = json['lastName'],
+    role = json['role'],
+    status = json['status'],
+    accessToken = json['accessToken'];
+
+  String get displayName => [firstName, lastName].join(' ');
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'orgId': orgId,
+    'email': email,
+    'firstName': firstName,
+    'lastName': lastName,
+    'role': role,
+    'status': status,
+    'accessToken': accessToken
+  };
 }

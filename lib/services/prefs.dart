@@ -1,8 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:add_just/models/account.dart';
 
 class PrefsService {
   static final PrefsService _instance = new PrefsService._internal();
+  static final accountStoreKey = 'account';
 
   PrefsService._internal();
 
@@ -10,12 +13,19 @@ class PrefsService {
     return _instance;
   }
 
-  dynamic getValue(key) async {
+  Future<Account> restoreSession() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    return _prefs.get(key);
+    String data = await _prefs.get(accountStoreKey);
+    return Account.fromJson(json.decode(data));
   }
 
-  void storeUser(Account user) {
+  void storeSession(Account a) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.setString(accountStoreKey, json.encode(a.toJson()));
+  }
 
+  void deleteSession() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.remove(accountStoreKey);
   }
 }

@@ -59,4 +59,18 @@ class Themes {
     fontSize: 13.0,
     color: Colors.black54
   );
+
+  static TextStyle drawerMenuHeader = new TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 18.0,
+    color: Color.fromRGBO(3, 218, 196, 1.0),
+    letterSpacing: 1.2
+  );
+
+  static TextStyle drawerMenuItem = new TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 15.0,
+    color: Colors.white,
+    letterSpacing: 1.2
+  );
 }

@@ -60,7 +60,7 @@ class Base {
     HttpClientResponse response = await request.close();
     print('Got response');
     ApiResponse resp = await _extractResponse(response);
-    print('Got response: ${resp}');
+    print('Got response: $resp');
     httpClient.close();
     return resp;
   }

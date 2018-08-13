@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:add_just/models/account.dart';
+import 'package:add_just/ui/themes.dart';
 
 class ProjectsDrawer extends StatelessWidget {
+  ProjectsDrawer({Key key, this.account}) : super(key: key);
+
+  final Account account;
+
   void _notImplemented(BuildContext context) {
     if (Navigator.canPop(context)) {
       Navigator.pop(context);
@@ -16,14 +22,25 @@ class ProjectsDrawer extends StatelessWidget {
         child: new ListView(
           children: <Widget>[
             ListTile(
-              title: Text('Active Projects', style: TextStyle(fontSize: 15.0, color: Colors.white)),
+              title: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Dublin City Council', style: Themes.drawerMenuHeader),
+                  Text(account.displayName, style: Themes.drawerMenuItem),
+                ],
+              ),
+              contentPadding: EdgeInsets.all(0.0)
+            ),
+            new Divider(),
+            ListTile(
+              title: Text('Active Projects', style: Themes.drawerMenuItem),
               contentPadding: EdgeInsets.all(0.0),
               onTap: () {
                 _notImplemented(context);
               },
             ),
             ListTile(
-              title: Text('Completed Projects', style: TextStyle(fontSize: 15.0, color: Colors.white)),
+              title: Text('Completed Projects', style: Themes.drawerMenuItem),
               contentPadding: EdgeInsets.all(0.0),
               onTap: () {
                 _notImplemented(context);
@@ -31,14 +48,14 @@ class ProjectsDrawer extends StatelessWidget {
             ),
             new Divider(),
             ListTile(
-              title: Text('Help', style: TextStyle(fontSize: 15.0, color: Colors.white)),
+              title: Text('Help', style: Themes.drawerMenuItem),
               contentPadding: EdgeInsets.all(0.0),
               onTap: () {
                 _notImplemented(context);
               },
             ),
             ListTile(
-              title: Text('Contact Us', style: TextStyle(fontSize: 15.0, color: Colors.white)),
+              title: Text('Contact Us', style: Themes.drawerMenuItem),
               contentPadding: EdgeInsets.all(0.0),
               onTap: () {
                 _notImplemented(context);
@@ -46,7 +63,7 @@ class ProjectsDrawer extends StatelessWidget {
             ),
             new Divider(),
             ListTile(
-              title: Text('Log Out', style: TextStyle(fontSize: 15.0, color: Colors.white)),
+              title: Text('Log Out', style: Themes.drawerMenuItem),
               contentPadding: EdgeInsets.all(0.0),
               onTap: () {
                 _notImplemented(context);
