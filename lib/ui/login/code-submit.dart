@@ -4,7 +4,7 @@ import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
-import 'package:add_just/ui/projects/index.dart';
+import 'package:add_just/ui/projects/projects-index.dart';
 import 'package:add_just/ui/login/login-screen-presenter.dart';
 import 'package:add_just/ui/common.dart';
 

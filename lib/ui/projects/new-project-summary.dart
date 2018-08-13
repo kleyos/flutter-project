@@ -27,7 +27,6 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
   }
 
   void _handleCompletePress() async {
-    print(widget.project.toJson());
     try {
       setState(() {
         _isDataSending = true;

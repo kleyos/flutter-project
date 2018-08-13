@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/ui/login/code-sign-in.dart';
-import 'package:add_just/ui/projects/index.dart';
+import 'package:add_just/ui/projects/projects-index.dart';
 import 'package:add_just/services/prefs.dart';
 
 void main()  {
