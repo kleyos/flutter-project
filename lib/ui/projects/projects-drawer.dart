@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
+import 'package:add_just/services/prefs.dart';
+import 'package:add_just/ui/login/code-sign-in.dart';
 import 'package:add_just/ui/themes.dart';
 
 class ProjectsDrawer extends StatelessWidget {
@@ -11,6 +13,18 @@ class ProjectsDrawer extends StatelessWidget {
     if (Navigator.canPop(context)) {
       Navigator.pop(context);
     }
+  }
+
+  void _logOutTap(BuildContext context)
+  {
+    PrefsService prefs = new PrefsService();
+    prefs.deleteSession().then((bool isDone) {
+      if (Navigator.canPop(context)) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => new CodeSignIn())
+        );
+      }
+    });
   }
 
   @override
@@ -66,7 +80,7 @@ class ProjectsDrawer extends StatelessWidget {
               title: Text('Log Out', style: Themes.drawerMenuItem),
               contentPadding: EdgeInsets.all(0.0),
               onTap: () {
-                _notImplemented(context);
+                _logOutTap(context);
               },
             ),
           ],

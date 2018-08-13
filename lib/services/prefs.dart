@@ -19,13 +19,13 @@ class PrefsService {
     return Account.fromJson(json.decode(data));
   }
 
-  void storeSession(Account a) async {
+  Future<bool> storeSession(Account a) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    _prefs.setString(accountStoreKey, json.encode(a.toJson()));
+    return await _prefs.setString(accountStoreKey, json.encode(a.toJson()));
   }
 
-  void deleteSession() async {
+  Future<bool> deleteSession() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    _prefs.remove(accountStoreKey);
+    return await _prefs.remove(accountStoreKey);
   }
 }

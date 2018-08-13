@@ -21,12 +21,6 @@ class SignIn extends StatelessWidget {
     _pwdController.clear();
   }
 
-  void _notImplemented(BuildContext context) {
-    if (Navigator.canPop(context)) {
-      Navigator.pop(context);
-    }
-  }
-
   Widget _buildForm() {
     return new Form(
       child: new Column(
