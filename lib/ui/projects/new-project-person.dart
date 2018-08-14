@@ -24,9 +24,7 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
       });
       Projects projectService = new Projects();
       try {
-        ApiResponse resp = await projectService.users(widget.account);
-        _users = List.from(resp.data['users']).map((e) => User.fromApiResponse(e))
-          .where((u) => u.isQS).toList();
+        _users = (await projectService.users(widget.account)).where((u) => u.isQS).toList();
         _currentUserId = _users[0]?.id;
       } catch (e) {
         showAlert(context, e.toString());

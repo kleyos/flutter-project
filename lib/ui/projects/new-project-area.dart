@@ -4,7 +4,6 @@ import 'package:add_just/models/new-project.dart';
 import 'package:add_just/ui/projects/new-project-person.dart';
 import 'package:add_just/models/area.dart';
 import 'package:add_just/models/account.dart';
-import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -24,8 +23,7 @@ class _NewProjectAreaState extends State<NewProjectArea> {
       });
       Projects projectService = new Projects();
       try {
-        ApiResponse resp = await projectService.regions(widget.account);
-        _areas = List.from(resp.data['regions']).map((e) => Area.fromApiResponse(e)).toList();
+        _areas = await projectService.regions(widget.account);
         _currentAreaId = _areas[0]?.id;
       } catch (e) {
         showAlert(context, e.toString());

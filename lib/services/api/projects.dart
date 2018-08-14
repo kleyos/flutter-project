@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:add_just/models/account.dart';
+import 'package:add_just/models/area.dart';
 import 'package:add_just/models/new-project.dart';
+import 'package:add_just/models/project.dart';
+import 'package:add_just/models/user.dart';
 import 'package:add_just/services/api/base.dart';
 
 class Projects extends Base {
@@ -9,24 +12,44 @@ class Projects extends Base {
     String host
   }) : super(host: host);
 
-  Future<ApiResponse> index(Account acc) async {
-    return await get("/api/orgs/${acc.orgId}/projects",
+  Future<List<Project>> index(Account acc) async {
+    ApiResponse resp = await get("/api/orgs/${acc.orgId}/projects",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
+    if (resp.data == null || List.from(resp.data['projects']).isEmpty) {
+      return [];
+    }
+    return List.from(resp.data['projects']).map((p) => Project.fromApiResponse(p)).toList();
   }
 
-  Future<ApiResponse> regions(Account acc) async {
-    return await get("/api/orgs/${acc.orgId}/regions",
+  Future<List<Area>> regions(Account acc) async {
+    ApiResponse resp = await get("/api/orgs/${acc.orgId}/regions",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
+    if (resp.data == null || List.from(resp.data['regions']).isEmpty) {
+      return [];
+    }
+    return List.from(resp.data['regions']).map((a) => Area.fromApiResponse(a)).toList();
   }
 
-  Future<ApiResponse> users(Account acc) async {
-    return await get("/api/orgs/${acc.orgId}/users",
+  Future<List<User>> users(Account acc) async {
+    ApiResponse resp = await get("/api/orgs/${acc.orgId}/users",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
+    if (resp.data == null || List.from(resp.data['users']).isEmpty) {
+      return [];
+    }
+    return List.from(resp.data['users']).map((e) => User.fromApiResponse(e)).toList();
   }
 
   Future<ApiResponse> saveNewProject(Account acc, NewProject project) async {
     return await post("/api/orgs/${acc.orgId}/projects",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"},
       body: project.toJson());
+  }
+
+  Future<List<String>> sections(Account acc) async {
+    ApiResponse resp = await get("/api/orgs/${acc.orgId}/sections",
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
+    return resp != null && resp.data['sections'] != null
+      ? List.from(resp.data['sections']).map((s) => s.toString()).toList()
+      : [];
   }
 }

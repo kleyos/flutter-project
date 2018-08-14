@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
@@ -13,14 +12,13 @@ import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/common.dart';
 
 class _ProjectsIndexState extends State<ProjectsIndex> {
-  Future<List<dynamic>> _loadProjects() async {
+  Future<List<ProjectItem>> _loadProjects() async {
     try {
       Projects projectService = new Projects();
-      ApiResponse resp = await projectService.index(widget.account);
-      return List.from(resp.data['projects']).map((p) =>
-        ProjectItem(account: widget.account, project: Project.fromApiResponse(p))).toList();
+      List<Project> projects = await projectService.index(widget.account);
+      return projects.map((p) => ProjectItem(account: widget.account, project: p)).toList();
     } catch (e) {
-      showAlert(context, e);
+      showAlert(context, e.toString());
     }
     return [];
   }
