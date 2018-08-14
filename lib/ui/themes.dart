@@ -73,4 +73,10 @@ class Themes {
     color: Colors.white,
     letterSpacing: 1.2
   );
+
+  static TextStyle popupDialogAction = new TextStyle(
+    fontSize: 17.0,
+    color: Colors.teal,
+    fontStyle: FontStyle.italic
+  );
 }

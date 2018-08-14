@@ -6,23 +6,45 @@ import 'package:add_just/ui/themes.dart';
 
 class _ProjectShowState extends State<ProjectShow> {
   final List<String> _sections = ['Kitchen', 'Living Room', 'Bathroom'];
+
+  Widget _buildOpts() {
+    return new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        new ListView.separated(
+          itemBuilder: (context, idx) =>
+            new CheckboxListTile(
+              title: new Text(_sections[idx]),
+              value: false,
+              onChanged: (bool value) {
+              //                  setState(() { timeDilation = value ? 20.0 : 1.0; });
+              }
+            ),
+          separatorBuilder: (context, _) => new Divider(),
+          itemCount: _sections.length,
+          shrinkWrap: true
+        ),
+        new Divider(),
+        new FlatButton(
+          onPressed: null,
+          child: new Text('Add new', textAlign: TextAlign.left, style: Themes.popupDialogAction)
+        ),
+        new Divider()
+      ],
+    );
+  }
   
   void _handleAddSections() {
     showDialog<Null>(
       context: context,
       barrierDismissible: true,
       builder: (context) => new AlertDialog(
-        content: new ListView.builder(
-          itemBuilder: (context, idx) =>
-            new CheckboxListTile(
-              title: new Text(_sections[idx]),
-              value: false,
-              onChanged: (bool value) {
-//                  setState(() { timeDilation = value ? 20.0 : 1.0; });
-              }
-            ),
-          itemCount: _sections.length,
-          shrinkWrap: true
+        contentPadding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 0.0),
+        content: new Container(
+//          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _buildOpts()
         ),
         actions: <Widget>[
           new FlatButton(
