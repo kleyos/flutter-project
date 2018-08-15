@@ -1,87 +1,30 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:add_just/models/project.dart';
 import 'package:add_just/models/account.dart';
+import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/ui/common.dart';
+import 'package:add_just/ui/projects/sections-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _ProjectShowState extends State<ProjectShow> {
-  List<String> _selectedSections = [];
-  List<String> _sections = [];
-
   Future<List<String>> _loadSections() async {
-    if (_sections.isEmpty) {
-      try {
-        Projects projectService = new Projects();
-        _sections = await projectService.sections(widget.account);
-      } catch (e) {
-        showAlert(context, e.toString());
-      }
+    try {
+      Projects projectService = new Projects();
+      return await projectService.sections(widget.account);
+    } catch (e) {
+      showAlert(context, e.toString());
     }
-    return _sections;
   }
 
   Widget _checkboxBuilder(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-    print('rebuild');
-
     if (snapshot.connectionState != ConnectionState.done) {
       return new Center(child: CircularProgressIndicator());
     }
-    
-
-    List<Widget> items = List.from(snapshot.data).map((l) => new Column(
-      children: <Widget>[
-        new CheckboxListTile(
-          title: new Text(l),
-          value: _selectedSections.contains(l),
-          onChanged: (bool value) {
-            print(_selectedSections);
-            print(value);
-            setState(() {
-              if (value) {
-                _selectedSections.contains(l) ? _selectedSections.remove(l) : _selectedSections.add(l);
-              }
-            });
-          }
-        ),
-        new Divider()
-      ],
-    )).toList();
-    items.add(new Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        new FlatButton(
-          onPressed: null,
-          child: new Text('Add new', textAlign: TextAlign.left, style: Themes.popupDialogAction)
-        ),
-        new Divider()
-      ],
-    ));
-
-    return new Expanded(
-      flex: 1,
-        child: new ListView(
-          shrinkWrap: true,
-          children: items
-      )
-    );
+    return new SectionsList(account: widget.account, sections: snapshot.data);
   }
 
-  Widget _buildOpts() {
-    return new Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        new FutureBuilder(
-          future: _loadSections(),
-          builder:  _checkboxBuilder
-        ),
-      ]
-    );
-  }
-  
   void _handleAddSections() {
     showDialog<Null>(
       context: context,
@@ -91,7 +34,10 @@ class _ProjectShowState extends State<ProjectShow> {
         content: new Container(
 //          height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: _buildOpts()
+          child: new FutureBuilder(
+            future: _loadSections(),
+            builder: _checkboxBuilder
+          )
         ),
         actions: <Widget>[
           new FlatButton(
