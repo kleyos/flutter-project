@@ -13,7 +13,11 @@ class _ProjectSectionItemState extends State<ProjectSectionItem> {
         children: <Widget>[
           Text(widget.projectSection.name.toUpperCase(), style: Themes.projectSectionTitle),
           new SizedBox(width: 12.0),
-          Text(widget.projectSection.numItems.toString(), style: Themes.projectSectionNum)
+          Text(widget.projectSection.numItems.toString(), style: Themes.projectSectionNum),
+          new Align(
+            alignment: Alignment.centerRight,
+            child: new Icon(Icons.chevron_right)
+          )
         ],
       ),
     );

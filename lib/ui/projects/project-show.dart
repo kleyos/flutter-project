@@ -13,11 +13,20 @@ import 'package:add_just/ui/themes.dart';
 
 class _ProjectShowState extends State<ProjectShow> {
   List<String> _selectedSections;
+  List<ProjectSection> _existingSections = [];
+  List<String> _availableSections = [];
   Projects projectService = new Projects();
+  bool _isSectionsNeedReload = false;
+
+  bool isSectionAlreadyAdded(String name) {
+    return _existingSections.firstWhere((s) => s.name == name, orElse: () => null) != null;
+  }
 
   Future<List<String>> _loadAvailableSections() async {
     try {
-      return await projectService.availableSections(widget.account);
+      _availableSections = await projectService.availableSections(widget.account);
+      _availableSections.removeWhere((name) => isSectionAlreadyAdded(name));
+      return _availableSections;
     } catch (e) {
       showAlert(context, e.toString());
     }
@@ -25,7 +34,9 @@ class _ProjectShowState extends State<ProjectShow> {
 
   Future<List<ProjectSection>> _loadSections() async {
     try {
-      return await projectService.sections(widget.account, widget.project);
+      _existingSections = await projectService.sections(widget.account, widget.project);
+      _isSectionsNeedReload = false;
+      return _existingSections;
     } catch (e) {
       showAlert(context, e.toString());
     }
@@ -33,7 +44,12 @@ class _ProjectShowState extends State<ProjectShow> {
 
   Future<ApiResponse> _saveSectionsToProject() async {
     try {
-      return await projectService.addSectionsToProject(widget.account, _selectedSections, widget.project);
+      ApiResponse resp = await projectService.addSectionsToProject(widget.account, _selectedSections, widget.project);
+      print(resp.data);
+      setState(() {
+        _isSectionsNeedReload = true;
+      });
+      return resp;
     } catch (e) {
       showAlert(context, e.toString());
     }
@@ -93,9 +109,10 @@ class _ProjectShowState extends State<ProjectShow> {
           new FlatButton(
             child: new Text('SAVE'),
             onPressed: () {
-              print(_selectedSections);
               Navigator.of(context).pop();
-              _saveSectionsToProject();
+              if (_selectedSections.isNotEmpty) {
+                _saveSectionsToProject();
+              }
             },
           ),
         ],
