@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/area.dart';
 import 'package:add_just/models/new-project.dart';
+import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/services/api/base.dart';
@@ -45,11 +46,25 @@ class Projects extends Base {
       body: project.toJson());
   }
 
-  Future<List<String>> sections(Account acc) async {
+  Future<List<String>> availableSections(Account acc) async {
     ApiResponse resp = await get("/api/orgs/${acc.orgId}/sections",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
     return resp != null && resp.data['sections'] != null
       ? List.from(resp.data['sections']).map((s) => s.toString()).toList()
       : [];
+  }
+
+  Future<List<ProjectSection>> sections(Account acc, Project prj) async {
+    ApiResponse resp = await get("/api/orgs/${acc.orgId}/projects/${prj.id}/sections",
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
+    return resp != null && resp.data['sections'] != null
+      ? List.from(resp.data['sections']).map((s) => ProjectSection.fromApiResponse(s)).toList()
+      : [];
+  }
+
+  Future<ApiResponse> addSectionsToProject(Account acc, List<String> sections, Project prj) async {
+    return await post("/api/orgs/${acc.orgId}/projects/${prj.id}/sections",
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"},
+      body: {'sections': sections});
   }
 }

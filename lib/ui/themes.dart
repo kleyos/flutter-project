@@ -79,4 +79,16 @@ class Themes {
     color: Colors.teal,
     fontStyle: FontStyle.italic
   );
+
+  static TextStyle projectSectionTitle = new TextStyle(
+    fontSize: 16.0,
+    color: Colors.black54,
+    letterSpacing: 1.2
+  );
+
+  static TextStyle projectSectionNum = new TextStyle(
+    fontSize: 16.0,
+    color: Colors.teal,
+    letterSpacing: 1.2
+  );
 }

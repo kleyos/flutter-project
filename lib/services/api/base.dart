@@ -78,6 +78,7 @@ class Base {
         break;
       case 400:
       case 401:
+      case 404:
         body = await r.transform(utf8.decoder).join();
         resp = ApiResponse.fromResponse(body);
         print('Got error: $body, code: ${r.statusCode}');
