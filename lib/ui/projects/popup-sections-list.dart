@@ -4,7 +4,7 @@ import 'package:add_just/ui/themes.dart';
 
 typedef void OnSelectedItemsChanges(List<String> items);
 
-class _SectionsListState extends State<SectionsList> {
+class _SectionsListState extends State<PopupSectionsList> {
   List<String> _selectedSections = [];
 
   Widget _buildAddButton() {
@@ -71,8 +71,8 @@ class _SectionsListState extends State<SectionsList> {
   }
 }
 
-class SectionsList extends StatefulWidget {
-  SectionsList({Key key, this.account, this.sections, this.onSelectedItemsChanges}) : super(key: key);
+class PopupSectionsList extends StatefulWidget {
+  PopupSectionsList({Key key, this.account, this.sections, this.onSelectedItemsChanges}) : super(key: key);
 
   final Account account;
   final List<String> sections;

@@ -1,5 +1,5 @@
 import 'package:add_just/models/account.dart';
-import 'package:add_just/models/project-section.dart';
+import 'package:add_just/models/inline-project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/sections/section-show.dart';
 import 'package:add_just/ui/themes.dart';
@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 class _ProjectSectionItemState extends State<ProjectSectionItem> {
   void _handleProjectTap(BuildContext context) {
     print(widget.account);
-    print(widget.projectSection);
+    print(widget.inlineProjectSection);
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => new SectionShow(
       account: widget.account,
       project: widget.project,
-      inlineProjectSection: widget.project.sectionByName(widget.projectSection.name)
+      inlineProjectSection: widget.project.sectionByName(widget.inlineProjectSection.name)
     )));
   }
 
@@ -26,9 +26,9 @@ class _ProjectSectionItemState extends State<ProjectSectionItem> {
         margin: EdgeInsets.only(top: 16.0),
         child: new Row(
           children: <Widget>[
-            Text(widget.projectSection.name.toUpperCase(), style: Themes.projectSectionTitle),
+            Text(widget.inlineProjectSection.name.toUpperCase(), style: Themes.projectSectionTitle),
             new SizedBox(width: 12.0),
-            Text(widget.projectSection.numItems.toString(), style: Themes.projectSectionNum),
+            Text(widget.inlineProjectSection.items.length.toString(), style: Themes.projectSectionNum),
             new Expanded(child: new SizedBox()),
             new Icon(Icons.chevron_right)
           ],
@@ -43,10 +43,10 @@ class ProjectSectionItem extends StatefulWidget {
     Key key,
     @required this.account,
     @required this.project,
-    @required this.projectSection
+    @required this.inlineProjectSection
   }) : super(key: key);
 
-  final ProjectSection projectSection;
+  final InlineProjectSection inlineProjectSection;
   final Account account;
   final Project project;
 

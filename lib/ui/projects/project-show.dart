@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:add_just/models/project-section.dart';
+import 'package:add_just/models/inline-project-section.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/ui/projects/project-section-item.dart';
-import 'package:add_just/ui/projects/sections-list.dart';
+import 'package:add_just/ui/projects/popup-sections-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _ProjectShowState extends State<ProjectShow> {
   List<String> _selectedSections;
-  List<ProjectSection> _existingSections = [];
+  List<InlineProjectSection> _existingSections = [];
   List<String> _availableSections = [];
   Projects projectService = new Projects();
   bool _isSectionsNeedReload = false;
@@ -32,9 +32,10 @@ class _ProjectShowState extends State<ProjectShow> {
     }
   }
 
-  Future<List<ProjectSection>> _loadSections() async {
+  Future<List<InlineProjectSection>> _loadSections() async {
     try {
-      _existingSections = await projectService.sections(widget.account, widget.project);
+      Project p = await projectService.load(widget.account, widget.project.id);
+      _existingSections = p.sections;
       _isSectionsNeedReload = false;
       return _existingSections;
     } catch (e) {
@@ -60,7 +61,7 @@ class _ProjectShowState extends State<ProjectShow> {
     if (snapshot.connectionState != ConnectionState.done) {
       return new Center(child: CircularProgressIndicator());
     }
-    return new SectionsList(
+    return new PopupSectionsList(
       account: widget.account,
       sections: snapshot.data,
       onSelectedItemsChanges: (List<String> items) {
@@ -77,7 +78,7 @@ class _ProjectShowState extends State<ProjectShow> {
     if (List.from(snapshot.data).isNotEmpty) {
       return new Column(
         children: new List.from(snapshot.data).map((e) =>
-          new ProjectSectionItem(account: widget.account, project: widget.project, projectSection: e)
+          new ProjectSectionItem(account: widget.account, project: widget.project, inlineProjectSection: e)
         ).toList()
       );
     } else {
