@@ -1,8 +1,7 @@
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/ui/common.dart';
-import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/projects/project-show.dart';

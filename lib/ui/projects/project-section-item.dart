@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/sections/section-show.dart';
 import 'package:add_just/ui/themes.dart';
-import 'package:flutter/material.dart';
 
 class _ProjectSectionItemState extends State<ProjectSectionItem> {
   void _handleProjectTap(BuildContext context) {

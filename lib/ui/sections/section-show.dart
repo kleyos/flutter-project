@@ -1,14 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
+import 'package:add_just/ui/sections/boq-items-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/themes.dart';
-import 'package:flutter/material.dart';
 
 class _SectionShowState extends State<SectionShow> {
 
   void _handleAddItem() {
-
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (BuildContext c) => new BoqItemsList(account: widget.account, project: widget.project)
+    ));
   }
 
   Widget _buildSection() {
@@ -44,11 +47,10 @@ class _SectionShowState extends State<SectionShow> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () { _handleAddItem(); },
-        tooltip: 'Add sections',
+        tooltip: 'Add item',
         child: new Icon(Icons.add),
       )
     );
-
   }
 }
 
