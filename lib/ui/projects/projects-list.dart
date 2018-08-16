@@ -5,18 +5,18 @@ import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/shared/background-image.dart';
-import 'package:add_just/ui/projects/project-item.dart';
+import 'package:add_just/ui/projects/project-list-item.dart';
 import 'package:add_just/ui/projects/projects-drawer.dart';
 import 'package:add_just/ui/projects/new-project-start.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/common.dart';
 
-class _ProjectsIndexState extends State<ProjectsIndex> {
-  Future<List<ProjectItem>> _loadProjects() async {
+class _ProjectsListState extends State<ProjectsList> {
+  Future<List<ProjectListItem>> _loadProjects() async {
     try {
       Projects projectService = new Projects();
       List<Project> projects = await projectService.index(widget.account);
-      return projects.map((p) => ProjectItem(account: widget.account, projectId: p.id)).toList();
+      return projects.map((p) => ProjectListItem(account: widget.account, projectId: p.id)).toList();
     } catch (e) {
       showAlert(context, e.toString());
     }
@@ -29,7 +29,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
     );
   }
 
-  Widget _listProjects(List<ProjectItem> projects) {
+  Widget _listProjects(List<ProjectListItem> projects) {
     return new ListView.builder(
       padding: new EdgeInsets.all(8.0),
       reverse: false,
@@ -97,11 +97,11 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
   }
 }
 
-class ProjectsIndex extends StatefulWidget {
-  ProjectsIndex({Key key, this.account}) : super(key: key);
+class ProjectsList extends StatefulWidget {
+  ProjectsList({Key key, this.account}) : super(key: key);
 
   final Account account;
 
   @override
-  State<StatefulWidget> createState() => new _ProjectsIndexState();
+  State<StatefulWidget> createState() => new _ProjectsListState();
 }

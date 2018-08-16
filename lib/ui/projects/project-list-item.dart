@@ -8,7 +8,7 @@ import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/projects/project-show.dart';
 import 'package:add_just/ui/themes.dart';
 
-class _ProjectItemState extends State<ProjectItem> {
+class _ProjectListItemState extends State<ProjectListItem> {
   Project project;
 
   String get subtitle => "${project.location?.join(' ')} / ${widget.account.displayName}";
@@ -22,7 +22,6 @@ class _ProjectItemState extends State<ProjectItem> {
     }
     return null;
   }
-
 
   void _handleProjectTap(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => new ProjectShow(
@@ -85,8 +84,8 @@ class _ProjectItemState extends State<ProjectItem> {
   }
 }
 
-class ProjectItem extends StatefulWidget {
-  ProjectItem({
+class ProjectListItem extends StatefulWidget {
+  ProjectListItem({
     Key key,
     @required this.account,
     @required this.projectId
@@ -96,5 +95,5 @@ class ProjectItem extends StatefulWidget {
   final Account account;
 
   @override
-  State<StatefulWidget> createState() => new _ProjectItemState();
+  State<StatefulWidget> createState() => new _ProjectListItemState();
 }

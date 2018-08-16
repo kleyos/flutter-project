@@ -4,7 +4,7 @@ import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
-import 'package:add_just/ui/projects/projects-index.dart';
+import 'package:add_just/ui/projects/projects-list.dart';
 import 'package:add_just/ui/login/login-screen-presenter.dart';
 import 'package:add_just/ui/common.dart';
 
@@ -32,7 +32,7 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
     setState(() { _isDataSending = false; });
     _codeController.clear();
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => ProjectsIndex(
+      MaterialPageRoute(builder: (context) => ProjectsList(
         account: user
       ))
     );

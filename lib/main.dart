@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/ui/login/code-sign-in.dart';
-import 'package:add_just/ui/projects/projects-index.dart';
+import 'package:add_just/ui/projects/projects-list.dart';
 import 'package:add_just/services/prefs.dart';
 
 void main()  {
@@ -22,7 +22,7 @@ class _AddJustAppState extends State<AddJustApp> {
   }
 
   Widget _homeWidget() {
-    return _account != null ? ProjectsIndex(account: _account) : CodeSignIn();
+    return _account != null ? ProjectsList(account: _account) : CodeSignIn();
   }
 
   @override

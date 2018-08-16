@@ -1,15 +1,20 @@
+import 'package:add_just/models/section-item.dart';
+
 class ProjectSection {
   ProjectSection({
-    this.id,
     this.name,
-    this.numItems
+    this.scopeItems
   });
 
-  final num id, numItems;
   final String name;
+  final List<SectionItem> scopeItems;
 
   ProjectSection.fromApiResponse(Map<String, dynamic> p) :
-    id = p['id'],
     name = p['name'],
-    numItems = p['numItems'];
+      scopeItems = p['scopeItems'] != null
+      ? List.from(p['scopeItems']).map((e) => SectionItem.fromApiResponse(e)).toList()
+      : [];
+
+  int get itemsCount => scopeItems.length;
+  bool get isEmpty => itemsCount == 0;
 }

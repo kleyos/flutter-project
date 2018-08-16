@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:add_just/models/inline-project-section.dart';
+import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/base.dart';
@@ -13,7 +13,7 @@ import 'package:add_just/ui/themes.dart';
 
 class _ProjectShowState extends State<ProjectShow> {
   List<String> _selectedSections;
-  List<InlineProjectSection> _existingSections = [];
+  List<ProjectSection> _existingSections = [];
   List<String> _availableSections = [];
   Projects projectService = new Projects();
   bool _isSectionsNeedReload = false;
@@ -32,7 +32,7 @@ class _ProjectShowState extends State<ProjectShow> {
     }
   }
 
-  Future<List<InlineProjectSection>> _loadSections() async {
+  Future<List<ProjectSection>> _loadSections() async {
     try {
       Project p = await projectService.load(widget.account, widget.project.id);
       _existingSections = p.sections;
@@ -78,7 +78,7 @@ class _ProjectShowState extends State<ProjectShow> {
     if (List.from(snapshot.data).isNotEmpty) {
       return new Column(
         children: new List.from(snapshot.data).map((e) =>
-          new ProjectSectionItem(account: widget.account, project: widget.project, inlineProjectSection: e)
+          new ProjectSectionItem(account: widget.account, project: widget.project, projectSection: e)
         ).toList()
       );
     } else {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/new-project.dart';
-import 'package:add_just/ui/projects/projects-index.dart';
+import 'package:add_just/ui/projects/projects-list.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
@@ -15,7 +15,7 @@ class NewProjectFinish extends StatelessWidget {
 
   void _handleNext(BuildContext context) {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => ProjectsIndex(
+      MaterialPageRoute(builder: (context) => ProjectsList(
         account: account
       ))
     );

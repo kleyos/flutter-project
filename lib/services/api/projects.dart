@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/area.dart';
 import 'package:add_just/models/new-project.dart';
-import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/services/api/base.dart';
@@ -59,14 +58,6 @@ class Projects extends Base {
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
     return resp != null && resp.data['sections'] != null
       ? List.from(resp.data['sections']).map((s) => s.toString()).toList()
-      : [];
-  }
-
-  Future<List<ProjectSection>> sections(Account acc, Project prj) async {
-    ApiResponse resp = await get("/api/orgs/${acc.orgId}/projects/${prj.id}/sections",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
-    return resp != null && resp.data['sections'] != null
-      ? List.from(resp.data['sections']).map((s) => ProjectSection.fromApiResponse(s)).toList()
       : [];
   }
 

@@ -44,7 +44,7 @@
 //   "deductions": []
 // }
 
-import 'package:add_just/models/inline-project-section.dart';
+import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/user.dart';
 
 class Project {
@@ -62,7 +62,7 @@ class Project {
   final num id, orgId;
   String name, status;
   List<String> location;
-  List<InlineProjectSection> sections;
+  List<ProjectSection> sections;
   User currentAMO, currentQS, currentCTR;
 
   Project.fromApiResponse(Map<String, dynamic> p) :
@@ -74,10 +74,10 @@ class Project {
     currentQS = p['currentQS'] != null ? User.fromApiResponse(p['currentQS']) : null,
     currentCTR = p['currentCTR'] != null ? User.fromApiResponse(p['currentCTR']) : null,
     sections = p['sections'] != null
-      ? List.from(p['sections']).map((e) => InlineProjectSection.fromApiResponse(e)).toList()
+      ? List.from(p['sections']).map((e) => ProjectSection.fromApiResponse(e)).toList()
       : [];
 
-  InlineProjectSection sectionByName(String name) {
+  ProjectSection sectionByName(String name) {
     return sections.firstWhere((s) => s.name == name);
   }
 }

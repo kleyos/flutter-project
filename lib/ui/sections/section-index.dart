@@ -11,7 +11,7 @@ class _SectionIndexState extends State<SectionIndex> {
   }
 
   Widget _buildMainContent() {
-    return null;
+    return new SizedBox();
   }
 
   @override

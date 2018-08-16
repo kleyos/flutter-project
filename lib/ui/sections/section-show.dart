@@ -1,7 +1,8 @@
 import 'package:add_just/models/account.dart';
-import 'package:add_just/models/inline-project-section.dart';
+import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/shared/background-image.dart';
+import 'package:add_just/ui/themes.dart';
 import 'package:flutter/material.dart';
 
 class _SectionShowState extends State<SectionShow> {
@@ -12,13 +13,16 @@ class _SectionShowState extends State<SectionShow> {
 
   Widget _buildSection() {
     return new Column(
-      children: widget.inlineProjectSection.items.map((i) => new Text(i.name)).toList()
+      children: widget.projectSection.scopeItems.map((i) => new Text(i.name)).toList()
     );
   }
 
   Widget _buildMainContent() {
-    return widget.project.sections.isEmpty
-      ? new Center(child: new Text('Add the first item to this section'))
+    return widget.projectSection.isEmpty
+      ? new Center(
+          child: new Text('Add the first item to this section',
+            style: Themes.pageHeader2, textAlign: TextAlign.center)
+        )
       : _buildSection();
   }
 
@@ -53,12 +57,12 @@ class SectionShow extends StatefulWidget {
     Key key,
     @required this.account,
     @required this.project,
-    @required this.inlineProjectSection
+    @required this.projectSection
   }) : super(key: key);
 
   final Account account;
   final Project project;
-  final InlineProjectSection inlineProjectSection;
+  final ProjectSection projectSection;
 
   @override
   State<StatefulWidget> createState() => new _SectionShowState();
