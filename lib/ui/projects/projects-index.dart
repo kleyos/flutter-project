@@ -16,7 +16,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
     try {
       Projects projectService = new Projects();
       List<Project> projects = await projectService.index(widget.account);
-      return projects.map((p) => ProjectItem(account: widget.account, project: p)).toList();
+      return projects.map((p) => ProjectItem(account: widget.account, projectId: p.id)).toList();
     } catch (e) {
       showAlert(context, e.toString());
     }

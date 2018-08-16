@@ -1,24 +1,32 @@
+import 'dart:async';
+
+import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/ui/common.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/projects/project-show.dart';
 import 'package:add_just/ui/themes.dart';
 
-class ProjectItem extends StatelessWidget {
-  ProjectItem({
-    Key key,
-    this.account,
-    this.project
-  }) : super(key: key);
+class _ProjectItemState extends State<ProjectItem> {
+  Project project;
 
-  final Project project;
-  final Account account;
+  String get subtitle => "${project.location?.join(' ')} / ${widget.account.displayName}";
 
-  String get subtitle => "${project.location?.join(' ')} / ${account.displayName}";
+  Future<Project> _loadProject() async {
+    try {
+      Projects projectService = new Projects();
+      return await projectService.load(widget.account, widget.projectId);
+    } catch (e) {
+      showAlert(context, e.toString());
+    }
+    return null;
+  }
+
 
   void _handleProjectTap(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => new ProjectShow(
-      account: account,
+      account: widget.account,
       project: project,
     )));
   }
@@ -34,8 +42,7 @@ class ProjectItem extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildCard() {
     return new Card(
       child: new InkWell(
         onTap: () { _handleProjectTap(context); },
@@ -60,4 +67,34 @@ class ProjectItem extends StatelessWidget {
       )
     );
   }
+
+  Widget _widgetBuilder(BuildContext context, AsyncSnapshot<Project> snapshot) {
+    if (snapshot.connectionState != ConnectionState.done) {
+      return new SizedBox();
+    }
+    project = snapshot.data;
+    return _buildCard();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new FutureBuilder(
+      future: _loadProject(),
+      builder: _widgetBuilder
+    );
+  }
+}
+
+class ProjectItem extends StatefulWidget {
+  ProjectItem({
+    Key key,
+    @required this.account,
+    @required this.projectId
+  }) : super(key: key);
+
+  final int projectId;
+  final Account account;
+
+  @override
+  State<StatefulWidget> createState() => new _ProjectItemState();
 }

@@ -22,6 +22,14 @@ class Projects extends Base {
     return List.from(resp.data['projects']).map((p) => Project.fromApiResponse(p)).toList();
   }
 
+  Future<Project> load(Account acc, int id) async {
+    ApiResponse resp = await get("/api/orgs/${acc.orgId}/projects/$id",
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
+    return resp.data != null
+      ? Project.fromApiResponse(resp.data)
+      : null;
+  }
+
   Future<List<Area>> regions(Account acc) async {
     ApiResponse resp = await get("/api/orgs/${acc.orgId}/regions",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});

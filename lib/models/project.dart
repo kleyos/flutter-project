@@ -76,4 +76,8 @@ class Project {
     sections = p['sections'] != null
       ? List.from(p['sections']).map((e) => InlineProjectSection.fromApiResponse(e)).toList()
       : [];
+
+  InlineProjectSection sectionByName(String name) {
+    return sections.firstWhere((s) => s.name == name);
+  }
 }

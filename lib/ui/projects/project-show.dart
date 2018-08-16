@@ -44,7 +44,8 @@ class _ProjectShowState extends State<ProjectShow> {
 
   Future<ApiResponse> _saveSectionsToProject() async {
     try {
-      ApiResponse resp = await projectService.addSectionsToProject(widget.account, _selectedSections, widget.project);
+      ApiResponse resp = await projectService.addSectionsToProject(
+        widget.account, _selectedSections, widget.project);
       print(resp.data);
       setState(() {
         _isSectionsNeedReload = true;
@@ -76,17 +77,20 @@ class _ProjectShowState extends State<ProjectShow> {
     if (List.from(snapshot.data).isNotEmpty) {
       return new Column(
         children: new List.from(snapshot.data).map((e) =>
-          new ProjectSectionItem(projectSection: e)
+          new ProjectSectionItem(account: widget.account, project: widget.project, projectSection: e)
         ).toList()
       );
     } else {
-      return new Column(
+      return new Container(
+        padding: EdgeInsets.all(32.0),
+        child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text('Start creating your scope of works by adding your first section below.',
-            style: Themes.pageHeader2, textAlign: TextAlign.center)
-        ]
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Start creating your scope of works by adding your first section below.',
+              style: Themes.pageHeader2, textAlign: TextAlign.center)
+          ]
+        )
       );
     }
   }
