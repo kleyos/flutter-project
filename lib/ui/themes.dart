@@ -91,4 +91,13 @@ class Themes {
     color: Colors.teal,
     letterSpacing: 1.2
   );
+
+  static TextStyle boqCategoryTitle = new TextStyle(
+    fontSize: 16.0
+  );
+
+  static TextStyle boqCategoryTitleHeader = new TextStyle(
+    fontSize: 16.0,
+    color: Colors.teal
+  );
 }

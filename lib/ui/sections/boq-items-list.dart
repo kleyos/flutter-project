@@ -4,36 +4,53 @@ import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/services/api/essentials.dart';
+import 'package:add_just/ui/sections/boq-items-category-list.dart';
 import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 
 class _BoqItemsListState extends State<BoqItemsList> {
+  BoqItemsContainer _boqItemsContainer;
 
   Future<BoqItemsContainer> _loadItems() async {
-    try {
-      Essentials eService = new Essentials();
-      return new BoqItemsContainer(items: await eService.loadBoqItems(widget.account));
-    } catch (e) {
-      showAlert(context, e.toString());
+    if (_boqItemsContainer == null) {
+      try {
+        Essentials eService = new Essentials();
+        _boqItemsContainer = await eService.loadBoqItems(widget.account);
+      } catch (e) {
+        showAlert(context, e.toString());
+      }
     }
+    return _boqItemsContainer;
   }
 
-  Widget _buildCategory(String name) {
-    return new Column(
-      children: <Widget>[
-        new Container(
-          padding: EdgeInsets.all(12.0),
-          child: new Row(
-            children: <Widget>[
-              Text(name, style: Themes.projectSectionTitle),
-              new Expanded(child: new SizedBox()),
-              new Icon(Icons.chevron_right, color: Colors.teal)
-            ]
+  void _categoryTap(BoqItemsCategory cat) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (c) => new BoqItemsCategoryList(
+        category: cat, projectName: widget.project.name
+      ))
+    );
+  }
+
+  Widget _buildCategory(BoqItemsCategory cat) {
+    return new InkWell(
+      onTap: () { _categoryTap(cat); },
+      child: new Column(
+        children: <Widget>[
+          new Container(
+            padding: EdgeInsets.all(16.0),
+            child: new Row(
+              children: <Widget>[
+                SizedBox(width: 24.0),
+                Text(cat.name, style: Themes.boqCategoryTitle),
+                new Expanded(child: new SizedBox()),
+                new Icon(Icons.chevron_right, color: Colors.teal)
+              ]
+            ),
           ),
-        ),
-        new Divider()
-      ]
+          new Divider()
+        ]
+      )
     );
   }
 
@@ -41,7 +58,10 @@ class _BoqItemsListState extends State<BoqItemsList> {
     if (snapshot.connectionState != ConnectionState.done) {
       return new Center(child: new CircularProgressIndicator());
     }
-    return new Column(children: snapshot.data.categories.map((i) => _buildCategory(i)).toList());
+    if (snapshot.data == null) {
+      return new Center(child: new Text('No items loaded'));
+    }
+    return new Column(children: snapshot.data.categories.map((c) => _buildCategory(c)).toList());
   }
 
   Widget _buildMainContent() {
