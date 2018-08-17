@@ -5,7 +5,7 @@ import 'package:add_just/models/boq-items-container.dart';
 
 class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
   void _categoryTap(BoqItemsCategory cat) {
-    print(cat.name);
+    Navigator.pop(context);
   }
 
   void _subTap(BoqItemsSubCategory sub) {
@@ -43,12 +43,15 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
             children: <Widget>[
               new InkWell(
                 onTap: () { _categoryTap(widget.category); },
-                child: new Row(
-                  children: <Widget>[
-                    SizedBox(width: 24.0),
-                    new Icon(Icons.chevron_left, color: Colors.teal),
-                    Text(widget.category.name, style: Themes.boqCategoryTitleHeader)
-                  ]
+                child: new Container(
+                  padding: EdgeInsets.fromLTRB(8.0, 16.0, 16.0, 16.0),
+                  child: new Row(
+                    children: <Widget>[
+                      new Icon(Icons.chevron_left, color: Colors.teal),
+                      SizedBox(width: 8.0),
+                      Text(widget.category.name, style: Themes.boqCategoryTitleHeader)
+                    ]
+                  )
                 )
               ),
               new Divider(),

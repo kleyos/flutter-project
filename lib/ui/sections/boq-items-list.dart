@@ -61,7 +61,12 @@ class _BoqItemsListState extends State<BoqItemsList> {
     if (snapshot.data == null) {
       return new Center(child: new Text('No items loaded'));
     }
-    return new Column(children: snapshot.data.categories.map((c) => _buildCategory(c)).toList());
+    return new Container(
+      padding: EdgeInsets.only(top: 8.0),
+      child: new Column(
+        children: snapshot.data.categories.map((c) => _buildCategory(c)).toList()
+      )
+    );
   }
 
   Widget _buildMainContent() {
