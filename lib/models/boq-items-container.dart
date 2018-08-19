@@ -7,8 +7,8 @@ class BoqItem {
   final String name, measure;
 }
 
-class BoqItemsSubCategory {
-  BoqItemsSubCategory({
+class BoqItemsSubcategory {
+  BoqItemsSubcategory({
     this.name,
     this.items
   });
@@ -16,7 +16,7 @@ class BoqItemsSubCategory {
   final String name;
   final List<BoqItem> items;
 
-  BoqItemsSubCategory.fromApiResponse(List<Map<String, dynamic>> data):
+  BoqItemsSubcategory.fromApiResponse(List<Map<String, dynamic>> data):
     name = data[0]['subCategory'],
     items = data.map((i) => new BoqItem(name: i['name'], measure: i['measure'])).toList();
 }
@@ -28,12 +28,12 @@ class BoqItemsCategory {
   });
 
   final String name;
-  final List<BoqItemsSubCategory> subCategories;
+  final List<BoqItemsSubcategory> subCategories;
 
   BoqItemsCategory.fromApiResponse(List<Map<String, dynamic>> data):
     name = data[0]['category'],
     subCategories = data.map((i) => i['subCategory']).toSet().toList().map((name) =>
-      BoqItemsSubCategory.fromApiResponse(data.where((n) => n['subCategory'] == name).toList())
+      BoqItemsSubcategory.fromApiResponse(data.where((n) => n['subCategory'] == name).toList())
     ).toList();
 }
 
