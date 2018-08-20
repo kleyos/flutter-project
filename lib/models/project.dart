@@ -77,6 +77,9 @@ class Project {
       ? List.from(p['sections']).map((e) => ProjectSection.fromApiResponse(e)).toList()
       : [];
 
+  bool get isCompleted => status == 'paid';
+  bool get isMarkedCompleted => status == 'marked_completed';
+
   ProjectSection sectionByName(String name) {
     return sections.firstWhere((s) => s.name == name);
   }
