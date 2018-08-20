@@ -36,6 +36,7 @@ class NewProjectFinish extends StatelessWidget {
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 new Image(
                   width: 150.0,

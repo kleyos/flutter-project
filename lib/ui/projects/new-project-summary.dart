@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/new-project.dart';
@@ -32,7 +33,8 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
         _isDataSending = true;
       });
       Projects projectService = new Projects();
-      await projectService.saveNewProject(widget.account, widget.project);
+      ApiResponse resp = await projectService.saveNewProject(widget.account, widget.project);
+      print(resp.data);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => NewProjectFinish(
           account: widget.account,
@@ -40,7 +42,7 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
         ))
       );
     } catch (e) {
-      print(e);
+      print(e.toString());
       showAlert(context, e.toString());
     } finally {
       setState(() {
