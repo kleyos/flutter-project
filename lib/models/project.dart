@@ -81,6 +81,6 @@ class Project {
   bool get isMarkedCompleted => status == 'marked_completed';
 
   ProjectSection sectionByName(String name) {
-    return sections.firstWhere((s) => s.name == name);
+    return sections.firstWhere((s) => s.name == name, orElse: () => null);
   }
 }

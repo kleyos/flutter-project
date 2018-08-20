@@ -5,6 +5,8 @@ import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
+  final GlobalKey<ScaffoldState> _scaffoldKey =  new GlobalKey<ScaffoldState>();
+
   void _categoryTap(BoqItemsCategory cat) {
     Navigator.pop(context);
     Navigator.pop(context);
@@ -14,6 +16,10 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     Navigator.pop(context);
   }
 
+  void _onBoqItemAdded(BoqItem item) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text('Added: ${item.name}')));
+  }
+
   void _itemTap(BoqItem i) {
     showDialog<Null>(
       context: context,
@@ -21,9 +27,9 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
       builder: (context) => new AlertDialog(
         contentPadding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 0.0),
         content: new Container(
-          height: MediaQuery.of(context).size.height,
+//          height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: new BoqItemSet(boqItem: i)
+          child: new BoqItemSet(boqItem: i, onBoqItemAdded: _onBoqItemAdded)
         ),
         actions: <Widget>[
           new FlatButton(
@@ -108,6 +114,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         title: new Text(widget.projectName),
         centerTitle: true

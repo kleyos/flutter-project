@@ -20,6 +20,10 @@ class ApiResponse {
   }
 
   dynamic operator [](String key) => data[key];
+
+  String toString() {
+    return data.toString();
+  }
 }
 
 class Base {
@@ -68,12 +72,12 @@ class Base {
   Future<ApiResponse> _extractResponse(HttpClientResponse r) async {
     String body;
     ApiResponse resp;
-    print(r);
 
     switch (r.statusCode) {
       case 200:
         body = await r.transform(utf8.decoder).join();
         resp = ApiResponse.fromResponse(body);
+        print('Got response: $resp');
         return resp;
         break;
       case 400:
@@ -81,7 +85,7 @@ class Base {
       case 404:
         body = await r.transform(utf8.decoder).join();
         resp = ApiResponse.fromResponse(body);
-        print('Got error: $body, code: ${r.statusCode}');
+        print('Got error: $body, code: ${r.statusCode}, body: $body');
         throw new Exception(resp.error);
         break;
       default:

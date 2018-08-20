@@ -100,4 +100,9 @@ class Themes {
     fontSize: 16.0,
     color: Colors.teal
   );
+
+  static TextStyle boqItemTitle = new TextStyle(
+    fontSize: 23.0,
+    color: Colors.teal
+  );
 }
