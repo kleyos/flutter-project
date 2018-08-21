@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
@@ -12,10 +12,11 @@ import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/common.dart';
 
 class _ProjectsListState extends State<ProjectsList> {
+  final projectPool = new ProjectPool();
+
   Future<List<ProjectListItem>> _loadProjects() async {
     try {
-      Projects projectService = new Projects();
-      List<Project> projects = await projectService.index();
+      List<Project> projects = await projectPool.index();
       return projects.map((p) => ProjectListItem(projectId: p.id)).toList();
     } catch (e) {
       showAlert(context, e.toString());

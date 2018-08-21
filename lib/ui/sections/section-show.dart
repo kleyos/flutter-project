@@ -1,18 +1,20 @@
-import 'package:add_just/ui/sections/section-list-item.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/section-item.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
+import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/ui/sections/section-list-item.dart';
 import 'package:add_just/ui/sections/boq-items-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _SectionShowState extends State<SectionShow> {
+  final projectPool = new ProjectPool();
 
   void _handleAddItem() {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext c) => new BoqItemsList(
-        project: widget.project, projectSection: widget.projectSection
+        projectId: widget.projectId, projectSectionId: widget.projectSectionId
       )
     ));
   }
@@ -33,34 +35,52 @@ class _SectionShowState extends State<SectionShow> {
     );
   }
 
-  Widget _buildSection() {
+  Widget _buildSection(BuildContext ctx, AsyncSnapshot<Project> sn) {
+    if (sn.connectionState != ConnectionState.done) {
+      return new SizedBox();
+    }
+    ProjectSection section = sn.data.sectionById(widget.projectSectionId);
     return new Column(
       children: <Widget>[
-        _buildSectionHeader(widget.projectSection.name),
+        _buildSectionHeader(section.name),
         new Container(
           padding: EdgeInsets.all(16.0),
           child: new Column(
-            children: widget.projectSection.scopeItems.map((i) => _buildSectionItem(i)).toList(),
+            children: section.scopeItems.map((i) => _buildSectionItem(i)).toList(),
           )
         )
       ]
     );
   }
 
+
+  Widget _buildTitle(BuildContext ctx, AsyncSnapshot<Project> sn) {
+    if (sn.connectionState != ConnectionState.done) {
+      return new SizedBox();
+    }
+    return new Text(sn.data.name);
+  }
+
   Widget _buildMainContent() {
-    return widget.projectSection.isEmpty
+    return widget.projectSectionId == null
       ? new Center(
         child: new Text('Add the first item to this section',
           style: Themes.pageHeader2, textAlign: TextAlign.center)
         )
-      : _buildSection();
+      : new FutureBuilder(
+        future: projectPool.getById(widget.projectId),
+        builder: _buildSection
+      );
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.project.name),
+        title: new FutureBuilder(
+          future: projectPool.getById(widget.projectId),
+          builder: _buildTitle,
+        ),
         centerTitle: true
       ),
       body: new Stack(
@@ -83,12 +103,11 @@ class _SectionShowState extends State<SectionShow> {
 class SectionShow extends StatefulWidget {
   SectionShow({
     Key key,
-    @required this.project,
-    @required this.projectSection
+    @required this.projectId,
+    @required this.projectSectionId
   }) : super(key: key);
 
-  final Project project;
-  final ProjectSection projectSection;
+  final int projectId, projectSectionId;
 
   @override
   State<StatefulWidget> createState() => new _SectionShowState();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/models/project-section.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/ui/sections/boq-items-subcategory-list.dart';
@@ -7,6 +7,8 @@ import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
+  final projectPool = new ProjectPool();
+
   void _categoryTap(BoqItemsCategory cat) {
     Navigator.pop(context);
   }
@@ -15,7 +17,7 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (c) => new BoqItemsSubcategoryList(
         category: widget.category, subcategory: sub,
-        project: widget.project, projectSection: widget.projectSection,
+        projectId: widget.projectId, projectSectionId: widget.projectSectionId,
       ))
     );
   }
@@ -43,7 +45,8 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
   }
 
   Widget _buildMainContent() {
-    return new Column(
+    return new ListView(
+      shrinkWrap: true,
       children: <Widget>[
         new Container(
           padding: EdgeInsets.all(16.0),
@@ -73,11 +76,21 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
     );
   }
 
+  Widget _buildTitle(BuildContext ctx, AsyncSnapshot<Project> sn) {
+    if (sn.connectionState != ConnectionState.done) {
+      return new SizedBox();
+    }
+    return new Text(sn.data.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.project.name),
+        title: new FutureBuilder(
+          future: projectPool.getById(widget.projectId),
+          builder: _buildTitle,
+        ),
         centerTitle: true
       ),
       body: new Stack(
@@ -94,13 +107,12 @@ class BoqItemsCategoryList extends StatefulWidget {
   BoqItemsCategoryList({
     Key key,
     @required this.category,
-    @required this.project,
-    @required this.projectSection
+    @required this.projectId,
+    @required this.projectSectionId
   }) : super(key: key);
 
   final BoqItemsCategory category;
-  final Project project;
-  final ProjectSection projectSection;
+  final int projectId, projectSectionId;
 
   @override
   State<StatefulWidget> createState() => new _BoqItemsCategoryListSate();

@@ -2,20 +2,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
-import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/projects/project-show.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _ProjectListItemState extends State<ProjectListItem> {
-  Project project;
-
-  String get subtitle => "${project.address?.join(' ')} / ${Account.current.displayName}";
+  final projectPool = new ProjectPool();
 
   Future<Project> _loadProject() async {
     try {
-      Projects projectService = new Projects();
-      return await projectService.load(widget.projectId);
+      return await projectPool.getById(widget.projectId);
     } catch (e) {
       showAlert(context, e.toString());
     }
@@ -24,7 +21,7 @@ class _ProjectListItemState extends State<ProjectListItem> {
 
   void _handleProjectTap(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => new ProjectShow(
-      project: project,
+      projectId: widget.projectId,
     )));
   }
 
@@ -39,7 +36,8 @@ class _ProjectListItemState extends State<ProjectListItem> {
     );
   }
 
-  Widget _buildCard() {
+  Widget _buildCard(Project project) {
+    String subtitle = "${project.address?.join(' ')} / ${Account.current.displayName}";
     return new Card(
       child: new InkWell(
         onTap: () { _handleProjectTap(context); },
@@ -69,8 +67,7 @@ class _ProjectListItemState extends State<ProjectListItem> {
     if (snapshot.connectionState != ConnectionState.done) {
       return new SizedBox();
     }
-    project = snapshot.data;
-    return _buildCard();
+    return _buildCard(snapshot.data);
   }
 
   @override

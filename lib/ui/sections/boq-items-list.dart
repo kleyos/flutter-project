@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/essentials.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/sections/boq-items-category-list.dart';
 import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 
 class _BoqItemsListState extends State<BoqItemsList> {
+  final projectPool = new ProjectPool();
   BoqItemsContainer _boqItemsContainer;
 
   Future<BoqItemsContainer> _loadItems() async {
@@ -27,7 +28,7 @@ class _BoqItemsListState extends State<BoqItemsList> {
   void _categoryTap(BoqItemsCategory cat) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (c) => new BoqItemsCategoryList(
-        category: cat, project: widget.project, projectSection: widget.projectSection,
+        category: cat, projectId: widget.projectId, projectSectionId: widget.projectSectionId,
       ))
     );
   }
@@ -70,17 +71,32 @@ class _BoqItemsListState extends State<BoqItemsList> {
   }
 
   Widget _buildMainContent() {
-    return new FutureBuilder(
-      future: _loadItems(),
-      builder: _buildItems
+    return new ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        FutureBuilder(
+          future: _loadItems(),
+          builder: _buildItems
+        )
+      ]
     );
+  }
+
+  Widget _buildTitle(BuildContext ctx, AsyncSnapshot<Project> sn) {
+    if (sn.connectionState != ConnectionState.done) {
+      return new SizedBox();
+    }
+    return new Text(sn.data.name);
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.project.name),
+        title: new FutureBuilder(
+          future: projectPool.getById(widget.projectId),
+          builder: _buildTitle,
+        ),
         centerTitle: true
       ),
       body: new Stack(
@@ -96,12 +112,11 @@ class _BoqItemsListState extends State<BoqItemsList> {
 class BoqItemsList extends StatefulWidget {
   BoqItemsList({
     Key key,
-    @required this.project,
-    @required this.projectSection
+    @required this.projectId,
+    @required this.projectSectionId
   }) : super(key: key);
 
-  final Project project;
-  final ProjectSection projectSection;
+  final int projectId, projectSectionId;
 
   @override
   State<StatefulWidget> createState() => new _BoqItemsListState();

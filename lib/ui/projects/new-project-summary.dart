@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/services/api/base.dart';
-import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/models/new-project.dart';
+import 'package:add_just/models/project.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/projects/new-project-finish.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -11,6 +11,7 @@ import 'package:add_just/ui/common.dart';
 
 class _NewProjectSummaryState extends State<NewProjectSummary> {
   bool _isDataSending = false;
+  final projectPool = new ProjectPool();
 
   Function _submitPress() {
     return _isDataSending ? null : () { _handleCompletePress(); };
@@ -31,12 +32,10 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
       setState(() {
         _isDataSending = true;
       });
-      Projects projectService = new Projects();
-      ApiResponse resp = await projectService.saveNewProject(widget.project);
-      print(resp.data);
+      Project p = await projectPool.saveNewProject(widget.newProject);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => NewProjectFinish(
-          project: widget.project
+          projectId: p.id
         ))
       );
     } catch (e) {
@@ -48,7 +47,7 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
       });
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -71,10 +70,10 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
                   flex: 1,
                   child: new Column(
                     children: <Widget>[
-                      _buildSummaryRow('Project:', widget.project.name),
-                      _buildSummaryRow('Address:', widget.project.address),
-                      _buildSummaryRow('Area:', widget.project.region.name),
-                      _buildSummaryRow('Senior QS / Engineer:', widget.project.user.displayName)
+                      _buildSummaryRow('Project:', widget.newProject.name),
+                      _buildSummaryRow('Address:', widget.newProject.address),
+                      _buildSummaryRow('Area:', widget.newProject.region.name),
+                      _buildSummaryRow('Senior QS / Engineer:', widget.newProject.user.displayName)
                     ],
                   )
                 ),
@@ -89,9 +88,9 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
 }
 
 class NewProjectSummary extends StatefulWidget {
-  NewProjectSummary({Key key, this.project}) : super(key: key);
+  NewProjectSummary({Key key, this.newProject}) : super(key: key);
 
-  final NewProject project;
+  final NewProject newProject;
 
   @override
   State<StatefulWidget> createState() => new _NewProjectSummaryState();

@@ -83,4 +83,8 @@ class Project {
   ProjectSection sectionByName(String name) {
     return sections.firstWhere((s) => s.name == name);
   }
+
+  ProjectSection sectionById(int id) {
+    return sections.firstWhere((s) => s.id == id);
+  }
 }

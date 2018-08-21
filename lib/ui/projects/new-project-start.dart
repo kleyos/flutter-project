@@ -19,7 +19,7 @@ class _NewProjectStartState extends State<NewProjectStart> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext c) => new NewProjectArea(
-            project: newProject
+            newProject: newProject
           ))
       );
     }

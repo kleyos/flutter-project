@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/new-project.dart';
 import 'package:add_just/ui/projects/new-project-person.dart';
 import 'package:add_just/models/area.dart';
-import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
@@ -14,13 +14,14 @@ class _NewProjectAreaState extends State<NewProjectArea> {
   int _currentAreaId;
   bool _isDataLoading = false;
   List<Area> _areas = [];
+  final projectService = new ProjectPool();
 
   Future<List<Area>> _loadRegions() async {
     if (_areas.isEmpty) {
       setState(() {
         _isDataLoading = true;
       });
-      Projects projectService = new Projects();
+
       try {
         _areas = await projectService.regions();
         _currentAreaId = _areas[0]?.id;
@@ -48,11 +49,11 @@ class _NewProjectAreaState extends State<NewProjectArea> {
 
   void _handleNext() {
     if (_currentAreaId != null) {
-      widget.project.region = _areas.firstWhere((area) => area.id == _currentAreaId);
+      widget.newProject.region = _areas.firstWhere((area) => area.id == _currentAreaId);
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext c) => new NewProjectPerson(
-            project: widget.project
+            newProject: widget.newProject
           ))
       );
     }
@@ -121,9 +122,9 @@ class _NewProjectAreaState extends State<NewProjectArea> {
 }
 
 class NewProjectArea extends StatefulWidget {
-  NewProjectArea({Key key, this.project}) : super(key: key);
+  NewProjectArea({Key key, this.newProject}) : super(key: key);
 
-  final NewProject project;
+  final NewProject newProject;
 
   @override
   State<StatefulWidget> createState() => new _NewProjectAreaState();

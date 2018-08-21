@@ -1,18 +1,15 @@
 import 'dart:async';
-
-import 'package:add_just/ui/common.dart';
 import 'package:flutter/material.dart';
-import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/models/boq-items-container.dart';
-import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/sections/boq-item-set.dart';
 import 'package:add_just/ui/shared/background-image.dart';
+import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/themes.dart';
-
 class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
   final _scaffoldKey =  new GlobalKey<ScaffoldState>();
-  final projectService = new Projects();
+  final projectPool = new ProjectPool();
 
   void _categoryTap(BoqItemsCategory cat) {
     Navigator.pop(context);
@@ -25,9 +22,8 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
 
   Future _onBoqItemAdded(BoqItem item, num quantity) async {
     try {
-      await projectService.addBoqItemToSection(
-        widget.project.id, widget.projectSection.id, item.id, quantity);
-      widget.project.sections = (await projectService.load(widget.project.id)).sections;
+      await projectPool.addBoqItemToSection(
+        widget.projectId, widget.projectSectionId, item.id, quantity);
       _scaffoldKey.currentState.showSnackBar(
         new SnackBar(
           content: new Text('Added: $quantity ${item.measure} of ${item.name}')
@@ -72,8 +68,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
             child: new Row(
               children: <Widget>[
                 SizedBox(width: 24.0),
-                Text(s.name, style: Themes.boqCategoryTitle),
-                new Expanded(child: new SizedBox()),
+                new Expanded(child: Text(s.name, style: Themes.boqCategoryTitle)),
                 new Icon(Icons.chevron_right, color: Colors.teal)
               ]
             ),
@@ -85,7 +80,8 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
   }
 
   Widget _buildMainContent() {
-    return new Column(
+    return new ListView(
+      shrinkWrap: true,
       children: <Widget>[
         new Container(
           padding: EdgeInsets.all(16.0),
@@ -129,12 +125,22 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     );
   }
 
+  Widget _buildTitle(BuildContext ctx, AsyncSnapshot<Project> sn) {
+    if (sn.connectionState != ConnectionState.done) {
+      return new SizedBox();
+    }
+    return new Text(sn.data.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
-        title: new Text(widget.project.name),
+        title: new FutureBuilder(
+          future: projectPool.getById(widget.projectId),
+          builder: _buildTitle,
+        ),
         centerTitle: true
       ),
       body: new Stack(
@@ -152,14 +158,13 @@ class BoqItemsSubcategoryList extends StatefulWidget {
     Key key,
     @required this.category,
     @required this.subcategory,
-    @required this.project,
-    @required this.projectSection
+    @required this.projectId,
+    @required this.projectSectionId
   }) : super(key: key);
 
   final BoqItemsCategory category;
   final BoqItemsSubcategory subcategory;
-  final Project project;
-  final ProjectSection projectSection;
+  final int projectId, projectSectionId;
 
   @override
   State<StatefulWidget> createState() => new _BoqItemsSubcategoryListSate();

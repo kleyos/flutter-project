@@ -7,10 +7,16 @@ import 'package:add_just/models/project.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/services/api/base.dart';
 
-class Projects extends Base {
-  Projects({
-    String host
-  }) : super(host: host);
+class ProjectPool extends Base {
+  static final ProjectPool _singleton = new ProjectPool._internal();
+
+  factory ProjectPool() {
+    return _singleton;
+  }
+
+  ProjectPool._internal();
+
+  Map<int, Project> _projects = {};
 
   Future<List<Project>> index() async {
     ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/projects",
@@ -47,10 +53,11 @@ class Projects extends Base {
     return List.from(resp.data['users']).map((e) => User.fromApiResponse(e)).toList();
   }
 
-  Future<ApiResponse> saveNewProject(NewProject project) async {
-    return await post("/api/orgs/${Account.current.orgId}/projects",
+  Future<Project> saveNewProject(NewProject project) async {
+    ApiResponse resp = await post("/api/orgs/${Account.current.orgId}/projects",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"},
       body: project.toJson());
+    return reloadById(resp.data['id']);
   }
 
   Future<List<String>> availableSections() async {
@@ -61,10 +68,11 @@ class Projects extends Base {
       : [];
   }
 
-  Future<ApiResponse> addSectionsToProject(List<String> sections, int prjId) async {
-    return await post("/api/orgs/${Account.current.orgId}/projects/$prjId/sections",
+  Future<Project> addSectionsToProject(List<String> sections, int prjId) async {
+    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/sections",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"},
       body: {'sections': sections});
+    return reloadById(prjId);
   }
 
   //// Post a new scope-item to a project
@@ -73,9 +81,20 @@ class Projects extends Base {
   //  Content-Type: application/json
   //
   //  {"scopes": [{"boqItemId": 1, "sectionId": 1, "quantity": 12}]}
-  Future<ApiResponse> addBoqItemToSection(int prjId, secId, itemId, num qty) async {
-    return await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-items",
+  Future<Project> addBoqItemToSection(int prjId, secId, itemId, num qty) async {
+    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-items",
       headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"},
       body: {'scopes': [{'boqItemId': itemId, 'sectionId': secId, 'quantity': qty}]});
+    return reloadById(prjId);
+  }
+
+  Future<Project> getById(int id) async {
+    _projects[id] ??= await load(id);
+    return _projects[id];
+  }
+
+  Future<Project> reloadById(int id) async {
+    _projects[id] = await load(id);
+    return _projects[id];
   }
 }

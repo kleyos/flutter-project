@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/new-project.dart';
 import 'package:add_just/models/user.dart';
-import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/projects/new-project-summary.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -14,13 +14,13 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
   int _currentUserId;
   bool _isDataLoading = false;
   List<User> _users = [];
+  final projectService = new ProjectPool();
 
   Future<List<User>> _loadRegions() async {
     if (_users.isEmpty) {
       setState(() {
         _isDataLoading = true;
       });
-      Projects projectService = new Projects();
       try {
         _users = (await projectService.users()).where((u) => u.isQS).toList();
         _currentUserId = _users[0]?.id;
@@ -47,11 +47,11 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
 
   void _handleNext() {
     if (_currentUserId != null) {
-      widget.project.user = _users.firstWhere((user) => user.id == _currentUserId);
+      widget.newProject.user = _users.firstWhere((user) => user.id == _currentUserId);
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext c) => new NewProjectSummary(
-            project: widget.project
+            newProject: widget.newProject
           ))
       );
     }
@@ -120,9 +120,9 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
 }
 
 class NewProjectPerson extends StatefulWidget {
-  NewProjectPerson({Key key, this.project}) : super(key: key);
+  NewProjectPerson({Key key, this.newProject}) : super(key: key);
 
-  final NewProject project;
+  final NewProject newProject;
 
   @override
   State<StatefulWidget> createState() => new _NewProjectPersonState();

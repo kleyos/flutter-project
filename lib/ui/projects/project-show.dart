@@ -2,8 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
-import 'package:add_just/services/api/base.dart';
-import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/projects/project-section-item.dart';
 import 'package:add_just/ui/projects/popup-sections-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -14,7 +13,7 @@ class _ProjectShowState extends State<ProjectShow> {
   List<String> _selectedSections;
   List<ProjectSection> _existingSections = [];
   List<String> _availableSections = [];
-  Projects projectService = new Projects();
+  final projectPool = new ProjectPool();
   bool _isSectionsNeedReload = false;
 
   bool isSectionAlreadyAdded(String name) {
@@ -23,7 +22,7 @@ class _ProjectShowState extends State<ProjectShow> {
 
   Future<List<String>> _loadAvailableSections() async {
     try {
-      _availableSections = await projectService.availableSections();
+      _availableSections = await projectPool.availableSections();
       _availableSections.removeWhere((name) => isSectionAlreadyAdded(name));
       return _availableSections;
     } catch (e) {
@@ -33,7 +32,7 @@ class _ProjectShowState extends State<ProjectShow> {
 
   Future<List<ProjectSection>> _loadSections() async {
     try {
-      Project p = await projectService.load(widget.project.id);
+      Project p = await projectPool.getById(widget.projectId);
       _existingSections = p.sections;
       _isSectionsNeedReload = false;
       return _existingSections;
@@ -42,14 +41,13 @@ class _ProjectShowState extends State<ProjectShow> {
     }
   }
 
-  Future<ApiResponse> _saveSectionsToProject() async {
+  Future<Project> _saveSectionsToProject() async {
     try {
-      ApiResponse resp = await projectService.addSectionsToProject(_selectedSections, widget.project.id);
-      widget.project.sections = (await projectService.load(widget.project.id)).sections;
+      Project p = await projectPool.addSectionsToProject(_selectedSections, widget.projectId);
       setState(() {
         _isSectionsNeedReload = true;
       });
-      return resp;
+      return p;
     } catch (e) {
       showAlert(context, e.toString());
     }
@@ -75,7 +73,7 @@ class _ProjectShowState extends State<ProjectShow> {
     if (List.from(snapshot.data).isNotEmpty) {
       return new Column(
         children: new List.from(snapshot.data).map((e) =>
-          new ProjectSectionItem(project: widget.project, projectSection: e)
+          new ProjectSectionItem(projectId: widget.projectId, projectSectionId: e.id)
         ).toList()
       );
     } else {
@@ -122,11 +120,21 @@ class _ProjectShowState extends State<ProjectShow> {
     );
   }
 
+  Widget _buildTitle(BuildContext ctx, AsyncSnapshot<Project> sn) {
+    if (sn.connectionState != ConnectionState.done) {
+      return new SizedBox();
+    }
+    return new Text(sn.data.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.project.name),
+        title: new FutureBuilder(
+          future: projectPool.getById(widget.projectId),
+          builder: _buildTitle,
+        ),
         centerTitle: true
       ),
       body: new Stack(
@@ -150,9 +158,9 @@ class _ProjectShowState extends State<ProjectShow> {
 }
 
 class ProjectShow extends StatefulWidget {
-  ProjectShow({Key key, this.project}) : super(key: key);
+  ProjectShow({Key key, this.projectId}) : super(key: key);
 
-  final Project project;
+  final int projectId;
 
   @override
   State<StatefulWidget> createState() => new _ProjectShowState();
