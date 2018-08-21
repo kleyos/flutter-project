@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/new-project.dart';
 import 'package:add_just/ui/projects/new-project-person.dart';
 import 'package:add_just/models/area.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -23,7 +22,7 @@ class _NewProjectAreaState extends State<NewProjectArea> {
       });
       Projects projectService = new Projects();
       try {
-        _areas = await projectService.regions(widget.account);
+        _areas = await projectService.regions();
         _currentAreaId = _areas[0]?.id;
       } catch (e) {
         showAlert(context, e.toString());
@@ -53,7 +52,6 @@ class _NewProjectAreaState extends State<NewProjectArea> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext c) => new NewProjectPerson(
-            account: widget.account,
             project: widget.project
           ))
       );
@@ -123,9 +121,8 @@ class _NewProjectAreaState extends State<NewProjectArea> {
 }
 
 class NewProjectArea extends StatefulWidget {
-  NewProjectArea({Key key, this.account, this.project}) : super(key: key);
+  NewProjectArea({Key key, this.project}) : super(key: key);
 
-  final Account account;
   final NewProject project;
 
   @override

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/sections/boq-items-list.dart';
@@ -10,7 +9,7 @@ class _SectionShowState extends State<SectionShow> {
 
   void _handleAddItem() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (BuildContext c) => new BoqItemsList(account: widget.account, project: widget.project)
+      builder: (BuildContext c) => new BoqItemsList(project: widget.project, projectSection: widget.projectSection)
     ));
   }
 
@@ -23,8 +22,8 @@ class _SectionShowState extends State<SectionShow> {
   Widget _buildMainContent() {
     return widget.projectSection.isEmpty
       ? new Center(
-          child: new Text('Add the first item to this section',
-            style: Themes.pageHeader2, textAlign: TextAlign.center)
+        child: new Text('Add the first item to this section',
+          style: Themes.pageHeader2, textAlign: TextAlign.center)
         )
       : _buildSection();
   }
@@ -57,12 +56,10 @@ class _SectionShowState extends State<SectionShow> {
 class SectionShow extends StatefulWidget {
   SectionShow({
     Key key,
-    @required this.account,
     @required this.project,
     @required this.projectSection
   }) : super(key: key);
 
-  final Account account;
   final Project project;
   final ProjectSection projectSection;
 

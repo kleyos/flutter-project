@@ -1,9 +1,11 @@
 class BoqItem {
   BoqItem({
+    this.id,
     this.name,
     this.measure
   });
 
+  final int id;
   final String name, measure;
 }
 
@@ -18,7 +20,7 @@ class BoqItemsSubcategory {
 
   BoqItemsSubcategory.fromApiResponse(List<Map<String, dynamic>> data):
     name = data[0]['subCategory'],
-    items = data.map((i) => new BoqItem(name: i['name'], measure: i['measure'])).toList();
+    items = data.map((i) => new BoqItem(id: i['id'], name: i['name'], measure: i['measure'])).toList();
 }
 
 class BoqItemsCategory {

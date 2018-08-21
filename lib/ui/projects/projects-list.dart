@@ -15,8 +15,8 @@ class _ProjectsListState extends State<ProjectsList> {
   Future<List<ProjectListItem>> _loadProjects() async {
     try {
       Projects projectService = new Projects();
-      List<Project> projects = await projectService.index(widget.account);
-      return projects.map((p) => ProjectListItem(account: widget.account, projectId: p.id)).toList();
+      List<Project> projects = await projectService.index();
+      return projects.map((p) => ProjectListItem(projectId: p.id)).toList();
     } catch (e) {
       showAlert(context, e.toString());
     }
@@ -25,7 +25,7 @@ class _ProjectsListState extends State<ProjectsList> {
 
   void _handleAddNewProject() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext c) => new NewProjectStart(account: widget.account))
+      MaterialPageRoute(builder: (BuildContext c) => new NewProjectStart())
     );
   }
 
@@ -81,7 +81,7 @@ class _ProjectsListState extends State<ProjectsList> {
         title: AddJustTitle(fontSize: 25.0),
         centerTitle: true
       ),
-      drawer: new ProjectsDrawer(account: widget.account),
+      drawer: new ProjectsDrawer(account: Account.current),
       body: new Stack(
         children: <Widget>[
           new BackgroundImage(),
@@ -98,10 +98,6 @@ class _ProjectsListState extends State<ProjectsList> {
 }
 
 class ProjectsList extends StatefulWidget {
-  ProjectsList({Key key, this.account}) : super(key: key);
-
-  final Account account;
-
   @override
   State<StatefulWidget> createState() => new _ProjectsListState();
 }

@@ -9,9 +9,9 @@ class Essentials extends Base {
     String host
   }) : super(host: host);
 
-  Future<BoqItemsContainer> loadBoqItems(Account acc) async {
-    ApiResponse resp = await get("/api/orgs/${acc.orgId}/boq-items",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${acc.accessToken}"});
+  Future<BoqItemsContainer> loadBoqItems() async {
+    ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/boq-items",
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"});
     if (resp.data == null || List.from(resp.data['boqItems']).isEmpty) {
       return null;
     }

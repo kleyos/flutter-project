@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/models/new-project.dart';
 import 'package:add_just/ui/projects/new-project-finish.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
@@ -33,11 +32,10 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
         _isDataSending = true;
       });
       Projects projectService = new Projects();
-      ApiResponse resp = await projectService.saveNewProject(widget.account, widget.project);
+      ApiResponse resp = await projectService.saveNewProject(widget.project);
       print(resp.data);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => NewProjectFinish(
-          account: widget.account,
           project: widget.project
         ))
       );
@@ -91,9 +89,8 @@ class _NewProjectSummaryState extends State<NewProjectSummary> {
 }
 
 class NewProjectSummary extends StatefulWidget {
-  NewProjectSummary({Key key, this.account, this.project}) : super(key: key);
+  NewProjectSummary({Key key, this.project}) : super(key: key);
 
-  final Account account;
   final NewProject project;
 
   @override

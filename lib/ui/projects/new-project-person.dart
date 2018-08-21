@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/new-project.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/ui/projects/new-project-summary.dart';
@@ -23,7 +22,7 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
       });
       Projects projectService = new Projects();
       try {
-        _users = (await projectService.users(widget.account)).where((u) => u.isQS).toList();
+        _users = (await projectService.users()).where((u) => u.isQS).toList();
         _currentUserId = _users[0]?.id;
       } catch (e) {
         showAlert(context, e.toString());
@@ -52,7 +51,6 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext c) => new NewProjectSummary(
-            account: widget.account,
             project: widget.project
           ))
       );
@@ -122,9 +120,8 @@ class _NewProjectPersonState extends State<NewProjectPerson> {
 }
 
 class NewProjectPerson extends StatefulWidget {
-  NewProjectPerson({Key key, this.account, this.project}) : super(key: key);
+  NewProjectPerson({Key key, this.project}) : super(key: key);
 
-  final Account account;
   final NewProject project;
 
   @override

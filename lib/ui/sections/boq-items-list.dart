@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/models/project.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/services/api/essentials.dart';
 import 'package:add_just/ui/sections/boq-items-category-list.dart';
 import 'package:add_just/ui/common.dart';
@@ -16,7 +16,7 @@ class _BoqItemsListState extends State<BoqItemsList> {
     if (_boqItemsContainer == null) {
       try {
         Essentials eService = new Essentials();
-        _boqItemsContainer = await eService.loadBoqItems(widget.account);
+        _boqItemsContainer = await eService.loadBoqItems();
       } catch (e) {
         showAlert(context, e.toString());
       }
@@ -27,7 +27,7 @@ class _BoqItemsListState extends State<BoqItemsList> {
   void _categoryTap(BoqItemsCategory cat) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (c) => new BoqItemsCategoryList(
-        category: cat, projectName: widget.project.name
+        category: cat, project: widget.project, projectSection: widget.projectSection,
       ))
     );
   }
@@ -96,12 +96,13 @@ class _BoqItemsListState extends State<BoqItemsList> {
 class BoqItemsList extends StatefulWidget {
   BoqItemsList({
     Key key,
-    @required this.account,
-    @required this.project
+    @required this.project,
+    @required this.projectSection
   }) : super(key: key);
 
-  final Account account;
   final Project project;
+  final ProjectSection projectSection;
+
   @override
   State<StatefulWidget> createState() => new _BoqItemsListState();
 }

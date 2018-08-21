@@ -1,21 +1,21 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:add_just/services/api/projects.dart';
-import 'package:add_just/ui/common.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
+import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/projects/project-show.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _ProjectListItemState extends State<ProjectListItem> {
   Project project;
 
-  String get subtitle => "${project.location?.join(' ')} / ${widget.account.displayName}";
+  String get subtitle => "${project.location?.join(' ')} / ${Account.current.displayName}";
 
   Future<Project> _loadProject() async {
     try {
       Projects projectService = new Projects();
-      return await projectService.load(widget.account, widget.projectId);
+      return await projectService.load(widget.projectId);
     } catch (e) {
       showAlert(context, e.toString());
     }
@@ -24,7 +24,6 @@ class _ProjectListItemState extends State<ProjectListItem> {
 
   void _handleProjectTap(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => new ProjectShow(
-      account: widget.account,
       project: project,
     )));
   }
@@ -84,14 +83,9 @@ class _ProjectListItemState extends State<ProjectListItem> {
 }
 
 class ProjectListItem extends StatefulWidget {
-  ProjectListItem({
-    Key key,
-    @required this.account,
-    @required this.projectId
-  }) : super(key: key);
+  ProjectListItem({Key key, @required this.projectId}) : super(key: key);
 
   final int projectId;
-  final Account account;
 
   @override
   State<StatefulWidget> createState() => new _ProjectListItemState();

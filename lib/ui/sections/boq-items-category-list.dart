@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:add_just/models/project-section.dart';
+import 'package:add_just/models/project.dart';
 import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/ui/sections/boq-items-subcategory-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -12,7 +14,8 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
   void _subTap(BoqItemsSubcategory sub) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (c) => new BoqItemsSubcategoryList(
-        category: widget.category, subcategory: sub, projectName: widget.projectName
+        category: widget.category, subcategory: sub,
+        project: widget.project, projectSection: widget.projectSection,
       ))
     );
   }
@@ -74,7 +77,7 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.projectName),
+        title: new Text(widget.project.name),
         centerTitle: true
       ),
       body: new Stack(
@@ -91,11 +94,13 @@ class BoqItemsCategoryList extends StatefulWidget {
   BoqItemsCategoryList({
     Key key,
     @required this.category,
-    @required this.projectName
+    @required this.project,
+    @required this.projectSection
   }) : super(key: key);
 
   final BoqItemsCategory category;
-  final String projectName;
+  final Project project;
+  final ProjectSection projectSection;
 
   @override
   State<StatefulWidget> createState() => new _BoqItemsCategoryListSate();

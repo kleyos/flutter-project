@@ -28,13 +28,12 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
   }
 
   @override
-  void onLoginSuccess(Account user) {
+  void onLoginSuccess(Account acc) {
+    Account.current = acc;
     setState(() { _isDataSending = false; });
     _codeController.clear();
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => ProjectsList(
-        account: user
-      ))
+      MaterialPageRoute(builder: (context) => ProjectsList())
     );
   }
 

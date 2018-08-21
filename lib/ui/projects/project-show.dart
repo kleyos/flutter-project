@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/base.dart';
 import 'package:add_just/services/api/projects.dart';
@@ -24,7 +23,7 @@ class _ProjectShowState extends State<ProjectShow> {
 
   Future<List<String>> _loadAvailableSections() async {
     try {
-      _availableSections = await projectService.availableSections(widget.account);
+      _availableSections = await projectService.availableSections();
       _availableSections.removeWhere((name) => isSectionAlreadyAdded(name));
       return _availableSections;
     } catch (e) {
@@ -34,7 +33,7 @@ class _ProjectShowState extends State<ProjectShow> {
 
   Future<List<ProjectSection>> _loadSections() async {
     try {
-      Project p = await projectService.load(widget.account, widget.project.id);
+      Project p = await projectService.load(widget.project.id);
       _existingSections = p.sections;
       _isSectionsNeedReload = false;
       return _existingSections;
@@ -45,9 +44,7 @@ class _ProjectShowState extends State<ProjectShow> {
 
   Future<ApiResponse> _saveSectionsToProject() async {
     try {
-      ApiResponse resp = await projectService.addSectionsToProject(
-        widget.account, _selectedSections, widget.project);
-      print(resp.data);
+      ApiResponse resp = await projectService.addSectionsToProject(_selectedSections, widget.project.id);
       setState(() {
         _isSectionsNeedReload = true;
       });
@@ -62,7 +59,6 @@ class _ProjectShowState extends State<ProjectShow> {
       return new Center(child: CircularProgressIndicator());
     }
     return new PopupSectionsList(
-      account: widget.account,
       sections: snapshot.data,
       onSelectedItemsChanges: (List<String> items) {
         _selectedSections = items;
@@ -78,7 +74,7 @@ class _ProjectShowState extends State<ProjectShow> {
     if (List.from(snapshot.data).isNotEmpty) {
       return new Column(
         children: new List.from(snapshot.data).map((e) =>
-          new ProjectSectionItem(account: widget.account, project: widget.project, projectSection: e)
+          new ProjectSectionItem(project: widget.project, projectSection: e)
         ).toList()
       );
     } else {
@@ -153,9 +149,8 @@ class _ProjectShowState extends State<ProjectShow> {
 }
 
 class ProjectShow extends StatefulWidget {
-  ProjectShow({Key key, this.account, this.project}) : super(key: key);
+  ProjectShow({Key key, this.project}) : super(key: key);
 
-  final Account account;
   final Project project;
 
   @override

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/models/new-project.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
@@ -20,7 +19,6 @@ class _NewProjectStartState extends State<NewProjectStart> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext c) => new NewProjectArea(
-            account: widget.account,
             project: newProject
           ))
       );
@@ -105,10 +103,6 @@ class _NewProjectStartState extends State<NewProjectStart> {
 }
 
 class NewProjectStart extends StatefulWidget {
-  NewProjectStart({Key key, this.account}) : super(key: key);
-
-  final Account account;
-
   @override
   State<StatefulWidget> createState() => new _NewProjectStartState();
 }

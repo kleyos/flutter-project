@@ -15,14 +15,14 @@ class _AddJustAppState extends State<AddJustApp> {
   void initState() {
     (new PrefsService()).restoreSession().then((a) {
       setState(() {
-        _account = a;
+        _account = Account.current = a;
       });
     });
     super.initState();
   }
 
   Widget _homeWidget() {
-    return _account != null ? ProjectsList(account: _account) : CodeSignIn();
+    return _account != null ? ProjectsList() : CodeSignIn();
   }
 
   @override

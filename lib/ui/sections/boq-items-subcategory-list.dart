@@ -1,11 +1,18 @@
-import 'package:add_just/ui/sections/boq-item-set.dart';
+import 'dart:async';
+
+import 'package:add_just/ui/common.dart';
 import 'package:flutter/material.dart';
+import 'package:add_just/models/project-section.dart';
+import 'package:add_just/models/project.dart';
 import 'package:add_just/models/boq-items-container.dart';
+import 'package:add_just/services/api/projects.dart';
+import 'package:add_just/ui/sections/boq-item-set.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
-  final GlobalKey<ScaffoldState> _scaffoldKey =  new GlobalKey<ScaffoldState>();
+  final _scaffoldKey =  new GlobalKey<ScaffoldState>();
+  final projectService = new Projects();
 
   void _categoryTap(BoqItemsCategory cat) {
     Navigator.pop(context);
@@ -16,8 +23,18 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     Navigator.pop(context);
   }
 
-  void _onBoqItemAdded(BoqItem item) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text('Added: ${item.name}')));
+  Future _onBoqItemAdded(BoqItem item, num quantity) async {
+    try {
+      await projectService.addBoqItemToSection(
+        widget.project.id, widget.projectSection.id, item.id, quantity);
+      _scaffoldKey.currentState.showSnackBar(
+        new SnackBar(
+          content: new Text('Added: $quantity ${item.measure} of ${item.name}')
+        )
+      );
+    } catch (e) {
+      showAlert(context, e.toString());
+    }
   }
 
   void _itemTap(BoqItem i) {
@@ -116,7 +133,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     return new Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
-        title: new Text(widget.projectName),
+        title: new Text(widget.project.name),
         centerTitle: true
       ),
       body: new Stack(
@@ -134,12 +151,14 @@ class BoqItemsSubcategoryList extends StatefulWidget {
     Key key,
     @required this.category,
     @required this.subcategory,
-    @required this.projectName
+    @required this.project,
+    @required this.projectSection
   }) : super(key: key);
 
   final BoqItemsCategory category;
   final BoqItemsSubcategory subcategory;
-  final String projectName;
+  final Project project;
+  final ProjectSection projectSection;
 
   @override
   State<StatefulWidget> createState() => new _BoqItemsSubcategoryListSate();

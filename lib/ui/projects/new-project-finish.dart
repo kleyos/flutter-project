@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/models/new-project.dart';
 import 'package:add_just/ui/projects/projects-list.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
@@ -8,16 +7,13 @@ import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 
 class NewProjectFinish extends StatelessWidget {
-  NewProjectFinish({Key key, this.account, this.project}) : super(key: key);
+  NewProjectFinish({Key key, this.project}) : super(key: key);
 
-  final Account account;
   final NewProject project;
 
   void _handleNext(BuildContext context) {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => ProjectsList(
-        account: account
-      ))
+      MaterialPageRoute(builder: (context) => ProjectsList())
     );
   }
 
