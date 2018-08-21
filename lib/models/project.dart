@@ -69,6 +69,7 @@ class Project {
     id = p['id'],
     orgId = p['org_id'],
     name = p['name'],
+    status = p['status'],
     location = p['location'],
     currentAMO = p['currentAMO'] != null ? User.fromApiResponse(p['currentAMO']) : null,
     currentQS = p['currentQS'] != null ? User.fromApiResponse(p['currentQS']) : null,

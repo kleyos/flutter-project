@@ -6,7 +6,6 @@ import 'package:add_just/services/api/projects.dart';
 import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/projects/project-show.dart';
 import 'package:add_just/ui/themes.dart';
-import 'package:add_just/ui/chat/chat-index.dart';
 
 class _ProjectListItemState extends State<ProjectListItem> {
   Project project;

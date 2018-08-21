@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/models/account.dart';
-import 'package:add_just/ui/chat/chat-navigation-bar.dart';
-import './messages.dart' as messages;
-import './scope.dart' as scope;
+import 'package:add_just/ui/project-setup-completed/navigation-with-tabs.dart';
+import 'package:add_just/ui/project-setup-completed/chat.dart';
+import 'package:add_just/ui/project-setup-completed/scope.dart';
 
-class _ProjectWithChatShowState extends State<ProjectWithChatShow> with SingleTickerProviderStateMixin{
+class _ProjectSetupCompletedShowState extends State<ProjectSetupCompletedShow> with SingleTickerProviderStateMixin{
   
   TabController controller;
-  int _messageCount;
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  
   @override
   void initState() {
     super.initState();
@@ -26,15 +27,15 @@ class _ProjectWithChatShowState extends State<ProjectWithChatShow> with SingleTi
   }
   
   Widget _iconBadge() {
-    return Container(
+    return new Container(
       width: 20.0,
       height: 20.0,
       alignment: Alignment.center,
-      decoration: BoxDecoration(
+      decoration: new BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
         color: Colors.blueAccent,
       ),
-      child: Text('$_messageCount',
+      child: new Text(widget.messageCount.toString(),
         style: TextStyle(fontWeight: FontWeight.bold)
       ),
     );
@@ -43,7 +44,8 @@ class _ProjectWithChatShowState extends State<ProjectWithChatShow> with SingleTi
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: ChatNavigationBar(
+      key: scaffoldKey,
+      appBar: NavigationWithTabs(
         projectName: widget.project.name,
         onMessagePress: () { _handleMessageIconPress(); },
         controller: controller,
@@ -52,20 +54,22 @@ class _ProjectWithChatShowState extends State<ProjectWithChatShow> with SingleTi
       body: new TabBarView(
         controller: controller,
         children: <Widget>[
-          new scope.Scope(),
-          new messages.Messages(owner: widget.account.id),
+          Scope(scaffoldKey: scaffoldKey, currentProject: widget.project),
+          Chat(owner: 12),
         ]
       )
     );
   }
 }
 
-class ProjectWithChatShow extends StatefulWidget {
-  ProjectWithChatShow({Key key, this.account, this.project}) : super(key: key);
+class ProjectSetupCompletedShow extends StatefulWidget {
+  ProjectSetupCompletedShow({Key key, this.project, this.messageCount}) : super(key: key);
 
-  final Account account;
   final Project project;
+  final int messageCount;
 
   @override
-  State<StatefulWidget> createState() => new _ProjectWithChatShowState();
+  State<StatefulWidget> createState() => new _ProjectSetupCompletedShowState();
 }
+
+
