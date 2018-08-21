@@ -17,6 +17,7 @@ class _SectionListItemState extends State<SectionListItem> {
               child: new Text(widget.sectionItem.name, style: Themes.sectionItemTitle)
             ),
             new Text(widget.sectionItem.quantity.toString(), style: Themes.sectionItemTitle),
+            SizedBox(width: 6.0),
             new Text(widget.sectionItem.measure, style: Themes.sectionItemTitle),
           ],
         ),
