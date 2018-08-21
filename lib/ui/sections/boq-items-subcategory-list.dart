@@ -27,6 +27,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     try {
       await projectService.addBoqItemToSection(
         widget.project.id, widget.projectSection.id, item.id, quantity);
+      widget.project.sections = (await projectService.load(widget.project.id)).sections;
       _scaffoldKey.currentState.showSnackBar(
         new SnackBar(
           content: new Text('Added: $quantity ${item.measure} of ${item.name}')

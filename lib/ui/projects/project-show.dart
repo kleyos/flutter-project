@@ -45,6 +45,7 @@ class _ProjectShowState extends State<ProjectShow> {
   Future<ApiResponse> _saveSectionsToProject() async {
     try {
       ApiResponse resp = await projectService.addSectionsToProject(_selectedSections, widget.project.id);
+      widget.project.sections = (await projectService.load(widget.project.id)).sections;
       setState(() {
         _isSectionsNeedReload = true;
       });

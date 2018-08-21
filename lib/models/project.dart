@@ -53,7 +53,7 @@ class Project {
     this.orgId,
     this.name,
     this.status,
-    this.location,
+    this.address,
     this.currentAMO,
     this.currentQS,
     this.currentCTR,
@@ -61,7 +61,7 @@ class Project {
 
   final num id, orgId;
   String name, status;
-  List<String> location;
+  List<String> address;
   List<ProjectSection> sections;
   User currentAMO, currentQS, currentCTR;
 
@@ -69,7 +69,7 @@ class Project {
     id = p['id'],
     orgId = p['org_id'],
     name = p['name'],
-    location = p['location'],
+    address = List.from(p['address']).map((i) => i.toString()).toList(),
     currentAMO = p['currentAMO'] != null ? User.fromApiResponse(p['currentAMO']) : null,
     currentQS = p['currentQS'] != null ? User.fromApiResponse(p['currentQS']) : null,
     currentCTR = p['currentCTR'] != null ? User.fromApiResponse(p['currentCTR']) : null,
@@ -81,6 +81,6 @@ class Project {
   bool get isMarkedCompleted => status == 'marked_completed';
 
   ProjectSection sectionByName(String name) {
-    return sections.firstWhere((s) => s.name == name, orElse: () => null);
+    return sections.firstWhere((s) => s.name == name);
   }
 }

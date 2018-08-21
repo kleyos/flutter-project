@@ -10,7 +10,7 @@ import 'package:add_just/ui/themes.dart';
 class _ProjectListItemState extends State<ProjectListItem> {
   Project project;
 
-  String get subtitle => "${project.location?.join(' ')} / ${Account.current.displayName}";
+  String get subtitle => "${project.address?.join(' ')} / ${Account.current.displayName}";
 
   Future<Project> _loadProject() async {
     try {

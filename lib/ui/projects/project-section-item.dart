@@ -6,7 +6,6 @@ import 'package:add_just/ui/themes.dart';
 
 class _ProjectSectionItemState extends State<ProjectSectionItem> {
   void _handleProjectTap(BuildContext context) {
-    print(widget.projectSection);
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => new SectionShow(
       project: widget.project,
       projectSection: widget.project.sectionByName(widget.projectSection.name)
