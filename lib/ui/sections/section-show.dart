@@ -37,8 +37,11 @@ class _SectionShowState extends State<SectionShow> {
     return new Column(
       children: <Widget>[
         _buildSectionHeader(widget.projectSection.name),
-        new Column(
-          children: widget.projectSection.scopeItems.map((i) => _buildSectionItem(i)).toList(),
+        new Container(
+          padding: EdgeInsets.all(16.0),
+          child: new Column(
+            children: widget.projectSection.scopeItems.map((i) => _buildSectionItem(i)).toList(),
+          )
         )
       ]
     );
