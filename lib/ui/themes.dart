@@ -105,4 +105,9 @@ class Themes {
     fontSize: 23.0,
     color: Colors.teal
   );
+
+  static TextStyle sectionItemTitle = new TextStyle(
+    fontSize: 17.0,
+    fontWeight: FontWeight.bold
+  );
 }

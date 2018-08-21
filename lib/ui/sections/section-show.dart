@@ -1,4 +1,6 @@
+import 'package:add_just/ui/sections/section-list-item.dart';
 import 'package:flutter/material.dart';
+import 'package:add_just/models/section-item.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/ui/sections/boq-items-list.dart';
@@ -9,13 +11,36 @@ class _SectionShowState extends State<SectionShow> {
 
   void _handleAddItem() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (BuildContext c) => new BoqItemsList(project: widget.project, projectSection: widget.projectSection)
+      builder: (BuildContext c) => new BoqItemsList(
+        project: widget.project, projectSection: widget.projectSection
+      )
     ));
+  }
+
+  Widget _buildSectionItem(SectionItem item) {
+    return new SectionListItem(sectionItem: item);
+  }
+
+  Widget _buildSectionHeader(String text) {
+    return new Container(
+      padding: EdgeInsets.all(16.0),
+      color: new Color.fromRGBO(224, 224, 224, 1.0),
+      child: new Row(
+        children: <Widget>[
+          new Text(text.toUpperCase(), style: Themes.projectSectionTitle)
+        ]
+      )
+    );
   }
 
   Widget _buildSection() {
     return new Column(
-      children: widget.projectSection.scopeItems.map((i) => new Text(i.name)).toList()
+      children: <Widget>[
+        _buildSectionHeader(widget.projectSection.name),
+        new Column(
+          children: widget.projectSection.scopeItems.map((i) => _buildSectionItem(i)).toList(),
+        )
+      ]
     );
   }
 
@@ -39,7 +64,6 @@ class _SectionShowState extends State<SectionShow> {
         children: <Widget>[
           new BackgroundImage(),
           new Container(
-            padding: EdgeInsets.all(32.0),
             child: _buildMainContent()
           )
         ]
