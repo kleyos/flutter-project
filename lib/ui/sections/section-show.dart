@@ -67,9 +67,14 @@ class _SectionShowState extends State<SectionShow> {
         child: new Text('Add the first item to this section',
           style: Themes.pageHeader2, textAlign: TextAlign.center)
         )
-      : new FutureBuilder(
-        future: projectPool.getById(widget.projectId),
-        builder: _buildSection
+      : new ListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          new FutureBuilder(
+            future: projectPool.getById(widget.projectId),
+            builder: _buildSection
+          )
+        ],
       );
   }
 

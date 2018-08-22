@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:add_just/ui/sections/project-setup-done.dart';
+import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
@@ -53,6 +55,12 @@ class _ProjectShowState extends State<ProjectShow> {
     }
   }
 
+  void _handleScopeFinalise() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => ProjectSetupDone())
+    );
+  }
+
   Widget _checkboxBuilder(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
     if (snapshot.connectionState != ConnectionState.done) {
       return new Center(child: CircularProgressIndicator());
@@ -72,9 +80,29 @@ class _ProjectShowState extends State<ProjectShow> {
 
     if (List.from(snapshot.data).isNotEmpty) {
       return new Column(
-        children: new List.from(snapshot.data).map((e) =>
-          new ProjectSectionItem(projectId: widget.projectId, projectSectionId: e.id)
-        ).toList()
+        children: <Widget>[
+          new Expanded(
+            child: new ListView(
+              shrinkWrap: true,
+              children: new List.from(snapshot.data).map((e) =>
+                new ProjectSectionItem(projectId: widget.projectId, projectSectionId: e.id)
+              ).toList()
+            )
+          ),
+          new InkWell(
+            onTap: () { _handleScopeFinalise(); },
+            child: new Container(
+              padding: EdgeInsets.all(12.0),
+              color: Colors.teal,
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Text('FINALISE SCOPE OF WORK', style: Themes.buttonCaption, textAlign: TextAlign.center)
+                ],
+              )
+            )
+          )
+        ]
       );
     } else {
       return new Container(

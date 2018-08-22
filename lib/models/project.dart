@@ -47,6 +47,17 @@
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/user.dart';
 
+// Project statuses:
+// created,
+// work_commenced,
+// marked_completed,
+// completion_cert_issued,
+// payment_claim_submitted,
+// payment_recommendation_issued,
+// payment_certification_issued,
+// invoice_received,
+// paid
+
 class Project {
   Project({
     this.id,
@@ -58,7 +69,7 @@ class Project {
     this.currentQS,
     this.currentCTR,
   });
-
+  
   final num id, orgId;
   String name, status;
   List<String> address;
