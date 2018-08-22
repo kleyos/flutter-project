@@ -110,4 +110,17 @@ class Themes {
     fontSize: 17.0,
     fontWeight: FontWeight.bold
   );
+  
+  static TextStyle scopeSectionItemName = new TextStyle(
+      fontSize: 18.0,
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w800
+  );
+  
+  static TextStyle scopeSectionItem = new TextStyle(
+      fontSize: 10.0,
+      color: Colors.black38,
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w800
+  );
 }
