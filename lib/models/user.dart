@@ -1,3 +1,12 @@
+// User roles
+// 'superadmin',
+// 'org_admin',
+// 'amo',
+// 'ctr',
+// 'qs',
+// 'architect',
+// 'finance'
+
 class User {
   User({
     this.id,
@@ -19,4 +28,5 @@ class User {
 
   String get displayName => [firstName, lastName].join(' ');
   bool get isQS => role == 'qs';
+  bool get isContractor => role == 'ctr';
 }

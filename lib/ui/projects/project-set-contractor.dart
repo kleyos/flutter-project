@@ -21,7 +21,7 @@ class _ProjectSetContractorState extends State<ProjectSetContractor> {
         _isDataLoading = true;
       });
       try {
-        _users = await projectPool.users();
+        _users = (await projectPool.users()).where((u) => u.isContractor).toList();
         _currentUserId = _users[0]?.id;
       } catch (e) {
         showAlert(context, e.toString());
