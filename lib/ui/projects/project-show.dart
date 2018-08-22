@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'package:add_just/ui/sections/project-setup-done.dart';
-import 'package:add_just/ui/shared/single-action-button.dart';
+import 'package:add_just/ui/projects/project-set-contractor.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
@@ -57,7 +56,7 @@ class _ProjectShowState extends State<ProjectShow> {
 
   void _handleScopeFinalise() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => ProjectSetupDone())
+      MaterialPageRoute(builder: (context) => ProjectSetContractor(projectId: widget.projectId))
     );
   }
 

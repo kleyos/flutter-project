@@ -88,6 +88,20 @@ class ProjectPool extends Base {
     return reloadById(prjId);
   }
 
+//  // Finalise the scope of a project
+//  POST {{host}}/api/orgs/1/projects/1/finalise-scope
+//  Authorization: Bearer {{amo_token}}
+//  Content-Type: application/json
+//
+//  {"ctrId": 10}
+//  ###
+  Future<Project> finaliseScope(int prjId, ctrId) async {
+    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/finalise-scope",
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"},
+      body: {'ctrId': ctrId});
+    return reloadById(prjId);
+  }
+
   Future<Project> getById(int id) async {
     _projects[id] ??= await load(id);
     return _projects[id];
