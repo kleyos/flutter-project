@@ -80,7 +80,7 @@ class Project {
     id = p['id'],
     orgId = p['org_id'],
     name = p['name'],
-    address = List.from(p['address']).map((i) => i.toString()).toList(),
+    address = List.from(p['address']).map((i) => i as String).toList(),
     currentAMO = p['currentAMO'] != null ? User.fromApiResponse(p['currentAMO']) : null,
     currentQS = p['currentQS'] != null ? User.fromApiResponse(p['currentQS']) : null,
     currentCTR = p['currentCTR'] != null ? User.fromApiResponse(p['currentCTR']) : null,

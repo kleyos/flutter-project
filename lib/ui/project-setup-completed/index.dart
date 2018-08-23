@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project.dart';
-import 'package:add_just/models/account.dart';
 import 'package:add_just/ui/project-setup-completed/navigation-with-tabs.dart';
 import 'package:add_just/ui/project-setup-completed/chat.dart';
 import 'package:add_just/ui/project-setup-completed/scope.dart';

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/services/api/base.dart';
@@ -19,8 +18,7 @@ class Essentials extends Base {
     if (_boqItemsContainer != null) {
       return _boqItemsContainer;
     }
-    ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/boq-items",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"});
+    ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/boq-items", headers: authHeader);
     if (resp.data == null || List.from(resp.data['boqItems']).isEmpty) {
       return null;
     }

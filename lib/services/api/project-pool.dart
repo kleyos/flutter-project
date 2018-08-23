@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/area.dart';
 import 'package:add_just/models/new-project.dart';
@@ -20,7 +19,7 @@ class ProjectPool extends Base {
 
   Future<List<Project>> index() async {
     ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/projects",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"});
+      headers: authHeader);
     if (resp.data == null || List.from(resp.data['projects']).isEmpty) {
       return [];
     }
@@ -29,7 +28,7 @@ class ProjectPool extends Base {
 
   Future<Project> load(int id) async {
     ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/projects/$id",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"});
+      headers: authHeader);
     return resp.data != null
       ? Project.fromApiResponse(resp.data)
       : null;
@@ -37,7 +36,7 @@ class ProjectPool extends Base {
 
   Future<List<Area>> regions() async {
     ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/regions",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"});
+      headers: authHeader);
     if (resp.data == null || List.from(resp.data['regions']).isEmpty) {
       return [];
     }
@@ -46,7 +45,7 @@ class ProjectPool extends Base {
 
   Future<List<User>> users() async {
     ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/users",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"});
+      headers: authHeader);
     if (resp.data == null || List.from(resp.data['users']).isEmpty) {
       return [];
     }
@@ -55,14 +54,14 @@ class ProjectPool extends Base {
 
   Future<Project> saveNewProject(NewProject project) async {
     ApiResponse resp = await post("/api/orgs/${Account.current.orgId}/projects",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"},
+      headers: authHeader,
       body: project.toJson());
     return reloadById(resp.data['id']);
   }
 
   Future<List<String>> availableSections() async {
     ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/sections",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"});
+      headers: authHeader);
     return resp != null && resp.data['sections'] != null
       ? List.from(resp.data['sections']).map((s) => s.toString()).toList()
       : [];
@@ -70,7 +69,7 @@ class ProjectPool extends Base {
 
   Future<Project> addSectionsToProject(List<String> sections, int prjId) async {
     await post("/api/orgs/${Account.current.orgId}/projects/$prjId/sections",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"},
+      headers: authHeader,
       body: {'sections': sections});
     return reloadById(prjId);
   }
@@ -83,7 +82,7 @@ class ProjectPool extends Base {
   //  {"scopes": [{"boqItemId": 1, "sectionId": 1, "quantity": 12}]}
   Future<Project> addBoqItemToSection(int prjId, secId, itemId, num qty) async {
     await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-items",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"},
+      headers: authHeader,
       body: {'scopes': [{'boqItemId': itemId, 'sectionId': secId, 'quantity': qty}]});
     return reloadById(prjId);
   }
@@ -97,7 +96,7 @@ class ProjectPool extends Base {
 //  ###
   Future<Project> finaliseScope(int prjId, ctrId) async {
     await post("/api/orgs/${Account.current.orgId}/projects/$prjId/finalise-scope",
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"},
+      headers: authHeader,
       body: {'ctrId': ctrId});
     return reloadById(prjId);
   }

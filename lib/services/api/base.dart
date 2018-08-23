@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:add_just/models/account.dart';
 
 class ApiResponse {
   ApiResponse.fromResponse(String payload) {
@@ -34,11 +35,12 @@ class Base {
   String host;
 
   String get _host => host ?? 'api.staging.termpay.io';
+  Map<String, String> get authHeader => {HttpHeaders.AUTHORIZATION: "Bearer ${Account.current.accessToken}"};
 
   Future<ApiResponse> get(String path, {Map<String, String> headers}) async {
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request = await httpClient.getUrl(Uri.https(_host, path));
-    request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
+    request.headers.add(HttpHeaders.CONTENT_TYPE, 'application/json');
     if (headers != null) {
       headers.forEach((k, v) { request.headers.add(k, v); });
     }
@@ -54,7 +56,7 @@ class Base {
     print(uri);
     HttpClientRequest request = await httpClient.postUrl(uri);
     print('Setting headers...');
-    request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
+    request.headers.add(HttpHeaders.CONTENT_TYPE, 'application/json');
     if (headers != null) {
       headers.forEach((k, v) { request.headers.add(k, v); });
     }

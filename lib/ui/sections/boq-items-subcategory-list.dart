@@ -55,7 +55,6 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
         ],
       )
     );
-
   }
 
   List<Widget> _buildSubs() {

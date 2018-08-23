@@ -57,7 +57,7 @@ class BoqItemsContainer {
   final List<BoqItemsCategory> categories;
 
   BoqItemsCategory getCatByName(String name) {
-    categories.singleWhere((cat) => cat.name == name, orElse: () => null);
+    return categories.singleWhere((cat) => cat.name == name, orElse: () => null);
   }
 
   BoqItemsContainer.fromApiResponse(List<Map<String, dynamic>> data):

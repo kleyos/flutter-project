@@ -25,10 +25,10 @@ class _ProjectShowState extends State<ProjectShow> {
     try {
       _availableSections = await projectPool.availableSections();
       _availableSections.removeWhere((name) => isSectionAlreadyAdded(name));
-      return _availableSections;
     } catch (e) {
       showAlert(context, e.toString());
     }
+    return _availableSections;
   }
 
   Future<List<ProjectSection>> _loadSections() async {
@@ -36,22 +36,23 @@ class _ProjectShowState extends State<ProjectShow> {
       Project p = await projectPool.getById(widget.projectId);
       _existingSections = p.sections;
       _isSectionsNeedReload = false;
-      return _existingSections;
     } catch (e) {
       showAlert(context, e.toString());
     }
+    return _existingSections;
   }
 
   Future<Project> _saveSectionsToProject() async {
+    Project p;
     try {
-      Project p = await projectPool.addSectionsToProject(_selectedSections, widget.projectId);
+      p = await projectPool.addSectionsToProject(_selectedSections, widget.projectId);
       setState(() {
         _isSectionsNeedReload = true;
       });
-      return p;
     } catch (e) {
       showAlert(context, e.toString());
     }
+    return p;
   }
 
   void _handleScopeFinalise() {
