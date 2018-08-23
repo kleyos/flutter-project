@@ -1,16 +1,28 @@
-import 'package:add_just/ui/sections/section-item-amend.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/section-item.dart';
+import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/ui/common.dart';
+import 'package:add_just/ui/sections/section-item-amend.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _SectionListItemState extends State<SectionListItem> {
+  final projectPool = new ProjectPool();
 
   bool get canAmend => true;
   bool get cannotIncrease => false;
   bool get cannotDecrease => false;
 
-  void onSectionItemUpdated(SectionItem item, num amount) {
-    print(amount);
+  void onSectionItemUpdated(SectionItem item, num quantity) async {
+    try {
+      if (item.quantity > quantity) {
+        await projectPool.decScopeItem(widget.projectId, item.id, quantity);
+      }
+      if (item.quantity < quantity) {
+        await projectPool.incScopeItem(widget.projectId, item.id, quantity);
+      }
+    } catch (e) {
+      showAlert(context, e.toString());
+    }
   }
 
   void _popupAmendDialog() {
@@ -73,8 +85,13 @@ class _SectionListItemState extends State<SectionListItem> {
 }
 
 class SectionListItem extends StatefulWidget {
-  SectionListItem({Key key, @required this.sectionItem}) : super(key: key);
+  SectionListItem({
+    Key key,
+    @required this.projectId,
+    @required this.sectionItem
+  }) : super(key: key);
 
+  final int projectId;
   final SectionItem sectionItem;
 
   @override

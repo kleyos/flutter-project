@@ -63,7 +63,7 @@ class ProjectPool extends Base {
     ApiResponse resp = await get("/api/orgs/${Account.current.orgId}/sections",
       headers: authHeader);
     return resp != null && resp.data['sections'] != null
-      ? List.from(resp.data['sections']).map((s) => s.toString()).toList()
+      ? List.from(resp.data['sections']).map((s) => s as String).toList()
       : [];
   }
 
@@ -98,6 +98,20 @@ class ProjectPool extends Base {
     await post("/api/orgs/${Account.current.orgId}/projects/$prjId/finalise-scope",
       headers: authHeader,
       body: {'ctrId': ctrId});
+    return reloadById(prjId);
+  }
+
+  Future<Project> incScopeItem(int prjId, itemID, num quantity) async {
+    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-addition",
+      headers: authHeader,
+      body: {'scopeItemId': itemID, 'quantity': quantity});
+    return reloadById(prjId);
+  }
+
+  Future<Project> decScopeItem(int prjId, itemID, num quantity) async {
+    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-deduction",
+      headers: authHeader,
+      body: {'scopeItemId': itemID, 'quantity': quantity});
     return reloadById(prjId);
   }
 

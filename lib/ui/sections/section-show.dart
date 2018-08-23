@@ -20,7 +20,7 @@ class _SectionShowState extends State<SectionShow> {
   }
 
   Widget _buildSectionItem(SectionItem item) {
-    return new SectionListItem(sectionItem: item);
+    return new SectionListItem(projectId: widget.projectId, sectionItem: item);
   }
 
   Widget _buildSectionHeader(String text) {
