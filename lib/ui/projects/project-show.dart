@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:add_just/ui/projects/project-set-contractor.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/ui/projects/project-set-contractor.dart';
 import 'package:add_just/ui/projects/project-section-item.dart';
 import 'package:add_just/ui/projects/popup-sections-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
