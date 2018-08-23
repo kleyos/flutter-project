@@ -1,7 +1,7 @@
-import 'package:add_just/ui/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
+import 'package:add_just/ui/themes.dart';
 
 typedef void OnBoqItemAdded(BoqItem item, num amount);
 
@@ -37,16 +37,16 @@ class _BoqItemSetState extends State<BoqItemSet> {
 
   Widget _buildInput() {
     return new TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Quantity',
-          border: InputBorder.none,
-          isDense: true,
-          contentPadding: EdgeInsets.all(8.0)
-        ),
-        autofocus: true,
-        keyboardType: TextInputType.number,
-        validator: numberValidator,
-        controller: _quantity
+      decoration: InputDecoration(
+        labelText: 'Quantity',
+        border: InputBorder.none,
+        isDense: true,
+        contentPadding: EdgeInsets.all(8.0)
+      ),
+      autofocus: true,
+      keyboardType: TextInputType.number,
+      validator: numberValidator,
+      controller: _quantity
     );
   }
 
@@ -96,7 +96,10 @@ class _BoqItemSetState extends State<BoqItemSet> {
 }
 
 class BoqItemSet extends StatefulWidget {
-  BoqItemSet({Key key, this.boqItem, this.onBoqItemAdded}) : super(key: key);
+  BoqItemSet({Key key,
+    this.boqItem,
+    this.onBoqItemAdded
+  }) : super(key: key);
 
   final BoqItem boqItem;
   final OnBoqItemAdded onBoqItemAdded;

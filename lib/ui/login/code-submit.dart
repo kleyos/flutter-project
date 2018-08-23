@@ -67,6 +67,7 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
               filled: true,
               fillColor: Colors.white
             ),
+            autofocus: true,
             textAlign: TextAlign.center,
             controller: _codeController,
           ),

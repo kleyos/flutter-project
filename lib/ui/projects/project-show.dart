@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'package:add_just/ui/sections/project-setup-done.dart';
-import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/ui/projects/project-set-contractor.dart';
 import 'package:add_just/ui/projects/project-section-item.dart';
 import 'package:add_just/ui/projects/popup-sections-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
@@ -57,7 +56,7 @@ class _ProjectShowState extends State<ProjectShow> {
 
   void _handleScopeFinalise() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => ProjectSetupDone())
+      MaterialPageRoute(builder: (context) => ProjectSetContractor(projectId: widget.projectId))
     );
   }
 
@@ -70,6 +69,58 @@ class _ProjectShowState extends State<ProjectShow> {
       onSelectedItemsChanges: (List<String> items) {
         _selectedSections = items;
       },
+    );
+  }
+
+  Widget _buildFinaliseButton() {
+    return new FutureBuilder(
+      future: projectPool.getById(widget.projectId),
+      builder: (BuildContext ctx, AsyncSnapshot<Project> s) {
+        if (s.connectionState != ConnectionState.done) {
+          return new SizedBox();
+        }
+        if (s.data.canFinaliseScopes) {
+          new InkWell(
+            onTap: () { _handleScopeFinalise(); },
+            child: new Container(
+              padding: EdgeInsets.all(12.0),
+              color: Colors.teal,
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Text('FINALISE SCOPE OF WORK', style: Themes.buttonCaption, textAlign: TextAlign.center)
+                ],
+              )
+            )
+          );
+        }
+        return new SizedBox();
+      }
+    );
+  }
+
+  Widget _buildFloatingActionButton() {
+    return new FloatingActionButton(
+      onPressed: () { _handleAddSections(); },
+      tooltip: 'Add sections',
+      child: new Icon(Icons.add)
+    );
+  }
+
+  Widget _buildFloatingActionButtonHolder() {
+    return new FutureBuilder(
+      future: projectPool.getById(widget.projectId),
+      builder: (BuildContext ctx, AsyncSnapshot<Project> s) {
+        if (s.connectionState != ConnectionState.done) {
+          return new SizedBox();
+        }
+        return s.data.canFinaliseScopes
+          ? new Container(
+              padding: EdgeInsets.only(bottom: 40.0),
+              child: _buildFloatingActionButton()
+            )
+          : _buildFloatingActionButton();
+      }
     );
   }
 
@@ -87,21 +138,9 @@ class _ProjectShowState extends State<ProjectShow> {
               children: new List.from(snapshot.data).map((e) =>
                 new ProjectSectionItem(projectId: widget.projectId, projectSectionId: e.id)
               ).toList()
-            )
+            ),
           ),
-          new InkWell(
-            onTap: () { _handleScopeFinalise(); },
-            child: new Container(
-              padding: EdgeInsets.all(12.0),
-              color: Colors.teal,
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new Text('FINALISE SCOPE OF WORK', style: Themes.buttonCaption, textAlign: TextAlign.center)
-                ],
-              )
-            )
-          )
+          _buildFinaliseButton()
         ]
       );
     } else {
@@ -176,11 +215,7 @@ class _ProjectShowState extends State<ProjectShow> {
           )
         ]
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () { _handleAddSections(); },
-        tooltip: 'Add sections',
-        child: new Icon(Icons.add),
-      )
+      floatingActionButton: _buildFloatingActionButtonHolder()
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:add_just/ui/projects/projects-list.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
-import 'package:add_just/ui/shared/completed-screen.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:flutter/material.dart';

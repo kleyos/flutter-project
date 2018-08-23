@@ -12,12 +12,12 @@ import 'package:add_just/ui/shared/background-image.dart';
 class _BoqItemsListState extends State<BoqItemsList> {
   final projectPool = new ProjectPool();
   BoqItemsContainer _boqItemsContainer;
+  final essentials = new Essentials();
 
   Future<BoqItemsContainer> _loadItems() async {
     if (_boqItemsContainer == null) {
       try {
-        Essentials eService = new Essentials();
-        _boqItemsContainer = await eService.loadBoqItems();
+        _boqItemsContainer = await essentials.loadBoqItems();
       } catch (e) {
         showAlert(context, e.toString());
       }
