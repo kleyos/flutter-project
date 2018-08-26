@@ -22,9 +22,9 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
     );
   }
 
-  List<Widget> _buildSubs() {
-    return widget.category.subCategories.map((s) => new InkWell(
-      onTap: () { _subTap(s); },
+  Widget _buildSubItem(String caption, Function onTap) {
+    return new InkWell(
+      onTap: onTap,
       child: new Column(
         children: <Widget>[
           new Container(
@@ -32,7 +32,7 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
             child: new Row(
               children: <Widget>[
                 SizedBox(width: 24.0),
-                Text(s.name, style: Themes.boqCategoryTitle),
+                Text(caption, style: Themes.boqCategoryTitle),
                 new Expanded(child: new SizedBox()),
                 new Icon(Icons.chevron_right, color: Colors.teal)
               ]
@@ -41,7 +41,17 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
           new Divider()
         ]
       )
-    )).toList();
+    );
+  }
+
+  List<Widget> _buildSubs() {
+    return widget.category.subCategories.map(
+      (s) => _buildSubItem(s.name, () { _subTap(s); })
+    ).toList();
+  }
+
+  Widget _buildAddCustomItem() {
+    return _buildSubItem('Add custom Item', () {});
   }
 
   Widget _buildMainContent() {
@@ -67,7 +77,7 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
               ),
               new Divider(),
               new Column(
-                children: _buildSubs(),
+                children: _buildSubs() + [_buildAddCustomItem()],
               )
             ],
           )

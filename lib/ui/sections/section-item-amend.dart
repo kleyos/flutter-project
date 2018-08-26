@@ -39,10 +39,10 @@ class _SectionItemAmendState extends State<SectionItemAmend> {
         return '"$value" is not a valid number';
       }
       if (widget.cannotIncrease && widget.sectionItem.quantity < v) {
-        return 'Cannot increase value!';
+        return 'Cannot increase quantity!';
       }
       if (widget.cannotDecrease && widget.sectionItem.quantity > v) {
-        return 'Cannot decrease value!';
+        return 'Cannot decrease quantity!';
       }
     } catch (e){
       return '"$value" is not a valid number';
