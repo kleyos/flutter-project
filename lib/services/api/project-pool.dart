@@ -115,6 +115,13 @@ class ProjectPool extends Base {
     return reloadById(prjId);
   }
 
+  Future<Project> addCustomScopeItem(int prjId, secID, num qty, String name, msr) async {
+    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/custom-scope-items",
+      headers: authHeader,
+      body: {'sectionId': secID, 'quantity': qty, 'name': name, 'measure': msr});
+    return reloadById(prjId);
+  }
+
   Future<Project> getById(int id) async {
     _projects[id] ??= await load(id);
     return _projects[id];

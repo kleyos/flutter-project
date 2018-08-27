@@ -4,6 +4,7 @@ import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/essentials.dart';
 import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/ui/sections/add-custom-scope-item-action.dart';
 import 'package:add_just/ui/sections/boq-items-category-list.dart';
 import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/themes.dart';
@@ -57,7 +58,8 @@ class _BoqItemsListState extends State<BoqItemsList> {
 
   Widget _buildItems(BuildContext context, AsyncSnapshot<BoqItemsContainer> snapshot) {
     if (snapshot.connectionState != ConnectionState.done) {
-      return new Center(child: new CircularProgressIndicator());
+      return new Center(child: new AddCustomScopeItemAction(
+        projectId: widget.projectId, sectionId: widget.projectSectionId));
     }
     if (snapshot.data == null) {
       return new Center(child: new Text('No items loaded'));
@@ -65,7 +67,10 @@ class _BoqItemsListState extends State<BoqItemsList> {
     return new Container(
       padding: EdgeInsets.only(top: 8.0),
       child: new Column(
-        children: snapshot.data.categories.map((c) => _buildCategory(c)).toList()
+        children: snapshot.data.categories.map(
+          (c) => _buildCategory(c)
+        ).toList() + [new AddCustomScopeItemAction(
+          projectId: widget.projectId, sectionId: widget.projectSectionId)]
       )
     );
   }

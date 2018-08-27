@@ -5,8 +5,10 @@ import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/sections/boq-item-set.dart';
 import 'package:add_just/ui/shared/background-image.dart';
+import 'package:add_just/ui/sections/add-custom-scope-item-action.dart';
 import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/themes.dart';
+
 class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
   final _scaffoldKey =  new GlobalKey<ScaffoldState>();
   final projectPool = new ProjectPool();
@@ -57,9 +59,9 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     );
   }
 
-  List<Widget> _buildSubs() {
-    return widget.subcategory.items.map((s) => new InkWell(
-      onTap: () { _itemTap(s); },
+  Widget _buildSubItem(String caption, GestureTapCallback onTap) {
+    return new InkWell(
+      onTap: onTap,
       child: new Column(
         children: <Widget>[
           new Container(
@@ -67,7 +69,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
             child: new Row(
               children: <Widget>[
                 SizedBox(width: 24.0),
-                new Expanded(child: Text(s.name, style: Themes.boqCategoryTitle)),
+                new Expanded(child: Text(caption, style: Themes.boqCategoryTitle)),
                 new Icon(Icons.chevron_right, color: Colors.teal)
               ]
             ),
@@ -75,7 +77,13 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
           new Divider()
         ]
       )
-    )).toList();
+    );
+  }
+
+  List<Widget> _buildSubs() {
+    return widget.subcategory.items.map(
+      (s) => _buildSubItem(s.name, () { _itemTap(s); })
+    ).toList();
   }
 
   Widget _buildMainContent() {
@@ -115,7 +123,8 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
               ),
               new Divider(),
               new Column(
-                children: _buildSubs(),
+                children: _buildSubs() +
+                  [AddCustomScopeItemAction(projectId: widget.projectId, sectionId: widget.projectSectionId)],
               )
             ],
           )

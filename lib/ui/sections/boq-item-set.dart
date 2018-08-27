@@ -3,7 +3,7 @@ import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 
-typedef void OnBoqItemAdded(BoqItem item, num amount);
+typedef void OnBoqItemAdded(BoqItem item, num quantity);
 
 class _BoqItemSetState extends State<BoqItemSet> {
   final _quantity = TextEditingController();

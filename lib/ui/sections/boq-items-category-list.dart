@@ -4,6 +4,7 @@ import 'package:add_just/models/project.dart';
 import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/ui/sections/boq-items-subcategory-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
+import 'package:add_just/ui/sections/add-custom-scope-item-action.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
@@ -50,10 +51,6 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
     ).toList();
   }
 
-  Widget _buildAddCustomItem() {
-    return _buildSubItem('Add custom Item', () {});
-  }
-
   Widget _buildMainContent() {
     return new ListView(
       shrinkWrap: true,
@@ -77,7 +74,8 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
               ),
               new Divider(),
               new Column(
-                children: _buildSubs() + [_buildAddCustomItem()],
+                children: _buildSubs() +
+                  [AddCustomScopeItemAction(projectId: widget.projectId, sectionId: widget.projectSectionId)],
               )
             ],
           )
