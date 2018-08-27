@@ -78,8 +78,9 @@ class Project {
 
   Project.fromApiResponse(Map<String, dynamic> p) :
     id = p['id'],
-    orgId = p['org_id'],
+    orgId = p['orgId'],
     name = p['name'],
+    status = p['status'],
     address = List.from(p['address']).map((i) => i as String).toList(),
     currentAMO = p['currentAMO'] != null ? User.fromApiResponse(p['currentAMO']) : null,
     currentQS = p['currentQS'] != null ? User.fromApiResponse(p['currentQS']) : null,
@@ -88,6 +89,7 @@ class Project {
       ? List.from(p['sections']).map((e) => ProjectSection.fromApiResponse(e)).toList()
       : [];
 
+  bool get isNew => status == 'created';
   bool get isCompleted => status == 'paid';
   bool get isMarkedCompleted => status == 'marked_completed';
   bool get canFinaliseScopes => status == 'created';

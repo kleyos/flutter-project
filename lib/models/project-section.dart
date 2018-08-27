@@ -20,4 +20,5 @@ class ProjectSection {
 
   int get itemsCount => scopeItems.length;
   bool get isEmpty => itemsCount == 0;
+  bool get isNotEmpty => !isEmpty;
 }

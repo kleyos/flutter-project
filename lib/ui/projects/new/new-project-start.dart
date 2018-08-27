@@ -4,7 +4,7 @@ import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
-import 'package:add_just/ui/projects/new-project-area.dart';
+import 'package:add_just/ui/projects/new/new-project-area.dart';
 
 class _NewProjectStartState extends State<NewProjectStart> {
   final TextEditingController _nameController = new TextEditingController();

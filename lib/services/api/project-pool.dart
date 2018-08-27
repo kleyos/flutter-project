@@ -104,7 +104,7 @@ class ProjectPool extends Base {
   Future<Project> incScopeItem(int prjId, itemID, num quantity) async {
     await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-addition",
       headers: authHeader,
-      body: {'scopeItemId': itemID, 'quantity': quantity});
+      body: {'boqItemId': itemID, 'quantity': quantity});
     return reloadById(prjId);
   }
 

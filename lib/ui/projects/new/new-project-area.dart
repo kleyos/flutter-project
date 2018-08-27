@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/new-project.dart';
-import 'package:add_just/ui/projects/new-project-person.dart';
 import 'package:add_just/models/area.dart';
 import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/ui/projects/new/new-project-person.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';

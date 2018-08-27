@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
-import 'package:add_just/ui/common.dart';
+import 'package:add_just/ui/projects/new/new-project-show.dart';
 import 'package:add_just/ui/projects/project-show.dart';
+import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _ProjectListItemState extends State<ProjectListItem> {
@@ -19,10 +20,11 @@ class _ProjectListItemState extends State<ProjectListItem> {
     return null;
   }
 
-  void _handleProjectTap(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => new ProjectShow(
-      projectId: widget.projectId,
-    )));
+  void _handleProjectTap(Project project) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => project.isNew
+      ? new NewProjectShow(projectId: widget.projectId)
+      : new ProjectShow(projectId: widget.projectId)
+    ));
   }
 
   Widget _buildLid() {
@@ -40,7 +42,7 @@ class _ProjectListItemState extends State<ProjectListItem> {
     String subtitle = "${project.address?.join(' ')} / ${Account.current.displayName}";
     return new Card(
       child: new InkWell(
-        onTap: () { _handleProjectTap(context); },
+        onTap: () { _handleProjectTap(project); },
         child: new Container(
           padding: const EdgeInsets.fromLTRB(24.0, 10.0, 10.0, 24.0),
           child: new Column(

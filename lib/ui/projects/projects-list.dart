@@ -7,7 +7,7 @@ import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/projects/project-list-item.dart';
 import 'package:add_just/ui/projects/projects-drawer.dart';
-import 'package:add_just/ui/projects/new-project-start.dart';
+import 'package:add_just/ui/projects/new/new-project-start.dart';
 import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/common.dart';
 

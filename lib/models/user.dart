@@ -7,7 +7,9 @@
 // 'architect',
 // 'finance'
 
-class User {
+import 'package:add_just/models/roleable.dart';
+
+class User extends Roleable {
   User({
     this.id,
     this.firstName,
@@ -17,7 +19,7 @@ class User {
   });
 
   final int id;
-  final String firstName, lastName, role, status;
+  final String firstName, role, lastName, status;
 
   User.fromApiResponse(Map<String, dynamic> a) :
     id = a['id'],
@@ -27,6 +29,4 @@ class User {
     status = a['status'];
 
   String get displayName => [firstName, lastName].join(' ');
-  bool get isQS => role == 'qs';
-  bool get isContractor => role == 'ctr';
 }

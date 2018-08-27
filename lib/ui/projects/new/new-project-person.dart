@@ -1,19 +1,20 @@
 import 'dart:async';
-import 'package:add_just/models/project.dart';
-import 'package:add_just/ui/projects/project-setup-done.dart';
 import 'package:flutter/material.dart';
+import 'package:add_just/models/new-project.dart';
 import 'package:add_just/models/user.dart';
 import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/ui/projects/new/new-project-summary.dart';
+import 'package:add_just/ui/shared/add-just-title.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/common.dart';
 
-class _ProjectSetContractorState extends State<ProjectSetContractor> {
+class _NewProjectPersonState extends State<NewProjectPerson> {
   int _currentUserId;
   bool _isDataLoading = false;
   List<User> _users = [];
-  final projectPool = new ProjectPool();
+  final projectService = new ProjectPool();
 
   Future<List<User>> _loadUsers() async {
     if (_users.isEmpty) {
@@ -21,7 +22,7 @@ class _ProjectSetContractorState extends State<ProjectSetContractor> {
         _isDataLoading = true;
       });
       try {
-        _users = (await projectPool.users()).where((u) => u.isContractor).toList();
+        _users = (await projectService.users()).where((u) => u.isQS).toList();
         _currentUserId = _users[0]?.id;
       } catch (e) {
         showAlert(context, e.toString());
@@ -44,13 +45,14 @@ class _ProjectSetContractorState extends State<ProjectSetContractor> {
     });
   }
 
-  void _handleNext() async {
+  void _handleNext() {
     if (_currentUserId != null) {
-      await projectPool.finaliseScope(widget.projectId, _currentUserId);
+      widget.newProject.user = _users.firstWhere((user) => user.id == _currentUserId);
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (BuildContext c) => new ProjectSetupDone()
-        )
+          builder: (BuildContext c) => new NewProjectSummary(
+            newProject: widget.newProject
+          ))
       );
     }
   }
@@ -83,32 +85,25 @@ class _ProjectSetContractorState extends State<ProjectSetContractor> {
           flex: 1,
           child: new Column(
             children: <Widget>[
-              new Text('Appoint Contractor', style: Themes.pageHeader2),
+              new Text('User', style: Themes.pageHeader2),
+              new Text('Please enter project details to get started.',
+                style: Themes.pageHeaderHint
+              ),
               const SizedBox(height: 16.0),
               _buildDropDown()
             ]
           )
         ),
-        new SingleActionButton(caption: 'CONFIRM', onPressed: _submitPress())
+        new SingleActionButton(caption: 'NEXT', onPressed: _submitPress())
       ]
     );
-  }
-
-  Widget _buildTitle(BuildContext ctx, AsyncSnapshot<Project> sn) {
-    if (sn.connectionState != ConnectionState.done) {
-      return new SizedBox();
-    }
-    return new Text(sn.data.name);
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new FutureBuilder(
-          future: projectPool.getById(widget.projectId),
-          builder: _buildTitle,
-        ),
+        title: AddJustTitle(),
         centerTitle: true
       ),
       body: new Stack(
@@ -124,11 +119,11 @@ class _ProjectSetContractorState extends State<ProjectSetContractor> {
   }
 }
 
-class ProjectSetContractor extends StatefulWidget {
-  ProjectSetContractor({Key key, this.projectId}) : super(key: key);
+class NewProjectPerson extends StatefulWidget {
+  NewProjectPerson({Key key, this.newProject}) : super(key: key);
 
-  final int projectId;
+  final NewProject newProject;
 
   @override
-  State<StatefulWidget> createState() => new _ProjectSetContractorState();
+  State<StatefulWidget> createState() => new _NewProjectPersonState();
 }

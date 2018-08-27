@@ -1,6 +1,7 @@
+import 'package:add_just/models/roleable.dart';
 import 'package:add_just/services/api/base.dart';
 
-class Account {
+class Account extends Roleable {
   static Account current;
 
   Account({
@@ -15,8 +16,7 @@ class Account {
   });
 
   final num id, orgId;
-  final String email, accessToken;
-  String firstName, lastName, role, status;
+  final String email, accessToken, firstName, lastName, role, status;
 
   bool get isAuthenticated => accessToken != null && accessToken.isNotEmpty;
 
