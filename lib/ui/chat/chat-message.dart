@@ -60,14 +60,14 @@ class ChatMessage extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14.0,
-              color: Color.fromRGBO(58, 150, 143, 1.0),
+              color: Colors.teal,
             ),
           ),
           new SizedBox(width: 8.0),
           new Text(item['time'],
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color.fromRGBO(201, 201, 201, 1.0),
+              color: Color.fromRGBO(193, 193, 193, 1.0),
               fontSize: 12.0,
             ),
           ),

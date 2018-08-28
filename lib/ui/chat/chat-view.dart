@@ -52,7 +52,7 @@ class ChatView extends StatelessWidget {
           fontStyle: FontStyle.italic,
         ),
         suffixIcon: new Icon(Icons.photo_camera, size: 35.0,),
-        fillColor: Color.fromRGBO(255, 255, 255, 1.0),
+        fillColor: Colors.white,
         contentPadding: EdgeInsets.all(16.0),
         filled: true,
       ),

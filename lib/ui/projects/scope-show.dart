@@ -64,7 +64,7 @@ class _ScopeShowState extends State<ScopeShow> {
       onPressed: () {
         setState(() { _isCompleted = true; });
         Navigator.pop(context);
-        },
+      },
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(5.0)
       )
@@ -76,10 +76,6 @@ class _ScopeShowState extends State<ScopeShow> {
   }
 
   void _showBottomSheet() {
-    setState(() {
-      _showBottomSheetCallBack = null;
-    });
-
     widget.scaffoldKey.currentState.showBottomSheet((context) {
       return new Container(
         height: 200.0,
