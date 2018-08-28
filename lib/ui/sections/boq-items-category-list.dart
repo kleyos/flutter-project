@@ -23,7 +23,7 @@ class _BoqItemsCategoryListSate extends State<BoqItemsCategoryList> {
     );
   }
 
-  Widget _buildSubItem(String caption, Function onTap) {
+  Widget _buildSubItem(String caption, VoidCallback onTap) {
     return new InkWell(
       onTap: onTap,
       child: new Column(
