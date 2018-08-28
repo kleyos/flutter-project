@@ -71,6 +71,7 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
             autofocus: true,
             textAlign: TextAlign.center,
             controller: _codeController,
+            style: Themes.boqCategoryTitleHeader
           ),
           const SizedBox(height: 32.0),
           SingleActionButton(caption: "LET'S GET STARTED", onPressed: _submitPress())
