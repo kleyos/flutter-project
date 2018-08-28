@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/models/boq-items-container.dart';
 import 'package:add_just/services/api/project-pool.dart';
-import 'package:add_just/ui/sections/boq-item-set.dart';
+import 'package:add_just/ui/sections/boq-item-set-action.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/sections/add-custom-scope-item-action.dart';
 import 'package:add_just/ui/common.dart';
@@ -45,7 +45,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
         content: new Container(
 //          height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: new BoqItemSet(boqItem: i, onBoqItemAdded: _onBoqItemAdded)
+          child: new BoqItemSetAction(boqItem: i, onBoqItemAdded: _onBoqItemAdded)
         ),
         actions: <Widget>[
           new FlatButton(

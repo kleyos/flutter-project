@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/ui/themes.dart';
-import 'package:add_just/ui/project-setup-completed/scope-item.dart';
+import 'package:add_just/ui/projects/scope-section-item.dart';
 
 class _ScopeSectionState extends State<ScopeSection> {
 

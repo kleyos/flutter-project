@@ -1,9 +1,9 @@
-import 'package:add_just/models/section-item.dart';
 import 'package:flutter/material.dart';
+import 'package:add_just/models/section-item.dart';
 import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:add_just/ui/themes.dart';
 
-typedef void OnSectionItemUpdated(SectionItem item, num amount);
+typedef void OnSectionItemAmended(SectionItem item, num quantity);
 
 class _SectionItemAmendState extends State<SectionItemAmend> {
   final _quantity = TextEditingController();
@@ -16,11 +16,11 @@ class _SectionItemAmendState extends State<SectionItemAmend> {
   }
 
   void _itemAmend(BuildContext context) {
-    if (widget.onSectionItemUpdated != null) {
+    if (widget.onSectionItemAmended != null) {
       if (_formKey.currentState.validate()) {
         final v = num.parse(_quantity.text);
         if (widget.sectionItem.quantity != v) {
-          widget.onSectionItemUpdated(widget.sectionItem, v);
+          widget.onSectionItemAmended(widget.sectionItem, v);
         }
         Navigator.pop(context);
       }
@@ -114,13 +114,13 @@ class SectionItemAmend extends StatefulWidget {
   SectionItemAmend({
     Key key,
     @required this.sectionItem,
-    @required this.onSectionItemUpdated,
+    @required this.onSectionItemAmended,
     @required this.cannotIncrease,
     @required this.cannotDecrease
   }) : super(key: key);
 
   final SectionItem sectionItem;
-  final OnSectionItemUpdated onSectionItemUpdated;
+  final OnSectionItemAmended onSectionItemAmended;
   final bool cannotIncrease, cannotDecrease;
 
   @override

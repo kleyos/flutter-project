@@ -6,10 +6,37 @@ import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/sections/section-list-item.dart';
 import 'package:add_just/ui/sections/boq-items-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
+import 'package:add_just/ui/common.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _SectionShowState extends State<SectionShow> {
+  final _scaffoldKey =  new GlobalKey<ScaffoldState>();
   final projectPool = new ProjectPool();
+
+  void _handleAmendItem(SectionItem item, num quantity) async {
+    try {
+//      if (item.quantity > quantity) {
+//        await projectPool.decScopeItem(widget.projectId, item.id, quantity);
+//      }
+//      if (item.quantity < quantity) {
+//        await projectPool.incScopeItem(widget.projectId, item.id, quantity);
+//      }
+      _showAtSnackBar("Quantity of '${item.name}' set to ${item.quantity}");
+    } catch (e) {
+      showAlert(context, e.toString());
+    }
+  }
+
+  void _handleDeleteItem(SectionItem item) async {
+//    await projectPool.removeScopeItem(widget.projectId, item.id);
+    _showAtSnackBar("'${item.name}' removed from this section");
+  }
+
+  void _showAtSnackBar(String text) {
+    _scaffoldKey.currentState.showSnackBar(
+      new SnackBar(content: new Text(text))
+    );
+  }
 
   void _handleAddItem() {
     Navigator.of(context).push(MaterialPageRoute(
@@ -20,7 +47,12 @@ class _SectionShowState extends State<SectionShow> {
   }
 
   Widget _buildSectionItem(SectionItem item) {
-    return new SectionListItem(projectId: widget.projectId, sectionItem: item);
+    return new SectionListItem(
+      projectId: widget.projectId,
+      sectionItem: item,
+      onSectionItemAmended: _handleAmendItem,
+      onSectionItemDeleted: _handleDeleteItem
+    );
   }
 
   Widget _buildSectionHeader(String text) {
@@ -81,6 +113,7 @@ class _SectionShowState extends State<SectionShow> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         title: new FutureBuilder(
           future: projectPool.getById(widget.projectId),

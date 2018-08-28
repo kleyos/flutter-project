@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class Message extends StatelessWidget {
+class ChatMessage extends StatelessWidget {
   
-  Message({
+  ChatMessage({
     Key key,
     @required this.item,
     @required this.isOwner,
@@ -11,7 +11,7 @@ class Message extends StatelessWidget {
   final item;
   final bool isOwner;
   
-  Widget _wihteContainerRow() {
+  Widget _whiteContainerRow() {
     return new Row(
       children: <Widget>[
         !isOwner 
@@ -95,7 +95,7 @@ class Message extends StatelessWidget {
                   : const EdgeInsets.only(left: 25.0),
                 child: _autherRow(),
               ),
-              _wihteContainerRow()
+              _whiteContainerRow()
             ]
           )
         )

@@ -5,7 +5,7 @@ import 'package:add_just/ui/themes.dart';
 
 typedef void OnBoqItemAdded(BoqItem item, num quantity);
 
-class _BoqItemSetState extends State<BoqItemSet> {
+class _BoqItemSetActionState extends State<BoqItemSetAction> {
   final _quantity = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -95,8 +95,9 @@ class _BoqItemSetState extends State<BoqItemSet> {
   }
 }
 
-class BoqItemSet extends StatefulWidget {
-  BoqItemSet({Key key,
+class BoqItemSetAction extends StatefulWidget {
+  BoqItemSetAction({
+    Key key,
     this.boqItem,
     this.onBoqItemAdded
   }) : super(key: key);
@@ -105,5 +106,5 @@ class BoqItemSet extends StatefulWidget {
   final OnBoqItemAdded onBoqItemAdded;
 
   @override
-  State<StatefulWidget> createState() => new _BoqItemSetState();
+  State<StatefulWidget> createState() => new _BoqItemSetActionState();
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class NavigationWithTabs extends AppBar {
+class TabbedAppBar extends AppBar {
 
-  NavigationWithTabs({
+  TabbedAppBar({
     Key key,
     this.messageCount,
     this.iconBadge,

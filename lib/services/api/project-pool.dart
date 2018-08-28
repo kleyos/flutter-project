@@ -122,6 +122,12 @@ class ProjectPool extends Base {
     return reloadById(prjId);
   }
 
+  Future<Project> removeScopeItem(int prjId, itemId) async {
+    await delete("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-items/$itemId",
+      headers: authHeader);
+    return reloadById(prjId);
+  }
+
   Future<Project> getById(int id) async {
     _projects[id] ??= await load(id);
     return _projects[id];

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/ui/shared/background-image.dart';
-import 'package:add_just/ui/project-setup-completed/message.dart';
+import 'package:add_just/ui/chat/chat-message.dart';
 
-class Chat extends StatelessWidget {
+class ChatView extends StatelessWidget {
 
-  Chat({
+  ChatView({
     @required this.owner,
     Key key,
   }) : super(key: key);
@@ -31,11 +31,11 @@ class Chat extends StatelessWidget {
     },
   ];
   
-  List<Message> _loadMessages() {
-    return _messages.map((item) => Message(item: item, isOwner: owner == item['id'])).toList();
+  List<ChatMessage> _loadMessages() {
+    return _messages.map((item) => ChatMessage(item: item, isOwner: owner == item['id'])).toList();
   }
   
-  Widget _listMessages(List<Message> messages) {
+  Widget _listMessages(List<ChatMessage> messages) {
     return new ListView.builder(
       reverse: false,
       itemBuilder: (_, int idx) => messages[idx],

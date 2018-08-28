@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project.dart';
-import 'package:add_just/ui/project-setup-completed/scope-section.dart';
+import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/ui/projects/scope-section.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/completed-screen.dart';
 import 'package:add_just/ui/themes.dart';
 
-class _ScopeState extends State<Scope> {
+class _ScopeShowState extends State<ScopeShow> {
   bool _isCompleted = false;
   VoidCallback _showBottomSheetCallBack;
+  final projectPool = new ProjectPool();
 
   @override
   void initState() {
@@ -15,37 +17,24 @@ class _ScopeState extends State<Scope> {
     _showBottomSheetCallBack = _showBottomSheet;
   }
 
-  final List<Map> marks = [
-    {
-      'status': 'marked_completed',
+  final statusStyling = {
+    'marked_completed': {
       'mark': 'Work Marked Completed',
       'color': Colors.cyan
     },
-    {
-      'status': 'work_comenced',
-      'mark': 'Work Comenced',
+    'work_commenced': {
+      'mark': 'Work Commenced',
       'color': Colors.orange
     },
-    {
-      'status': 'completion_issued',
+    'completion_issued': {
       'mark': 'Work Marked Completed',
       'color': Colors.blue
     },
-    {
-      'status': 'created',
+    'created': {
       'mark': 'Work Marked Created',
       'color': Colors.blue
-    },
-  ];
-
-  Map _defineMark(status) {
-    return marks.firstWhere((item) => item['status'] == status, orElse: () =>
-    {
-      'status': ' ',
-      'mark': ' ',
-      'color': Colors.black12
-    });
-  }
+    }
+  };
 
   Widget _buildLid(color) {
     return new Container(
@@ -57,10 +46,6 @@ class _ScopeState extends State<Scope> {
         shape: BoxShape.circle,
       ),
     );
-  }
-
-  List<ScopeSection> _loadSections() {
-    return widget.currentProject.sections.map((item) => ScopeSection(scopeSection: item)).toList();
   }
 
   Widget _listSections(List<ScopeSection> sections) {
@@ -106,44 +91,58 @@ class _ScopeState extends State<Scope> {
     });
   }
 
+  Widget _buildStatusHeader(Project p) {
+    final styling = statusStyling[p.status];
+    return styling.isNotEmpty
+      ? new Row(
+        children: <Widget>[
+          _buildLid(styling['color']),
+          new Text(styling['mark'], style: TextStyle(color: styling['color']))
+        ]
+      )
+      : new SizedBox();
+  }
+
+  Widget _buildScopeView(BuildContext ctx, AsyncSnapshot<Project> s) {
+    if (s.connectionState != ConnectionState.done) {
+      return new Center(child: CircularProgressIndicator());
+    }
+    return new Column (
+      children: <Widget>[
+        new Container(
+          color: Color.fromRGBO(224, 224, 224, 1.0),
+          padding: EdgeInsets.all(20.0),
+          margin: EdgeInsets.only(top: 16.0),
+          child: _buildStatusHeader(s.data)
+        ),
+        new Expanded(
+          child: _listSections(s.data.sections.map((item) => ScopeSection(scopeSection: item)).toList())
+        ),
+        new InkWell(
+          onTap: _showBottomSheetCallBack,
+          child: new Container(
+            color: Colors.teal,
+            padding: const EdgeInsets.all(16.0),
+            child: new Row (
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _issueCompletionCertificateText('ISSUE COMPLETION CERTIFICATE', Themes.buttonCaption),
+              ],
+            )
+          )
+        )
+      ],
+    );
+  }
+
   Widget _buildMainContent() {
     return new Stack(
       children: <Widget>[
         BackgroundImage(),
         new Container(
-          child: new Column (
-            children: <Widget>[
-              new Container(
-                color: Color.fromRGBO(224, 224, 224, 1.0),
-                padding: EdgeInsets.all(20.0),
-                margin: EdgeInsets.only(top: 16.0),
-                child: new Row(
-                  children: <Widget>[
-                    _buildLid(_defineMark(widget.currentProject.status)['color']),
-                    new Text(_defineMark(widget.currentProject.status)['mark'],
-                      style: TextStyle(
-                        color: _defineMark(widget.currentProject.status)['color'])
-                    )
-                  ]
-                )
-              ),
-              new Expanded(
-                child: _listSections(_loadSections())
-              ),
-              new InkWell(
-                onTap: _showBottomSheetCallBack,
-                child: new Container(
-                  color: Colors.teal,
-                    padding: const EdgeInsets.all(16.0),
-                    child: new Row (
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        _issueCompletionCertificateText('ISSUE COMPLETION CERTIFICATE', Themes.buttonCaption),
-                      ],
-                    )
-                )
-              )
-            ],
+          child: new FutureBuilder(
+            builder: _buildScopeView,
+            future: projectPool.getById(widget.projectId)
           )
         )
       ]
@@ -158,16 +157,16 @@ class _ScopeState extends State<Scope> {
   }
 }
 
-class Scope extends StatefulWidget {
-  Scope({
+class ScopeShow extends StatefulWidget {
+  ScopeShow({
     Key key,
     @required this.scaffoldKey,
-    @required this.currentProject
+    @required this.projectId
   }) : super(key: key);
 
   final GlobalKey<ScaffoldState> scaffoldKey;
-  final Project currentProject;
+  final int projectId;
 
   @override
-  State<StatefulWidget> createState() => new _ScopeState();
+  State<StatefulWidget> createState() => new _ScopeShowState();
 }

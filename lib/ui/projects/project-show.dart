@@ -1,9 +1,9 @@
-import 'package:add_just/models/project.dart';
 import 'package:flutter/material.dart';
+import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
-import 'package:add_just/ui/project-setup-completed/navigation-with-tabs.dart';
-import 'package:add_just/ui/project-setup-completed/chat.dart';
-import 'package:add_just/ui/project-setup-completed/scope.dart';
+import 'package:add_just/ui/chat/chat-view.dart';
+import 'package:add_just/ui/projects/scope-show.dart';
+import 'package:add_just/ui/projects/tabbed-app-bar.dart';
 
 class _ProjectShowState extends State<ProjectShow> with SingleTickerProviderStateMixin{
   TabController controller;
@@ -56,7 +56,7 @@ class _ProjectShowState extends State<ProjectShow> with SingleTickerProviderStat
 
   AppBar _projectTitleBuilder() {
     return _project != null
-      ? new NavigationWithTabs(
+      ? new TabbedAppBar(
           projectName: _project.name,
           onMessagePress: () { _handleMessageIconPress(); },
           controller: controller,
@@ -73,8 +73,8 @@ class _ProjectShowState extends State<ProjectShow> with SingleTickerProviderStat
       body: new TabBarView(
         controller: controller,
         children: <Widget>[
-          _project != null ? Scope(scaffoldKey: scaffoldKey, currentProject: _project) : SizedBox(),
-          Chat(owner: 12),
+          _project != null ? ScopeShow(scaffoldKey: scaffoldKey, projectId: widget.projectId) : SizedBox(),
+          ChatView(owner: 12),
         ]
       )
     );

@@ -53,18 +53,29 @@ class Base {
   Future<ApiResponse> post(String path, {Map<String, String> headers, Map<String, dynamic> body}) async {
     HttpClient httpClient = new HttpClient();
     Uri uri = Uri.https(_host, path);
-    print(uri);
     HttpClientRequest request = await httpClient.postUrl(uri);
-    print('Setting headers...');
     request.headers.add(HttpHeaders.CONTENT_TYPE, 'application/json');
     if (headers != null) {
       headers.forEach((k, v) { request.headers.add(k, v); });
     }
-    print('Headers set');
     request.add(utf8.encode(json.encode(body)));
     print('Send body: ${json.encode(body)}');
     HttpClientResponse response = await request.close();
-    print('Got response');
+    ApiResponse resp = await _extractResponse(response);
+    print('Got response: $resp');
+    httpClient.close();
+    return resp;
+  }
+
+  Future<ApiResponse> delete(String path, {Map<String, String> headers}) async {
+    HttpClient httpClient = new HttpClient();
+    Uri uri = Uri.https(_host, path);
+    HttpClientRequest request = await httpClient.deleteUrl(uri);
+    request.headers.add(HttpHeaders.CONTENT_TYPE, 'application/json');
+    if (headers != null) {
+      headers.forEach((k, v) { request.headers.add(k, v); });
+    }
+    HttpClientResponse response = await request.close();
     ApiResponse resp = await _extractResponse(response);
     print('Got response: $resp');
     httpClient.close();

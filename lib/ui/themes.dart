@@ -112,15 +112,13 @@ class Themes {
   );
   
   static TextStyle scopeSectionItemName = new TextStyle(
-      fontSize: 18.0,
-      fontFamily: 'Roboto',
-      fontWeight: FontWeight.w800
+    fontSize: 18.0,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w800
   );
   
-  static TextStyle scopeSectionItem = new TextStyle(
-      fontSize: 10.0,
-      color: Colors.black38,
-      fontFamily: 'Roboto',
-      fontWeight: FontWeight.w800
+  static TextStyle dialogText = new TextStyle(
+    fontSize: 18.0,
+    color: Colors.black26
   );
 }
