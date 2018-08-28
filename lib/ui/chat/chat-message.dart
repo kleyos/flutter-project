@@ -25,15 +25,15 @@ class ChatMessage extends StatelessWidget {
             constraints: new BoxConstraints(
               minHeight: 80.0,
             ),
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(12.0),
             decoration: new BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5.0),
             ),        
             child: new Text(item['body'],
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.0,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 17.0,
                   color: Colors.black,
               ),
             ),
@@ -49,29 +49,30 @@ class ChatMessage extends StatelessWidget {
     );
   }
 
-  Widget _autherRow() {
-    return new Row(
-      mainAxisAlignment: isOwner ? MainAxisAlignment.end : MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        new Container (
-          margin: EdgeInsets.only(right: 10.0),
-          child: new Text(item['author'],
+  Widget _authorRow() {
+    return new Container (
+      margin: EdgeInsets.only(right: 10.0, bottom: 4.0),
+      child: new Row(
+        mainAxisAlignment: isOwner ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          new Text(item['author'],
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 12.0,
+              fontSize: 14.0,
               color: Color.fromRGBO(58, 150, 143, 1.0),
             ),
           ),
-        ),
-        new Text(item['time'],
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color.fromRGBO(201, 201, 201, 1.0),
-            fontSize: 8.0,
+          new SizedBox(width: 8.0),
+          new Text(item['time'],
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color.fromRGBO(201, 201, 201, 1.0),
+              fontSize: 12.0,
+            ),
           ),
-        ),
-      ],
+        ],
+      )
     );
   }
 
@@ -93,7 +94,7 @@ class ChatMessage extends StatelessWidget {
                 margin: isOwner 
                   ? const EdgeInsets.only(right: 25.0)
                   : const EdgeInsets.only(left: 25.0),
-                child: _autherRow(),
+                child: _authorRow(),
               ),
               _whiteContainerRow()
             ]

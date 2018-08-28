@@ -3,6 +3,7 @@ import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/chat/chat-message.dart';
 
 class ChatView extends StatelessWidget {
+  final TextEditingController _textController = TextEditingController();
 
   ChatView({
     @required this.owner,
@@ -42,11 +43,9 @@ class ChatView extends StatelessWidget {
       itemCount: messages.length
     );
   }
-  Widget _chatField() {
-    final TextEditingController _controller = TextEditingController();
-    
+  Widget _inputBox() {
     return new TextField(
-      controller: _controller,
+      controller: _textController,
       decoration: new InputDecoration(
         hintText: 'Type message here',
         hintStyle: TextStyle(
@@ -54,7 +53,7 @@ class ChatView extends StatelessWidget {
         ),
         suffixIcon: new Icon(Icons.photo_camera, size: 35.0,),
         fillColor: Color.fromRGBO(255, 255, 255, 1.0),
-        contentPadding: EdgeInsets.all(10.0),
+        contentPadding: EdgeInsets.all(16.0),
         filled: true,
       ),
     ); 
@@ -71,7 +70,7 @@ class ChatView extends StatelessWidget {
               new Expanded(
                 child: _listMessages(_loadMessages())
               ),
-              _chatField(),
+              _inputBox(),
             ],
           )
         )
