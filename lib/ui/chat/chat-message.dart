@@ -32,9 +32,9 @@ class ChatMessage extends StatelessWidget {
             ),        
             child: new Text(item['body'],
               style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 17.0,
-                  color: Colors.black,
+                fontWeight: FontWeight.w400,
+                fontSize: 17.0,
+                color: Colors.black,
               ),
             ),
           )

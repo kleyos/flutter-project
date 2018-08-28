@@ -16,7 +16,7 @@ class PrefsService {
   Future<Account> restoreSession() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String data = await _prefs.get(accountStoreKey);
-    return Account.fromJson(json.decode(data));
+    return data != null ? Account.fromJson(json.decode(data)) : null;
   }
 
   Future<bool> storeSession(Account a) async {
