@@ -50,11 +50,8 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
                         onChanged: (_) {},
                       )
                     : new SizedBox(),
-                  new Flexible(
-                    child: new Text(widget.sectionItem.name, style: Themes.scopeSectionItemName)
-                  ),
                   new Expanded(
-                    child: new SizedBox()
+                    child: new Text(widget.sectionItem.name, style: Themes.scopeSectionItemName)
                   ),
                   new Text(widget.sectionItem.quantity.toString(), style: Themes.scopeSectionItemName),
                   new Text(widget.sectionItem.measure, style: Themes.scopeSectionItemName)

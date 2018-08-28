@@ -110,9 +110,8 @@ class _ScopeShowState extends State<ScopeShow> {
     return new Column (
       children: <Widget>[
         new Container(
-          color: Color.fromRGBO(224, 224, 224, 1.0),
-          padding: EdgeInsets.all(20.0),
-          margin: EdgeInsets.only(top: 16.0),
+          color: Themes.scopeSectionBackgroundColor,
+          padding: EdgeInsets.fromLTRB(30.0, 12.0, 12.0, 12.0),
           child: _buildStatusHeader(s.data)
         ),
         new Expanded(
