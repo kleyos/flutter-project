@@ -47,7 +47,7 @@ class TabbedAppBar extends AppBar {
 
   final String projectName;
   final int messageCount;
-  final Function onMessagePress;
+  final VoidCallback onMessagePress;
   final TabController controller;
   final iconBadge;
 }

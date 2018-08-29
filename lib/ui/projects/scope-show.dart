@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/ui/projects/scope-section.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/shared/completed-screen.dart';
@@ -111,7 +112,11 @@ class _ScopeShowState extends State<ScopeShow> {
           child: _buildStatusHeader(s.data)
         ),
         new Expanded(
-          child: _listSections(s.data.sections.map((item) => ScopeSection(scopeSection: item)).toList())
+          child: _listSections(s.data.sections.map((item) => ScopeSection(
+            projectId: widget.projectId,
+            scopeSection: item,
+            permissionsResolver: new ProjectPermissionsResolver(project: s.data),
+          )).toList())
         ),
         new InkWell(
           onTap: _showBottomSheetCallBack,

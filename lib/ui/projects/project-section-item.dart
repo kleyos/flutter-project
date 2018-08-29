@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/ui/sections/section-show.dart';
 import 'package:add_just/ui/themes.dart';
 
 class _ProjectSectionItemState extends State<ProjectSectionItem> {
   final projectPool = new ProjectPool();
 
-  void _handleProjectTap(BuildContext context) {
+  void _handleProjectTap(BuildContext context, ProjectPermissionsResolver permissionsResolver) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => new SectionShow(
       projectId: widget.projectId,
-      projectSectionId: widget.projectSectionId
+      projectSectionId: widget.projectSectionId,
+      permissionsResolver: permissionsResolver,
     )));
   }
 
@@ -21,7 +23,7 @@ class _ProjectSectionItemState extends State<ProjectSectionItem> {
     }
     ProjectSection projectSection = snapshot.data.sectionById(widget.projectSectionId);
     return new InkWell(
-      onTap: () { _handleProjectTap(context); },
+      onTap: () { _handleProjectTap(context, new ProjectPermissionsResolver(project: snapshot.data)); },
       child: new Container(
         color: Color.fromRGBO(224, 224, 224, 1.0),
         padding: EdgeInsets.all(16.0),

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/section-item.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
+import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/services/api/project-pool.dart';
-import 'package:add_just/ui/sections/section-list-item.dart';
+import 'package:add_just/ui/projects/scope-section-item.dart';
 import 'package:add_just/ui/sections/boq-items-list.dart';
 import 'package:add_just/ui/shared/background-image.dart';
 import 'package:add_just/ui/common.dart';
@@ -47,11 +48,12 @@ class _SectionShowState extends State<SectionShow> {
   }
 
   Widget _buildSectionItem(SectionItem item) {
-    return new SectionListItem(
+    return new ScopeSectionItem(
       projectId: widget.projectId,
       sectionItem: item,
       onSectionItemAmended: _handleAmendItem,
-      onSectionItemDeleted: _handleDeleteItem
+      onSectionItemDeleted: _handleDeleteItem,
+      permissionsResolver: widget.permissionsResolver
     );
   }
 
@@ -142,10 +144,13 @@ class SectionShow extends StatefulWidget {
   SectionShow({
     Key key,
     @required this.projectId,
-    @required this.projectSectionId
+    @required this.projectSectionId,
+    @required this.permissionsResolver
   }) : super(key: key);
 
   final int projectId, projectSectionId;
+  final ProjectPermissionsResolver permissionsResolver;
+
 
   @override
   State<StatefulWidget> createState() => new _SectionShowState();
