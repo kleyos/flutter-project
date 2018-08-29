@@ -35,12 +35,12 @@ class Base {
   String host;
 
   String get _host => host ?? 'api.staging.termpay.io';
-  Map<String, String> get authHeader => {HttpHeaders.AUTHORIZATION: "Bearer ${Account.current.accessToken}"};
+  Map<String, String> get authHeader => {HttpHeaders.authorizationHeader: "Bearer ${Account.current.accessToken}"};
 
   Future<ApiResponse> get(String path, {Map<String, String> headers}) async {
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request = await httpClient.getUrl(Uri.https(_host, path));
-    request.headers.add(HttpHeaders.CONTENT_TYPE, 'application/json');
+    request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
     if (headers != null) {
       headers.forEach((k, v) { request.headers.add(k, v); });
     }
@@ -54,7 +54,7 @@ class Base {
     HttpClient httpClient = new HttpClient();
     Uri uri = Uri.https(_host, path);
     HttpClientRequest request = await httpClient.postUrl(uri);
-    request.headers.add(HttpHeaders.CONTENT_TYPE, 'application/json');
+    request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
     if (headers != null) {
       headers.forEach((k, v) { request.headers.add(k, v); });
     }
@@ -71,7 +71,7 @@ class Base {
     HttpClient httpClient = new HttpClient();
     Uri uri = Uri.https(_host, path);
     HttpClientRequest request = await httpClient.deleteUrl(uri);
-    request.headers.add(HttpHeaders.CONTENT_TYPE, 'application/json');
+    request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
     if (headers != null) {
       headers.forEach((k, v) { request.headers.add(k, v); });
     }

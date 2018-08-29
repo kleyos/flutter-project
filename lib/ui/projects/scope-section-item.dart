@@ -1,5 +1,5 @@
-import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:flutter/material.dart';
+import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/models/section-item.dart';
 import 'package:add_just/ui/sections/section-item-amend.dart';
 import 'package:add_just/ui/themes.dart';

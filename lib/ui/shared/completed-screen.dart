@@ -5,8 +5,8 @@ import 'package:add_just/ui/shared/background-image.dart';
 class CompletedScreen extends StatelessWidget {
 
   CompletedScreen({
-    @required this.screenText,
     Key key,
+    @required this.screenText,
   }) : super(key: key);
 
   final String screenText;

@@ -11,7 +11,6 @@ class AddJustTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
