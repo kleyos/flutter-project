@@ -1,3 +1,4 @@
+import 'package:add_just/models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
@@ -10,6 +11,7 @@ class _ProjectShowState extends State<ProjectShow> with SingleTickerProviderStat
   Project _project;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final projectPool = new ProjectPool();
+  final account = new Account();
 
   void _loadProject() async {
     final p = await projectPool.getById(widget.projectId);
@@ -35,6 +37,10 @@ class _ProjectShowState extends State<ProjectShow> with SingleTickerProviderStat
     print('message count');
   }
 
+  void _handlePersonIconPress() {
+    print('go to team screen');
+  }
+
   String _messageCount() {
     return '0';
   }
@@ -57,8 +63,10 @@ class _ProjectShowState extends State<ProjectShow> with SingleTickerProviderStat
   AppBar _projectTitleBuilder() {
     return _project != null
       ? new TabbedAppBar(
+          userRole: account.role,
           projectName: _project.name,
           onMessagePress: () { _handleMessageIconPress(); },
+          onPersonPress: () { _handlePersonIconPress(); },
           controller: controller,
           iconBadge: _iconBadge()
         )
