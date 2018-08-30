@@ -9,6 +9,7 @@ class TabbedAppBar extends AppBar {
     @required this.projectName,
     @required this.onMessagePress,
     @required this.controller,
+    @required this.userRole,
   }) : super(
     key: key,
     leading: new BackButton(),
@@ -30,7 +31,13 @@ class TabbedAppBar extends AppBar {
           ],
         ),
         onPressed: onMessagePress
-      )
+      ),
+      userRole == 'ctr'
+      ? new IconButton(
+          icon: new Icon(Icons.person_add),
+          onPressed: onMessagePress
+        )
+      : new SizedBox(width: 25.0)
     ],
     bottom: new PreferredSize(
       preferredSize: const Size.fromHeight(48.0),
@@ -46,8 +53,10 @@ class TabbedAppBar extends AppBar {
   );
 
   final String projectName;
+  final String userRole;
   final int messageCount;
   final VoidCallback onMessagePress;
   final TabController controller;
   final iconBadge;
+
 }

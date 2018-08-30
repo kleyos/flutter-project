@@ -110,6 +110,12 @@ class Themes {
     fontSize: 17.0,
     fontWeight: FontWeight.bold
   );
+
+  static final scopeSectionPrice = new TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.normal,
+    color: Colors.black26
+  );
   
   static final scopeSectionItemName = new TextStyle(
     fontSize: 18.0,

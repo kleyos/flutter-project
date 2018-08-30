@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/services/project-permissions-resolver.dart';
-import 'package:add_just/ui/projects/scope-bottom-amo.dart';
-import 'package:add_just/ui/projects/scope-bottom-ctr.dart';
 import 'package:add_just/ui/projects/scope-section.dart';
 import 'package:add_just/ui/shared/background-image.dart';
+import 'package:add_just/ui/shared/completed-screen.dart';
 import 'package:add_just/ui/themes.dart';
 
-class _ScopeShowState extends State<ScopeShow> {
-  final projectPool = new ProjectPool();
+class _ScopeBottomAmoState extends State<ScopeBottomAmo> {
+  bool _isCompleted = false;
   VoidCallback _showBottomSheetCallBack;
+  final projectPool = new ProjectPool();
 
   @override
   void initState() {
@@ -57,27 +57,6 @@ class _ScopeShowState extends State<ScopeShow> {
     },
   };
 
-
-  Widget _listSections(List<ScopeSection> sections) {
-    return new ListView.builder(
-      reverse: false,
-      itemBuilder: (_, int idx) => sections[idx],
-      itemCount: sections.length,
-    );
-  }
-
-  Widget _buildStatusHeader(Project p) {
-    final styling = statusStyling[p.status];
-    return styling.isNotEmpty
-      ? new Row(
-      children: <Widget>[
-        _buildLid(styling['color']),
-        new Text(styling['mark'], style: TextStyle(color: styling['color']))
-      ]
-    )
-      : new SizedBox();
-  }
-
   Widget _buildLid(color) {
     return new Container(
       margin: EdgeInsets.only(right: 10.0),
@@ -90,18 +69,87 @@ class _ScopeShowState extends State<ScopeShow> {
     );
   }
 
+  Widget _listSections(List<ScopeSection> sections) {
+    return new ListView.builder(
+      reverse: false,
+      itemBuilder: (_, int idx) => sections[idx],
+      itemCount: sections.length,
+    );
+  }
+
+  Widget _issueCompletionCertificateButton(isAllChecked) {
+    return new RaisedButton(
+      child: new Text('ISSUE COMPLETION CERTIFICATE', style: Themes.buttonCaption),
+      color: Color.fromRGBO(2, 218, 196, 1.0),
+      padding: const EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0,),
+      onPressed: isAllChecked ? () {
+        setState(() { _isCompleted = true; });
+        Navigator.pop(context);
+      } : null,
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(5.0)
+      )
+    );
+  }
+
+  Widget _bottomSheetBuilder(status, isAllChecked) {
+    return new Container (
+      child: status != 'completion_cert_issued'
+        ? _bottomSheetIssueCompletionCertificate(status, isAllChecked)
+        :
+    )
+  }
+
+  Widget _issueCompletionCertificateText(text, _style, flag) {
+    return new Text(flag ? text : null, style: _style);
+  }
+  widget _bottomSheetIssueCompletionCertificate(isAllChecked, status) {
+    return new Container(
+      child: new Center(
+        child: status != 'marked_completed'
+          ? _issueCompletionCertificateText(
+          'Contractor must mark work completed before you can issue a'
+            'completion certificate.',
+          Themes.drawerMenuItem,
+          true
+        )
+          : new Column(
+          children: <Widget>[
+            _issueCompletionCertificateText(
+              'You mast check all items'
+                'before you can issue a completion certificate.',
+              Themes.drawerMenuItem,
+              !isAllChecked
+            ),
+            _issueCompletionCertificateButton(!isAllChecked)
+          ]
+        )
+      ),
+    );
+  }
+
   void _showBottomSheet() {
     widget.scaffoldKey.currentState.showBottomSheet((context) {
       return new Container(
         height: 200.0,
         color: Colors.teal,
         child: new Center(
-          child: widget.userRole == 'ctr'
-            ? ScopeBottomCtr()
-            : ScopeBottomAmo()
+          child: _issueCompletionCertificateButton()
         )
       );
     });
+  }
+
+  Widget _buildStatusHeader(Project p) {
+    final styling = statusStyling[p.status];
+    return styling.isNotEmpty
+      ? new Row(
+      children: <Widget>[
+        _buildLid(styling['color']),
+        new Text(styling['mark'], style: TextStyle(color: styling['color']))
+      ]
+    )
+      : new SizedBox();
   }
 
   Widget _buildScopeView(BuildContext ctx, AsyncSnapshot<Project> s) {
@@ -130,12 +178,12 @@ class _ScopeShowState extends State<ScopeShow> {
             child: new Row (
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new Text('ISSUE COMPLETION CERTIFICATE', style: Themes.buttonCaption),
+                _issueCompletionCertificateText('ISSUE COMPLETION CERTIFICATE', Themes.buttonCaption),
               ],
             )
           )
         )
-      ]
+      ],
     );
   }
 
@@ -155,22 +203,22 @@ class _ScopeShowState extends State<ScopeShow> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildMainContent();
+    return _isCompleted
+      ? CompletedScreen(screenText: "Completion Cetificate Issued")
+      : _buildMainContent();
   }
 }
 
-class ScopeShow extends StatefulWidget {
-  ScopeShow({
+class ScopeBottomAmo extends StatefulWidget {
+  ScopeAmo({
     Key key,
-    @required this.userRole,
     @required this.scaffoldKey,
     @required this.projectId
   }) : super(key: key);
 
-  final String userRole;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final int projectId;
 
   @override
-  State<StatefulWidget> createState() => new _ScopeShowState();
+  State<StatefulWidget> createState() => new _ScopeBottomAmoState();
 }

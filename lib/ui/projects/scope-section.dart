@@ -2,18 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/ui/themes.dart';
-import 'package:add_just/ui/projects/scope-section-item.dart';
+import 'package:add_just/ui/projects/scope-section-item-amo.dart';
+import 'package:add_just/ui/projects/scope-section-item-ctr.dart';
 
 class _ScopeSectionState extends State<ScopeSection> {
 
-  List<Widget> _loadSectionItems() {
-    return widget.scopeSection.scopeItems.map((item) => ScopeSectionItem(
-      projectId: widget.projectId,
-      sectionItem: item,
-      onSectionItemAmended: (_, __) {},
-      onSectionItemDeleted: (_) {},
-      permissionsResolver: widget.permissionsResolver
-    )).toList();
+  List<Widget> _loadSectionItems(role) {
+    return role == 'crt'
+      ? widget.scopeSection.scopeItems.map((item) => ScopeSectionItemCtr(
+          projectId: widget.projectId,
+          sectionItem: item,
+          onSectionItemAmended: (_, __) {},
+          onSectionItemDeleted: (_) {},
+          permissionsResolver: widget.permissionsResolver
+        )).toList()
+      : widget.scopeSection.scopeItems.map((item) => ScopeSectionItemAmo(
+          projectId: widget.projectId,
+          sectionItem: item,
+          onSectionItemAmended: (_, __) {},
+          onSectionItemDeleted: (_) {},
+          permissionsResolver: widget.permissionsResolver
+        )).toList();
   }
 
   @override
@@ -34,7 +43,7 @@ class _ScopeSectionState extends State<ScopeSection> {
             )
           ),
           new Column(
-            children: _loadSectionItems(),
+            children: _loadSectionItems(widget.userRole),
           )
         ]
       )
@@ -47,10 +56,12 @@ class ScopeSection extends StatefulWidget {
     Key key,
     @required this.projectId,
     @required this.scopeSection,
-    @required this.permissionsResolver
+    @required this.permissionsResolver,
+    @required this.userRole
   }) : super(key: key);
 
   final int projectId;
+  final String userRole;
   final ProjectSection scopeSection;
   final ProjectPermissionsResolver permissionsResolver;
 

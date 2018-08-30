@@ -6,7 +6,7 @@ import 'package:add_just/ui/themes.dart';
 
 typedef void OnSectionItemDeleted(SectionItem item);
 
-class _ScopeSectionItemState extends State<ScopeSectionItem> {
+class _ScopeSectionItemCtrState extends State<ScopeSectionItemCtr> {
   bool _isDeleted = false;
 
   bool get canAmend => true;
@@ -113,6 +113,8 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
     items.add(new Text(widget.sectionItem.quantity.toString(), style: Themes.sectionItemTitle));
     items.add(new SizedBox(width: 6.0));
     items.add(new Text(widget.sectionItem.measure, style: Themes.sectionItemTitle));
+    items.add(new Text("Price", style: Themes.scopeSectionPrice));
+    items.add(new Text("Total", style: Themes.sectionItemTitle));
 
     return items;
   }
@@ -123,11 +125,19 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
       child: new Card(
         child: new Container(
           padding: const EdgeInsets.all(24.0),
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _composeCardContent()
-          ),
+          child: new Column(
+            children: <Widget>[
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[new Text('TOTAL', style: Themes.scopeSectionPrice)]
+              ),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: _composeCardContent()
+              ),
+            ],
+          )
         )
       )
     );
@@ -144,8 +154,8 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
   }
 }
 
-class ScopeSectionItem extends StatefulWidget {
-  ScopeSectionItem({
+class ScopeSectionItemCtr extends StatefulWidget {
+  ScopeSectionItemCtr({
     Key key,
     @required this.projectId,
     @required this.sectionItem,
@@ -161,5 +171,5 @@ class ScopeSectionItem extends StatefulWidget {
   final ProjectPermissionsResolver permissionsResolver;
 
   @override
-  State<StatefulWidget> createState() => new _ScopeSectionItemState();
+  State<StatefulWidget> createState() => new _ScopeSectionItemCtrState();
 }
