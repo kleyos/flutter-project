@@ -67,9 +67,27 @@ class Base {
     return resp;
   }
 
+  Future<ApiResponse> put(String path, {Map<String, String> headers, Map<String, dynamic> body}) async {
+    HttpClient httpClient = new HttpClient();
+    Uri uri = Uri.https(_host, path);
+    HttpClientRequest request = await httpClient.putUrl(uri);
+    request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
+    if (headers != null) {
+      headers.forEach((k, v) { request.headers.add(k, v); });
+    }
+    request.add(utf8.encode(json.encode(body)));
+    print('Send body: ${json.encode(body)}');
+    HttpClientResponse response = await request.close();
+    ApiResponse resp = await _extractResponse(response);
+    print('Got response: $resp');
+    httpClient.close();
+    return resp;
+  }
+
   Future<ApiResponse> delete(String path, {Map<String, String> headers}) async {
     HttpClient httpClient = new HttpClient();
     Uri uri = Uri.https(_host, path);
+    print('Delete: ${uri.toString()}');
     HttpClientRequest request = await httpClient.deleteUrl(uri);
     request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
     if (headers != null) {

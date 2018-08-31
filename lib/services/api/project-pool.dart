@@ -74,16 +74,10 @@ class ProjectPool extends Base {
     return reloadById(prjId);
   }
 
-  //// Post a new scope-item to a project
-  //  POST {{host}}/api/orgs/1/projects/1/scope-items
-  //  Authorization: Bearer {{amo_token}}
-  //  Content-Type: application/json
-  //
-  //  {"scopes": [{"boqItemId": 1, "sectionId": 1, "quantity": 12}]}
   Future<Project> addBoqItemToSection(int prjId, secId, itemId, num qty) async {
     await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-items",
       headers: authHeader,
-      body: {'scopes': [{'boqItemId': itemId, 'sectionId': secId, 'quantity': qty}]});
+      body: {'boqItemId': itemId, 'sectionId': secId, 'quantity': qty});
     return reloadById(prjId);
   }
 
@@ -101,17 +95,10 @@ class ProjectPool extends Base {
     return reloadById(prjId);
   }
 
-  Future<Project> incScopeItem(int prjId, itemID, num quantity) async {
-    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-addition",
+  Future<Project> setScopeItemQuantity(int prjId, itemID, num quantity) async {
+    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-items/$itemID",
       headers: authHeader,
-      body: {'boqItemId': itemID, 'quantity': quantity});
-    return reloadById(prjId);
-  }
-
-  Future<Project> decScopeItem(int prjId, itemID, num quantity) async {
-    await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-deduction",
-      headers: authHeader,
-      body: {'scopeItemId': itemID, 'quantity': quantity});
+      body: {'quantity': quantity});
     return reloadById(prjId);
   }
 

@@ -66,7 +66,9 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
           new FlatButton(
             child: new Text('REMOVE'),
             onPressed: () {
-              print('delete' + DateTime.now().toIso8601String());
+              if (widget.onSectionItemDeleted != null) {
+                widget.onSectionItemDeleted(item);
+              }
               Navigator.of(context).pop();
               setState(() {
                 _isDeleted = true;
@@ -105,7 +107,9 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
     }
 
     if (widget.permissionsResolver.canSetDoneScopeItems) {
-      items.add(new Checkbox(value: true, onChanged: (_) {}));
+      items.add(new Checkbox(value: true, onChanged: (val) {
+        print(val);
+      }));
       items.add(SizedBox(width: 6.0));
     }
 

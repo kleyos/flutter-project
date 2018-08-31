@@ -16,12 +16,7 @@ class _SectionShowState extends State<SectionShow> {
 
   void _handleAmendItem(SectionItem item, num quantity) async {
     try {
-//      if (item.quantity > quantity) {
-//        await projectPool.decScopeItem(widget.projectId, item.id, quantity);
-//      }
-//      if (item.quantity < quantity) {
-//        await projectPool.incScopeItem(widget.projectId, item.id, quantity);
-//      }
+      await projectPool.setScopeItemQuantity(widget.projectId, item.id, quantity);
       _showAtSnackBar("Quantity of '${item.name}' set to ${item.quantity}");
     } catch (e) {
       showAlert(context, e.toString());
@@ -29,7 +24,7 @@ class _SectionShowState extends State<SectionShow> {
   }
 
   void _handleDeleteItem(SectionItem item) async {
-//    await projectPool.removeScopeItem(widget.projectId, item.id);
+    await projectPool.removeScopeItem(widget.projectId, item.id);
     _showAtSnackBar("'${item.name}' removed from this section");
   }
 

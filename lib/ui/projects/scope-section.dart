@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/services/project-permissions-resolver.dart';
+import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/themes.dart';
 import 'package:add_just/ui/projects/scope-section-item.dart';
 
 class _ScopeSectionState extends State<ScopeSection> {
+  final projectPool = new ProjectPool();
 
   List<Widget> _loadSectionItems() {
     return widget.scopeSection.scopeItems.map((item) => ScopeSectionItem(
       projectId: widget.projectId,
       sectionItem: item,
-      onSectionItemAmended: (_, __) {},
-      onSectionItemDeleted: (_) {},
+      onSectionItemAmended: (item, quantity) async{
+        await projectPool.setScopeItemQuantity(widget.projectId, item.id, quantity);
+        _showAtSnackBar("Quantity of '${item.name}' set to ${item.quantity}");
+      },
+      onSectionItemDeleted: (item) async {
+        await projectPool.removeScopeItem(widget.projectId, item.id);
+        _showAtSnackBar("'${item.name}' removed!");
+      },
       permissionsResolver: widget.permissionsResolver
     )).toList();
+  }
+  void _showAtSnackBar(String text) {
+    widget.scaffoldKey.currentState.showSnackBar(
+      new SnackBar(content: new Text(text))
+    );
   }
 
   @override
@@ -47,12 +60,14 @@ class ScopeSection extends StatefulWidget {
     Key key,
     @required this.projectId,
     @required this.scopeSection,
-    @required this.permissionsResolver
+    @required this.permissionsResolver,
+    @required this.scaffoldKey
   }) : super(key: key);
 
   final int projectId;
   final ProjectSection scopeSection;
   final ProjectPermissionsResolver permissionsResolver;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   State<StatefulWidget> createState() => new _ScopeSectionState();

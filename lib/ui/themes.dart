@@ -123,4 +123,23 @@ class Themes {
   );
 
   static final scopeSectionBackgroundColor = Color.fromRGBO(224, 224, 224, 1.0);
+
+  static final statusStyling = {
+    'marked_completed': {
+      'mark': 'Work Marked Completed',
+      'color': Colors.cyan
+    },
+    'work_commenced': {
+      'mark': 'Work Commenced',
+      'color': Colors.orange
+    },
+    'completion_issued': {
+      'mark': 'Work Marked Completed',
+      'color': Colors.blue
+    },
+    'created': {
+      'mark': 'Work Marked Created',
+      'color': Colors.blue
+    }
+  };
 }

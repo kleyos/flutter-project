@@ -18,25 +18,6 @@ class _ScopeShowState extends State<ScopeShow> {
     _showBottomSheetCallBack = _showBottomSheet;
   }
 
-  final statusStyling = {
-    'marked_completed': {
-      'mark': 'Work Marked Completed',
-      'color': Colors.cyan
-    },
-    'work_commenced': {
-      'mark': 'Work Commenced',
-      'color': Colors.orange
-    },
-    'completion_issued': {
-      'mark': 'Work Marked Completed',
-      'color': Colors.blue
-    },
-    'created': {
-      'mark': 'Work Marked Created',
-      'color': Colors.blue
-    }
-  };
-
   Widget _buildLid(color) {
     return new Container(
       margin: EdgeInsets.only(right: 10.0),
@@ -89,7 +70,7 @@ class _ScopeShowState extends State<ScopeShow> {
   }
 
   Widget _buildStatusHeader(Project p) {
-    final styling = statusStyling[p.status];
+    final styling = Themes.statusStyling[p.status];
     return styling.isNotEmpty
       ? new Row(
         children: <Widget>[
@@ -116,6 +97,7 @@ class _ScopeShowState extends State<ScopeShow> {
             projectId: widget.projectId,
             scopeSection: item,
             permissionsResolver: new ProjectPermissionsResolver(project: s.data),
+            scaffoldKey: widget.scaffoldKey
           )).toList())
         ),
         new InkWell(
