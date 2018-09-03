@@ -116,7 +116,23 @@ class Themes {
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w800
   );
-  
+
+  static final scopeItemSmallMeasure = new TextStyle(
+    fontSize: 13.0,
+    color: Colors.grey
+  );
+
+  static final scopeItemPrice = new TextStyle(
+    fontSize: 15.0,
+    color: Colors.grey
+  );
+
+  static final scopeItemPriceTotalCaption = new TextStyle(
+    fontSize: 8.0,
+    color: Colors.grey,
+    fontWeight: FontWeight.bold
+  );
+
   static final dialogText = new TextStyle(
     fontSize: 18.0,
     color: Colors.black26
@@ -125,21 +141,41 @@ class Themes {
   static final scopeSectionBackgroundColor = Color.fromRGBO(224, 224, 224, 1.0);
 
   static final statusStyling = {
-    'marked_completed': {
-      'mark': 'Work Marked Completed',
-      'color': Colors.cyan
+    'created': {
+      'mark': 'Work Marked Created',
+      'color': Colors.blue
     },
     'work_commenced': {
       'mark': 'Work Commenced',
       'color': Colors.orange
     },
-    'completion_issued': {
+    'marked_completed': {
       'mark': 'Work Marked Completed',
+      'color': Colors.cyan
+    },
+    'completion_cert_issued': {
+      'mark': 'Completion cert issued',
       'color': Colors.blue
     },
-    'created': {
-      'mark': 'Work Marked Created',
-      'color': Colors.blue
-    }
+    'payment_claim_submitted': {
+      'mark': 'Payment claim submitted',
+      'color': Colors.brown
+    },
+    'payment_recommendation_issued': {
+      'mark': 'Payment recommendation issued',
+      'color': Colors.brown
+    },
+    'payment_certification_issued': {
+      'mark': 'Payment certification issued',
+      'color': Colors.brown
+    },
+    'invoice_received': {
+      'mark': 'Invoice received',
+      'color': Colors.brown
+    },
+    'paid': {
+      'mark': 'Paid',
+      'color': Colors.green
+    },
   };
 }

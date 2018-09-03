@@ -38,7 +38,6 @@ class _ScopeSectionState extends State<ScopeSection> {
           new Container(
             color: Themes.scopeSectionBackgroundColor,
             padding: EdgeInsets.fromLTRB(30.0, 12.0, 12.0, 12.0),
-            margin: EdgeInsets.only(top: 12.0),
             child: new Row(
               children: <Widget>[
                 new Text(widget.scopeSection.name.toUpperCase(),
@@ -46,8 +45,11 @@ class _ScopeSectionState extends State<ScopeSection> {
               ]
             )
           ),
-          new Column(
-            children: _loadSectionItems(),
+          new Container(
+            padding: EdgeInsets.all(12.0),
+            child: new Column(
+              children: _loadSectionItems(),
+            )
           )
         ]
       )

@@ -58,7 +58,7 @@ class _SectionItemAmendState extends State<SectionItemAmend> {
         isDense: true,
         contentPadding: EdgeInsets.all(8.0)
       ),
-      autofocus: true,
+//      autofocus: true,
       keyboardType: TextInputType.number,
       validator: numberValidator,
       controller: _quantity

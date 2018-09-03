@@ -5,11 +5,13 @@ class SectionItem {
     this.quantity,
     this.measure,
     this.itemType,
-    this.completed
+    this.completed,
+    this.price,
+    this.currency
   });
 
-  final num id, quantity;
-  final String name, measure, itemType;
+  final num id, quantity, price;
+  final String name, measure, itemType, currency;
   final bool completed;
 
   SectionItem.fromApiResponse(Map<String, dynamic> p) :
@@ -18,5 +20,7 @@ class SectionItem {
     quantity = p['quantity'],
     measure = p['measure'],
     itemType = p['itemType'],
-    completed = p['completed'];
+    completed = p['completed'],
+    price = p['price'],
+    currency = '€';
 }

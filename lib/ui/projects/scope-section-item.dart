@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:add_just/services/project-permissions-resolver.dart';
+import 'package:add_just/models/account.dart';
 import 'package:add_just/models/section-item.dart';
+import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/ui/sections/section-item-amend.dart';
 import 'package:add_just/ui/themes.dart';
 
@@ -9,7 +10,7 @@ typedef void OnSectionItemDeleted(SectionItem item);
 class _ScopeSectionItemState extends State<ScopeSectionItem> {
   bool _isDeleted = false;
 
-  bool get canAmend => true;
+  bool get canAmend => Account.current.isAMO;
   bool get cannotIncrease => false;
   bool get cannotDecrease => false;
 
@@ -98,27 +99,76 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
     );
   }
 
-  List<Widget> _composeCardContent() {
-    List<Widget> items = [];
+  Widget _composeCardContent() {
+    if (Account.current.isAMO) {
+      return _composeAMOCardContent();
+    }
 
+    if (Account.current.isContractor) {
+      return _composeCTRCardContent();
+    }
+
+    return new SizedBox();
+  }
+
+  Widget _composeAMOCardContent() {
+    List<Widget> items = [];
     if (widget.permissionsResolver.canRemoveScopeItems) {
       items.add(_buildRemoveControl());
       items.add(SizedBox(width: 6.0));
     }
 
     if (widget.permissionsResolver.canSetDoneScopeItems) {
-      items.add(new Checkbox(value: true, onChanged: (val) {
+      items.add(new Checkbox(value: widget.sectionItem.completed, onChanged: (val) {
         print(val);
       }));
       items.add(SizedBox(width: 6.0));
     }
 
     items.add(new Expanded(child: new Text(widget.sectionItem.name, style: Themes.sectionItemTitle)));
+    items.add(new SizedBox(width: 6.0));
     items.add(new Text(widget.sectionItem.quantity.toString(), style: Themes.sectionItemTitle));
     items.add(new SizedBox(width: 6.0));
     items.add(new Text(widget.sectionItem.measure, style: Themes.sectionItemTitle));
 
-    return items;
+    return new Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: items
+    );
+  }
+
+  Widget _composeCTRCardContent() {
+    return new Column(
+      children: <Widget>[
+        new Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            new Text('TOTAL', textAlign: TextAlign.right, style: Themes.scopeItemPriceTotalCaption)
+          ],
+        ),
+        new Row(
+          children: <Widget>[
+            new Expanded(child: new Text(widget.sectionItem.name, style: Themes.sectionItemTitle)),
+            new Text('${widget.sectionItem.quantity}${widget.sectionItem.measure}',
+              style: Themes.scopeItemSmallMeasure),
+            SizedBox(width: 6.0),
+            new Text('${widget.sectionItem.currency}${widget.sectionItem.price}',
+              style: Themes.scopeItemPrice),
+            SizedBox(width: 12.0),
+            new Text('${widget.sectionItem.currency}${widget.sectionItem.quantity * widget.sectionItem.price}',
+              style: Themes.sectionItemTitle)
+          ],
+        )
+      ],
+    );
+  }
+
+  EdgeInsetsGeometry _cardPadding() {
+    if (Account.current.isContractor) {
+      return const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 24.0);
+    }
+    return const EdgeInsets.all(24.0);
   }
 
   Widget _buildMainContent() {
@@ -126,12 +176,8 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
       onTap: _tapHandler(),
       child: new Card(
         child: new Container(
-          padding: const EdgeInsets.all(24.0),
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _composeCardContent()
-          ),
+          padding: _cardPadding(),
+          child: _composeCardContent(),
         )
       )
     );

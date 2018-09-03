@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/services/project-permissions-resolver.dart';
@@ -70,7 +71,7 @@ class _ScopeShowState extends State<ScopeShow> {
   }
 
   Widget _buildStatusHeader(Project p) {
-    final styling = Themes.statusStyling[p.status];
+    final styling = Themes.statusStyling[p.status ?? 'error'];
     return styling.isNotEmpty
       ? new Row(
         children: <Widget>[
@@ -85,36 +86,42 @@ class _ScopeShowState extends State<ScopeShow> {
     if (s.connectionState != ConnectionState.done) {
       return new Center(child: CircularProgressIndicator());
     }
-    return new Column (
-      children: <Widget>[
-        new Container(
-          color: Themes.scopeSectionBackgroundColor,
-          padding: EdgeInsets.fromLTRB(30.0, 12.0, 12.0, 12.0),
-          child: _buildStatusHeader(s.data)
-        ),
-        new Expanded(
-          child: _listSections(s.data.sections.map((item) => ScopeSection(
-            projectId: widget.projectId,
-            scopeSection: item,
-            permissionsResolver: new ProjectPermissionsResolver(project: s.data),
-            scaffoldKey: widget.scaffoldKey
-          )).toList())
-        ),
-        new InkWell(
-          onTap: _showBottomSheetCallBack,
-          child: new Container(
-            color: Colors.teal,
-            padding: const EdgeInsets.all(16.0),
-            child: new Row (
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _issueCompletionCertificateText('ISSUE COMPLETION CERTIFICATE', Themes.buttonCaption),
-              ],
-            )
-          )
+
+    List<Widget> items = [];
+
+    if (Account.current.isAMO) {
+      items.add(new Container(
+        color: Themes.scopeSectionBackgroundColor,
+        padding: EdgeInsets.fromLTRB(30.0, 12.0, 12.0, 12.0),
+        child: _buildStatusHeader(s.data)
+      ));
+    } else {
+      items.add(new SizedBox(height: 24.0));
+    }
+
+    items.add(new Expanded(
+      child: _listSections(s.data.sections.map((item) => ScopeSection(
+        projectId: widget.projectId,
+        scopeSection: item,
+        permissionsResolver: new ProjectPermissionsResolver(project: s.data),
+        scaffoldKey: widget.scaffoldKey
+      )).toList())
+    ));
+    items.add(new InkWell(
+      onTap: _showBottomSheetCallBack,
+      child: new Container(
+        color: Colors.teal,
+        padding: const EdgeInsets.all(16.0),
+        child: new Row (
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _issueCompletionCertificateText('ISSUE COMPLETION CERTIFICATE', Themes.buttonCaption),
+          ],
         )
-      ],
-    );
+      )
+    ));
+
+    return new Column(children: items);
   }
 
   Widget _buildMainContent() {
