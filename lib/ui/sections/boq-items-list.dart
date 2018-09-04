@@ -118,7 +118,7 @@ class BoqItemsList extends StatefulWidget {
   BoqItemsList({
     Key key,
     @required this.projectId,
-    @required this.projectSectionId
+    this.projectSectionId
   }) : super(key: key);
 
   final int projectId, projectSectionId;

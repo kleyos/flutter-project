@@ -100,8 +100,14 @@ class _ScopeShowState extends State<ScopeShow> {
       items.add(new SizedBox(height: 24.0));
     }
 
+    var sections = s.data.sections;
+
+    if (s.data.additions != null) {
+      sections.add(s.data.additions);
+    }
+
     items.add(new Expanded(
-      child: _listSections(s.data.sections.map((item) => ScopeSection(
+      child: _listSections(sections.map((item) => ScopeSection(
         projectId: widget.projectId,
         scopeSection: item,
         permissionsResolver: new ProjectPermissionsResolver(project: s.data),

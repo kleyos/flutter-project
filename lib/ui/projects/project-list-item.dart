@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/account.dart';
 import 'package:add_just/models/project.dart';
+import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/projects/new/new-project-show.dart';
 import 'package:add_just/ui/projects/project-show.dart';
@@ -23,7 +24,10 @@ class _ProjectListItemState extends State<ProjectListItem> {
   void _handleProjectTap(Project project) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => project.isNew
       ? new NewProjectShow(projectId: widget.projectId)
-      : new ProjectShow(projectId: widget.projectId)
+      : new ProjectShow(
+          projectId: widget.projectId,
+          permissionsResolver: new ProjectPermissionsResolver(project: project)
+        )
     ));
   }
 

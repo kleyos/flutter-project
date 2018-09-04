@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
+import 'package:add_just/models/section-item.dart';
 import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/services/api/project-pool.dart';
 import 'package:add_just/ui/themes.dart';
@@ -8,8 +9,8 @@ import 'package:add_just/ui/projects/scope-section-item.dart';
 class _ScopeSectionState extends State<ScopeSection> {
   final projectPool = new ProjectPool();
 
-  List<Widget> _loadSectionItems() {
-    return widget.scopeSection.scopeItems.map((item) => ScopeSectionItem(
+  Widget _buildScopeSectionItem(SectionItem item) {
+    return new ScopeSectionItem(
       projectId: widget.projectId,
       sectionItem: item,
       onSectionItemAmended: (item, quantity) async{
@@ -21,8 +22,13 @@ class _ScopeSectionState extends State<ScopeSection> {
         _showAtSnackBar("'${item.name}' removed!");
       },
       permissionsResolver: widget.permissionsResolver
-    )).toList();
+    );
   }
+
+  List<Widget> _loadSectionItems() {
+    return widget.scopeSection.scopeItems.map((item) => _buildScopeSectionItem(item)).toList();
+  }
+
   void _showAtSnackBar(String text) {
     widget.scaffoldKey.currentState.showSnackBar(
       new SnackBar(content: new Text(text))

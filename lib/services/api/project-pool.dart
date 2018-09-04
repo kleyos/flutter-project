@@ -75,9 +75,12 @@ class ProjectPool extends Base {
   }
 
   Future<Project> addBoqItemToSection(int prjId, secId, itemId, num qty) async {
+    final payload = {'boqItemId': itemId, 'quantity': qty};
+    if (secId != null ){
+      payload['sectionId'] = secId;
+    }
     await post("/api/orgs/${Account.current.orgId}/projects/$prjId/scope-items",
-      headers: authHeader,
-      body: {'boqItemId': itemId, 'sectionId': secId, 'quantity': qty});
+      headers: authHeader, body: payload);
     return reloadById(prjId);
   }
 

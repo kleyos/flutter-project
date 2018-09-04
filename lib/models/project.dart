@@ -45,6 +45,7 @@
 // }
 
 import 'package:add_just/models/project-section.dart';
+import 'package:add_just/models/section-item.dart';
 import 'package:add_just/models/user.dart';
 
 // Project statuses:
@@ -65,15 +66,19 @@ class Project {
     this.name,
     this.status,
     this.address,
+    this.unreadMessages,
     this.currentAMO,
     this.currentQS,
     this.currentCTR,
+    this.sections,
+    this.additions
   });
   
-  final num id, orgId;
+  final num id, orgId, unreadMessages;
   String name, status;
   List<String> address;
   List<ProjectSection> sections;
+  ProjectSection additions;
   User currentAMO, currentQS, currentCTR;
 
   Project.fromApiResponse(Map<String, dynamic> p) :
@@ -81,18 +86,21 @@ class Project {
     orgId = p['orgId'],
     name = p['name'],
     status = p['status'],
+    unreadMessages = p['unreadMessages'],
     address = List.from(p['address']).map((i) => i as String).toList(),
     currentAMO = p['currentAMO'] != null ? User.fromApiResponse(p['currentAMO']) : null,
     currentQS = p['currentQS'] != null ? User.fromApiResponse(p['currentQS']) : null,
     currentCTR = p['currentCTR'] != null ? User.fromApiResponse(p['currentCTR']) : null,
     sections = p['sections'] != null
       ? List.from(p['sections']).map((e) => ProjectSection.fromApiResponse(e)).toList()
-      : [];
+      : [],
+    additions = p['additions'] != null
+      ? new ProjectSection(id: 0, name: 'Additions', scopeItems: List.from(p['additions']).map((e) => SectionItem.fromApiResponse(e)).toList())
+      : null;
 
   bool get isNew => status == 'created';
   bool get isCompleted => status == 'paid';
   bool get isMarkedCompleted => status == 'marked_completed';
-  bool get canFinaliseScopes => status == 'created';
 
   ProjectSection sectionByName(String name) {
     return sections.firstWhere((s) => s.name == name);

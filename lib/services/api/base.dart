@@ -39,7 +39,9 @@ class Base {
 
   Future<ApiResponse> get(String path, {Map<String, String> headers}) async {
     HttpClient httpClient = new HttpClient();
-    HttpClientRequest request = await httpClient.getUrl(Uri.https(_host, path));
+    Uri uri = Uri.https(_host, path);
+    HttpClientRequest request = await httpClient.getUrl(uri);
+    print('GET: $uri');
     request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
     if (headers != null) {
       headers.forEach((k, v) { request.headers.add(k, v); });
@@ -53,6 +55,7 @@ class Base {
   Future<ApiResponse> post(String path, {Map<String, String> headers, Map<String, dynamic> body}) async {
     HttpClient httpClient = new HttpClient();
     Uri uri = Uri.https(_host, path);
+    print('POST: $uri');
     HttpClientRequest request = await httpClient.postUrl(uri);
     request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
     if (headers != null) {
@@ -62,7 +65,6 @@ class Base {
     print('Send body: ${json.encode(body)}');
     HttpClientResponse response = await request.close();
     ApiResponse resp = await _extractResponse(response);
-    print('Got response: $resp');
     httpClient.close();
     return resp;
   }
@@ -70,6 +72,7 @@ class Base {
   Future<ApiResponse> put(String path, {Map<String, String> headers, Map<String, dynamic> body}) async {
     HttpClient httpClient = new HttpClient();
     Uri uri = Uri.https(_host, path);
+    print('PUT: $uri');
     HttpClientRequest request = await httpClient.putUrl(uri);
     request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
     if (headers != null) {
@@ -79,7 +82,6 @@ class Base {
     print('Send body: ${json.encode(body)}');
     HttpClientResponse response = await request.close();
     ApiResponse resp = await _extractResponse(response);
-    print('Got response: $resp');
     httpClient.close();
     return resp;
   }
@@ -87,6 +89,7 @@ class Base {
   Future<ApiResponse> delete(String path, {Map<String, String> headers}) async {
     HttpClient httpClient = new HttpClient();
     Uri uri = Uri.https(_host, path);
+    print('DELETE: $uri');
     print('Delete: ${uri.toString()}');
     HttpClientRequest request = await httpClient.deleteUrl(uri);
     request.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
@@ -95,7 +98,6 @@ class Base {
     }
     HttpClientResponse response = await request.close();
     ApiResponse resp = await _extractResponse(response);
-    print('Got response: $resp');
     httpClient.close();
     return resp;
   }
@@ -107,6 +109,7 @@ class Base {
     switch (r.statusCode) {
       case 200:
         body = await r.transform(utf8.decoder).join();
+        print('Got body: $body');
         resp = ApiResponse.fromResponse(body);
         print('Got response: $resp');
         return resp;

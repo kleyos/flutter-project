@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/services/api/project-pool.dart';
+import 'package:add_just/services/project-permissions-resolver.dart';
 import 'package:add_just/ui/projects/new/project-set-contractor.dart';
 import 'package:add_just/ui/projects/project-section-item.dart';
 import 'package:add_just/ui/projects/popup-sections-list.dart';
@@ -80,7 +81,10 @@ class _NewProjectShowState extends State<NewProjectShow> {
         if (s.connectionState != ConnectionState.done) {
           return new SizedBox();
         }
-        if (s.data.canFinaliseScopes) {
+
+        final permissionsResolver = new ProjectPermissionsResolver(project: s.data);
+
+        if (permissionsResolver.canFinaliseScope) {
           new InkWell(
             onTap: () { _handleScopeFinalise(); },
             child: new Container(
@@ -115,7 +119,10 @@ class _NewProjectShowState extends State<NewProjectShow> {
         if (s.connectionState != ConnectionState.done) {
           return new SizedBox();
         }
-        return s.data.canFinaliseScopes
+
+        final permissionsResolver = new ProjectPermissionsResolver(project: s.data);
+
+        return permissionsResolver.canFinaliseScope
           ? new Container(
               padding: EdgeInsets.only(bottom: 40.0),
               child: _buildFloatingActionButton()
