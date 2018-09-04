@@ -3,6 +3,7 @@ class SectionItem {
     this.id,
     this.name,
     this.quantity,
+    this.deductedQuantity,
     this.measure,
     this.itemType,
     this.completed,
@@ -10,7 +11,7 @@ class SectionItem {
     this.currency
   });
 
-  final num id, quantity, price;
+  final num id, quantity, price, deductedQuantity;
   final String name, measure, itemType, currency;
   final bool completed;
 
@@ -18,6 +19,7 @@ class SectionItem {
     id = p['id'],
     name = p['name'],
     quantity = p['quantity'],
+    deductedQuantity = p['deductedQuantity'],
     measure = p['measure'],
     itemType = p['itemType'],
     completed = p['completed'],

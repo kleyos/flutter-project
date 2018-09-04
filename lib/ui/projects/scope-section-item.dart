@@ -131,11 +131,28 @@ class _ScopeSectionItemState extends State<ScopeSectionItem> {
     items.add(new SizedBox(width: 6.0));
     items.add(new Text(widget.sectionItem.measure, style: Themes.sectionItemTitle));
 
-    return new Row(
+    Row row = new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: items
     );
+
+    Column col = new Column(
+      children: <Widget>[
+        row,
+        widget.sectionItem.deductedQuantity != null
+          ? new Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              new Text("Change  -${widget.sectionItem.deductedQuantity} ${widget.sectionItem.measure}",
+                style: Themes.scopeItemSmallMeasure)
+            ],
+          )
+          : const SizedBox()
+      ],
+    );
+
+    return col;
   }
 
   Widget _composeCTRCardContent() {

@@ -98,8 +98,8 @@ class _BoqItemSetActionState extends State<BoqItemSetAction> {
 class BoqItemSetAction extends StatefulWidget {
   BoqItemSetAction({
     Key key,
-    this.boqItem,
-    this.onBoqItemAdded
+    @required this.boqItem,
+    @required this.onBoqItemAdded
   }) : super(key: key);
 
   final BoqItem boqItem;

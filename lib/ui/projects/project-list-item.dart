@@ -27,12 +27,12 @@ class _ProjectListItemState extends State<ProjectListItem> {
     ));
   }
 
-  Widget _buildLid() {
+  Widget _buildLid(String status) {
     return new Container(
       width: 10.0,
       height: 10.0,
       decoration: new BoxDecoration(
-        color: Color.fromRGBO(0, 150, 136, 1.0),
+        color: Themes.statusStyling[status]['color'],
         shape: BoxShape.circle,
       ),
     );
@@ -53,7 +53,7 @@ class _ProjectListItemState extends State<ProjectListItem> {
               new Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  _buildLid()
+                  _buildLid(project.status)
                 ],
               ),
               new Text(project.name, style: Themes.projectListTitle),
