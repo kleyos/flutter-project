@@ -101,6 +101,8 @@ class Project {
   bool get isNew => status == 'created';
   bool get isCompleted => status == 'paid';
   bool get isMarkedCompleted => status == 'marked_completed';
+  List<ProjectSection> get allSections => additions != null ? sections + [additions] : sections;
+  List<ProjectSection> get notEmptySections => allSections.where((s) => s.isNotEmpty).toList();
 
   ProjectSection sectionByName(String name) {
     return sections.firstWhere((s) => s.name == name);
