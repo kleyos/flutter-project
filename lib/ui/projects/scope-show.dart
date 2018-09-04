@@ -88,6 +88,7 @@ class _ScopeShowState extends State<ScopeShow> {
     }
 
     List<Widget> items = [];
+    final permissionsResolver = new ProjectPermissionsResolver(project: s.data);
 
     if (Account.current.isAMO) {
       items.add(new Container(
@@ -107,19 +108,23 @@ class _ScopeShowState extends State<ScopeShow> {
         scaffoldKey: widget.scaffoldKey
       )).toList())
     ));
-    items.add(new InkWell(
-      onTap: _showBottomSheetCallBack,
-      child: new Container(
-        color: Colors.teal,
-        padding: const EdgeInsets.all(16.0),
-        child: new Row (
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _issueCompletionCertificateText('ISSUE COMPLETION CERTIFICATE', Themes.buttonCaption),
-          ],
+
+    if (permissionsResolver.canIssueCompletionCertificate) {
+      items.add(new InkWell(
+        onTap: _showBottomSheetCallBack,
+        child: new Container(
+          color: Colors.teal,
+          padding: const EdgeInsets.all(16.0),
+          child: new Row (
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _issueCompletionCertificateText(
+                'ISSUE COMPLETION CERTIFICATE', Themes.buttonCaption)
+            ]
+          )
         )
-      )
-    ));
+      ));
+    }
 
     return new Column(children: items);
   }

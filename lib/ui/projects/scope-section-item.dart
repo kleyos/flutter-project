@@ -10,9 +10,9 @@ typedef void OnSectionItemDeleted(SectionItem item);
 class _ScopeSectionItemState extends State<ScopeSectionItem> {
   bool _isDeleted = false;
 
-  bool get canAmend => Account.current.isAMO;
-  bool get cannotIncrease => false;
-  bool get cannotDecrease => false;
+  bool get cannotIncrease => !widget.permissionsResolver.canIncScopeItemQty;
+  bool get cannotDecrease => !widget.permissionsResolver.canDecScopeItemQty;
+  bool get canAmend => !cannotIncrease || !cannotDecrease;
 
   void _popupAmendDialog() {
     showDialog<Null>(

@@ -21,14 +21,17 @@ class ProjectPermissionsResolver {
   bool get isAMO => Account.current.isAMO;
   bool get isCTR => Account.current.isContractor;
 
-  bool get canAddScopeItems => isProjectCreated && isAMO;
-  bool get canAmendScopeItemQty => canAddScopeItems;
-  bool get canRemoveScopeItems => canAddScopeItems;
-  bool get canSetDoneScopeItems => isProjectWorkCommenced;
+  bool get canAddScopeItems => (isProjectCreated || isProjectWorkCommenced) && isAMO;
+  bool get canIncScopeItemQty => isProjectCreated && isAMO;
+  bool get canDecScopeItemQty => canIncScopeItemQty || (isProjectWorkCommenced && isAMO);
+  bool get canRemoveScopeItems => isProjectCreated && isAMO;
+  bool get canSetDoneScopeItems => isProjectMarkedCompleted && isAMO;
   bool get canFinaliseScope => canAddScopeItems && project.sections.length > 0
     && project.sections.firstWhere((s) => !s.isNotEmpty, orElse: () => null) != null;
 
-  bool get canIssueCompletionCertificate => isProjectWorkCommenced && isAMO;
+  bool get canMarkProjectCompleted => isProjectWorkCommenced && isCTR;
+
+  bool get canIssueCompletionCertificate => isProjectMarkedCompleted && isAMO;
 
   bool get canSubmitPaymentClaim => isProjectCompletionCertIssued && isCTR;
 
