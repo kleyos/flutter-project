@@ -44,11 +44,17 @@ class _ProjectsListState extends State<ProjectsList> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text('Welcome to', style: TextStyle(fontSize: 30.0)),
-          new Center(child: AddJustTitle()),
-          const SizedBox(height: 58.0),
+          new Expanded(
+            flex: 1,
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text('Welcome to', style: TextStyle(fontSize: 30.0)),
+                new Center(child: AddJustTitle()),
+              ]
+            )
+          ),
           SingleActionButton(caption: '+ADD NEW PROJECT', onPressed: _handleAddNewProject),
-          const SizedBox(height: 58.0 + 60.0),
         ],
       )
     );

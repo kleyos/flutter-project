@@ -18,21 +18,25 @@ class ProjectSetupDone extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        new Image(
-          width: 150.0,
-          height: 150.0,
-          fit: BoxFit.cover,
-          image: new AssetImage('assets/images/circular-check-button.png')
+        new Expanded(
+          child: new Column(
+            children: <Widget>[
+              new Image(
+                width: 150.0,
+                height: 150.0,
+                fit: BoxFit.cover,
+                image: new AssetImage('assets/images/circular-check-button.png')
+              ),
+              new SizedBox(height: 32.0),
+              new Text("Project setup is completed",
+                style: Themes.pageHeader2, textAlign: TextAlign.center),
+            ]
+          )
         ),
-        new SizedBox(height: 32.0),
-        new Text("Project setup is completed",
-          style: Themes.pageHeader2, textAlign: TextAlign.center),
-        new SizedBox(height: 32.0),
         new SingleActionButton(caption: 'GO TO PROJECTS LIST',
-          onPressed: () { _handleNext(ctx); })
+          onPressed: () { _handleNext(ctx); }),
       ],
     );
-
   }
 
   @override

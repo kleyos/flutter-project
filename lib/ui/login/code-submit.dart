@@ -52,29 +52,36 @@ class _CodeSubmitState extends State<CodeSubmit> implements LoginContract {
     return new Form(
       child: new Column(
         children: <Widget>[
-          new Text(
-            'Welcome',
-            style: Themes.pageHeader
+          new Expanded(
+            flex: 1,
+            child: new Column(
+              children: <Widget>[
+                new Text(
+                  'Welcome',
+                  style: Themes.pageHeader
+                ),
+                new Text(
+                  'Please check your email and enter your verification code.',
+                  style: Themes.pageHeaderHint
+                ),
+                const SizedBox(height: 82.0),
+                new TextFormField(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: Colors.white
+                  ),
+                  keyboardType: TextInputType.number,
+                  autofocus: true,
+                  textAlign: TextAlign.center,
+                  controller: _codeController,
+                  style: Themes.boqCategoryTitleHeader
+                ),
+              ]
+            )
           ),
-          new Text(
-            'Please check your email and enter your verification code.',
-            style: Themes.pageHeaderHint
-          ),
-          const SizedBox(height: 82.0),
-          new TextFormField(
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              filled: true,
-              fillColor: Colors.white
-            ),
-            keyboardType: TextInputType.number,
-            autofocus: true,
-            textAlign: TextAlign.center,
-            controller: _codeController,
-            style: Themes.boqCategoryTitleHeader
-          ),
-          const SizedBox(height: 32.0),
-          SingleActionButton(caption: "LET'S GET STARTED", onPressed: _submitPress())
+          SingleActionButton(caption: "LET'S GET STARTED", onPressed: _submitPress()),
+          const SizedBox(height: 40.0),
         ]
       )
     );
