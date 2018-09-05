@@ -15,8 +15,12 @@ class _NewProjectShowState extends State<NewProjectShow> {
   List<String> _selectedSections;
   List<ProjectSection> _existingSections = [];
   List<String> _availableSections = [];
-  final projectPool = new ProjectPool();
   bool _isSectionsNeedReload = false;
+  bool _isSectionNeedAdd = true;
+  
+  final projectPool = new ProjectPool();
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+
 
   bool isSectionAlreadyAdded(String name) {
     return _existingSections.firstWhere((s) => s.name == name, orElse: () => null) != null;
@@ -56,12 +60,6 @@ class _NewProjectShowState extends State<NewProjectShow> {
     return p;
   }
 
-  void _handleScopeFinalise() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => ProjectSetContractor(projectId: widget.projectId))
-    );
-  }
-
   Widget _checkboxBuilder(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
     if (snapshot.connectionState != ConnectionState.done) {
       return new Center(child: CircularProgressIndicator());
@@ -73,6 +71,18 @@ class _NewProjectShowState extends State<NewProjectShow> {
       },
     );
   }
+  void _showBottomSheet() {
+    setState(() { _isSectionNeedAdd = false; });
+    scaffoldKey.currentState.showBottomSheet((context) {
+      return new Container(
+        height: 300.0,
+        color: Colors.teal,
+        child: new Center(
+          child: ProjectSetContractor(projectId: widget.projectId)
+        )
+      );
+    });
+  }
 
   Widget _buildFinaliseButton() {
     return new FutureBuilder(
@@ -82,11 +92,13 @@ class _NewProjectShowState extends State<NewProjectShow> {
           return new SizedBox();
         }
 
+        print(s.data.sections.length);
+
         final permissionsResolver = new ProjectPermissionsResolver(project: s.data);
 
         if (permissionsResolver.canFinaliseScope) {
-          new InkWell(
-            onTap: () { _handleScopeFinalise(); },
+          return new InkWell(
+            onTap: () {_showBottomSheet();},
             child: new Container(
               padding: EdgeInsets.all(12.0),
               color: Colors.teal,
@@ -105,11 +117,13 @@ class _NewProjectShowState extends State<NewProjectShow> {
   }
 
   Widget _buildFloatingActionButton() {
-    return new FloatingActionButton(
-      onPressed: () { _handleAddSections(); },
-      tooltip: 'Add sections',
-      child: new Icon(Icons.add)
-    );
+    return _isSectionNeedAdd
+      ? new FloatingActionButton(
+          onPressed: () { _handleAddSections(); },
+          tooltip: 'Add sections',
+          child: new Icon(Icons.add))
+      : new SizedBox();
+
   }
 
   Widget _buildFloatingActionButtonHolder() {
@@ -205,6 +219,7 @@ class _NewProjectShowState extends State<NewProjectShow> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: scaffoldKey,
       appBar: new AppBar(
         title: new FutureBuilder(
           future: projectPool.getById(widget.projectId),
@@ -232,6 +247,8 @@ class NewProjectShow extends StatefulWidget {
   NewProjectShow({Key key, this.projectId}) : super(key: key);
 
   final int projectId;
+
+//  get scaffoldKey => null;
 
   @override
   State<StatefulWidget> createState() => new _NewProjectShowState();

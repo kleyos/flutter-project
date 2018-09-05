@@ -27,7 +27,7 @@ class ProjectPermissionsResolver {
   bool get canRemoveScopeItems => isProjectCreated && isAMO;
   bool get canSetDoneScopeItems => isProjectMarkedCompleted && isAMO;
   bool get canFinaliseScope => canAddScopeItems && project.sections.length > 0
-    && project.sections.firstWhere((s) => !s.isNotEmpty, orElse: () => null) != null;
+    && !project.sections.any((s) => s.isEmpty);
 
   bool get canMarkProjectCompleted => isProjectWorkCommenced && isCTR;
 

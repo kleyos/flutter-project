@@ -25,6 +25,12 @@ class Themes {
     fontWeight: FontWeight.w300
   );
 
+  static final header = new TextStyle(
+    fontSize: 25.0,
+    color: Colors.white,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w300
+  );
   static final pageHeaderHint = new TextStyle(
     fontSize: 12.0,
     fontFamily: 'Roboto',
