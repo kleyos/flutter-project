@@ -17,7 +17,7 @@ class _NewProjectShowState extends State<NewProjectShow> {
   List<String> _availableSections = [];
   bool _isSectionsNeedReload = false;
   bool _isSectionNeedAdd = true;
-  
+
   final projectPool = new ProjectPool();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -81,7 +81,7 @@ class _NewProjectShowState extends State<NewProjectShow> {
           child: ProjectSetContractor(projectId: widget.projectId)
         )
       );
-    });
+    }).closed.then((a) => setState(() { _isSectionNeedAdd = true; }));
   }
 
   Widget _buildFinaliseButton() {
@@ -247,8 +247,6 @@ class NewProjectShow extends StatefulWidget {
   NewProjectShow({Key key, this.projectId}) : super(key: key);
 
   final int projectId;
-
-//  get scaffoldKey => null;
 
   @override
   State<StatefulWidget> createState() => new _NewProjectShowState();
