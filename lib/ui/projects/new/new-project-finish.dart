@@ -10,7 +10,7 @@ import 'package:add_just/ui/themes.dart';
 class _NewProjectFinishState extends State<NewProjectFinish> {
   final projectPool = new ProjectPool();
 
-  void _handleNext(BuildContext context) {
+  void _handleGoToProjectsList(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => ProjectsList())
     );
@@ -42,7 +42,7 @@ class _NewProjectFinishState extends State<NewProjectFinish> {
           )
         ),
         new SingleActionButton(caption: 'GO TO PROJECTS LIST',
-          onPressed: () { _handleNext(ctx); }),
+          onPressed: () { _handleGoToProjectsList(ctx); }),
       ],
     );
   }

@@ -6,7 +6,7 @@ import 'package:add_just/ui/themes.dart';
 import 'package:flutter/material.dart';
 
 class ProjectSetupDone extends StatelessWidget {
-  void _handleNext(BuildContext context) {
+  void __handleGoToProgectsList(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => ProjectsList())
     );
@@ -37,7 +37,7 @@ class ProjectSetupDone extends StatelessWidget {
           )
         ),
         new SingleActionButton(caption: 'GO TO PROJECTS LIST',
-          onPressed: () { _handleNext(ctx); }),
+          onPressed: () { __handleGoToProgectsList(ctx); }),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:add_just/ui/projects/projects-list.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project-section.dart';
 import 'package:add_just/models/project.dart';
@@ -20,8 +21,7 @@ class _NewProjectShowState extends State<NewProjectShow> {
 
   final projectPool = new ProjectPool();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-
-
+  
   bool isSectionAlreadyAdded(String name) {
     return _existingSections.firstWhere((s) => s.name == name, orElse: () => null) != null;
   }
@@ -71,6 +71,7 @@ class _NewProjectShowState extends State<NewProjectShow> {
       },
     );
   }
+
   void _showBottomSheet() {
     setState(() { _isSectionNeedAdd = false; });
     scaffoldKey.currentState.showBottomSheet((context) {
@@ -123,7 +124,6 @@ class _NewProjectShowState extends State<NewProjectShow> {
           tooltip: 'Add sections',
           child: new Icon(Icons.add))
       : new SizedBox();
-
   }
 
   Widget _buildFloatingActionButtonHolder() {

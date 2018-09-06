@@ -38,10 +38,11 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     }
   }
 
-  void _handleNext(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => new NewProjectShow(projectId: widget.projectId))
-    );
+  void _handleGoToProject(BuildContext context) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   void _itemTap(BoqItem i) {
@@ -94,7 +95,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     ).toList();
   }
 
-  Widget _buildMainContent(ctx) {
+  Widget _buildMainContent() {
     return new ListView(
       shrinkWrap: true,
       children: <Widget>[
@@ -133,8 +134,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
               new Column(
                 children: _buildSubs() +
                   [
-                    AddCustomScopeItemAction(projectId: widget.projectId, sectionId: widget.projectSectionId),
-                    SingleActionButton(caption: "GO TO THE PROJECT", onPressed: () {_handleNext(ctx);}, )
+                    AddCustomScopeItemAction(projectId: widget.projectId, sectionId: widget.projectSectionId)
                   ],
               )
             ],
@@ -162,10 +162,23 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
         ),
         centerTitle: true
       ),
-      body: new Stack(
-        children: <Widget>[
-          new BackgroundImage(),
-          _buildMainContent(context)
+      body: new Column(
+        children: [
+          new Expanded(
+            flex: 1,
+            child: new Stack(
+              overflow: Overflow.visible,
+              children: <Widget>[
+                new BackgroundImage(),
+                _buildMainContent(),
+              ]
+            )
+          ),
+          new Container(
+            margin: EdgeInsets.only(left: 25.0, right: 25.0),
+            child: SingleActionButton(caption: "GO TO THE PROJECT",
+            onPressed: () {_handleGoToProject(context);})
+          )
         ]
       )
     );

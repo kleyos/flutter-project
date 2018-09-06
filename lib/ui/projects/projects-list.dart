@@ -86,7 +86,7 @@ class _ProjectsListState extends State<ProjectsList> {
     return new Scaffold(
       appBar: new AppBar(
         title: AddJustTitle(fontSize: 25.0),
-        centerTitle: true
+        centerTitle: true,
       ),
       drawer: new ProjectsDrawer(account: Account.current),
       body: new Stack(
