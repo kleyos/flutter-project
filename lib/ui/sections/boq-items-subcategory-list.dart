@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:add_just/ui/projects/new/new-project-show.dart';
+import 'package:add_just/ui/shared/single-action-button.dart';
 import 'package:flutter/material.dart';
 import 'package:add_just/models/project.dart';
 import 'package:add_just/models/boq-items-container.dart';
@@ -34,6 +36,12 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     } catch (e) {
       showAlert(context, e.toString());
     }
+  }
+
+  void _handleNext(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => new NewProjectShow(projectId: widget.projectId))
+    );
   }
 
   void _itemTap(BoqItem i) {
@@ -86,7 +94,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
     ).toList();
   }
 
-  Widget _buildMainContent() {
+  Widget _buildMainContent(ctx) {
     return new ListView(
       shrinkWrap: true,
       children: <Widget>[
@@ -124,7 +132,10 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
               new Divider(),
               new Column(
                 children: _buildSubs() +
-                  [AddCustomScopeItemAction(projectId: widget.projectId, sectionId: widget.projectSectionId)],
+                  [
+                    AddCustomScopeItemAction(projectId: widget.projectId, sectionId: widget.projectSectionId),
+                    SingleActionButton(caption: "GO TO THE PROJECT", onPressed: () {_handleNext(ctx);}, )
+                  ],
               )
             ],
           )
@@ -154,7 +165,7 @@ class _BoqItemsSubcategoryListSate extends State<BoqItemsSubcategoryList> {
       body: new Stack(
         children: <Widget>[
           new BackgroundImage(),
-          _buildMainContent()
+          _buildMainContent(context)
         ]
       )
     );
