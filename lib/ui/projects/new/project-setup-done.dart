@@ -21,14 +21,17 @@ class ProjectSetupDone extends StatelessWidget {
         new Expanded(
           child: new Column(
             children: <Widget>[
+              new SizedBox(height: 32.0),
               new Image(
                 width: 150.0,
                 height: 150.0,
                 fit: BoxFit.cover,
                 image: new AssetImage('assets/images/circular-check-button.png')
               ),
-              new SizedBox(height: 32.0),
-              new Text("Project setup is completed",
+              new SizedBox(height: 42.0),
+              new Text("Project setup is",
+                style: Themes.pageHeader2, textAlign: TextAlign.center),
+              new Text("completed",
                 style: Themes.pageHeader2, textAlign: TextAlign.center),
             ]
           )

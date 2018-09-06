@@ -28,6 +28,7 @@ class _NewProjectFinishState extends State<NewProjectFinish> {
         new Expanded(
           child: new Column(
             children: <Widget>[
+              new SizedBox(height: 42.0),
               new Image(
                 width: 150.0,
                 height: 150.0,
